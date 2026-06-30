@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Elevame — Investment Scenarios</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    background: #f7f7f5;
+    color: #1a1d2e;
+    min-height: 100vh;
+  }
+
+  .header {
+    background: #1a1d2e; padding: 18px 40px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .logo { font-size: 22px; font-weight: 600; color: #fff; }
+  .logo span { color: #6b4ff0; }
+  .header-tag { font-size: 11px; letter-spacing: 0.1em; color: #9b8ff4; text-transform: uppercase; }
+
+  .page { max-width: 1020px; margin: 0 auto; padding: 36px 24px 60px; }
+  .intro { margin-bottom: 24px; }
+  .intro h1 { font-size: 26px; font-weight: 600; color: #1a1d2e; margin-bottom: 6px; }
+  .intro h1 span { color: #6b4ff0; }
+  .intro p { font-size: 14px; color: #5f5e5a; line-height: 1.6; max-width: 640px; }
+
+  .tab-bar {
+    display: flex; gap: 4px; background: #fff; border: 1px solid #e0ded8;
+    border-radius: 10px; padding: 4px; margin-bottom: 28px; max-width: 680px; flex-wrap: wrap;
+  }
+  .tab-btn {
+    flex: 1; min-width: 130px; padding: 10px 14px; border: none; background: transparent;
+    border-radius: 7px; font-size: 12.5px; font-weight: 600; color: #5f5e5a;
+    cursor: pointer; font-family: inherit; transition: background 0.12s, color 0.12s;
+  }
+  .tab-btn:hover { background: #f1efe8; }
+  .tab-btn.active { background: #1a1d2e; color: #fff; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  .note { font-size: 11px; color: #b4b2a9; font-style: italic; line-height: 1.5; }
+
+  /* === Tab 1: comparison cards === */
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; margin-bottom: 8px; }
+  .compare-card {
+    background: #fff; border-radius: 16px; padding: 0; overflow: hidden;
+    border: 1.5px solid #e0ded8; display: flex; flex-direction: column;
+  }
+  .compare-head { padding: 24px 22px 20px; }
+  .current-val-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .current-val-label { font-size: 9.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #888780; }
+  .current-val-figure { font-size: 13px; font-weight: 700; }
+  .compare-badge {
+    display: inline-block; font-size: 10px; font-weight: 700; padding: 3px 10px;
+    border-radius: 20px; margin-bottom: 14px;
+  }
+  .compare-headline-figure { font-size: 34px; font-weight: 700; color: #1a1d2e; line-height: 1.05; margin-bottom: 2px; }
+  .compare-headline-sub { font-size: 11px; color: #5f5e5a; margin-bottom: 10px; }
+  .compare-name { font-size: 16px; font-weight: 700; color: #1a1d2e; margin-bottom: 4px; }
+  .compare-tagline { font-size: 12px; color: #888780; line-height: 1.4; }
+
+  .compare-section { padding: 18px 22px; border-top: 1px solid #f1efe8; }
+  .compare-section-label { font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #888780; margin-bottom: 10px; }
+
+  /* Equity + valuation combined */
+  .valuation-row { display: flex; align-items: center; gap: 18px; }
+  .valuation-stats { flex: 1; }
+  .valuation-line { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #f1efe8; font-size: 12px; }
+  .valuation-line:last-child { border-bottom: none; }
+  .valuation-line-label { color: #888780; }
+  .valuation-line-value { font-weight: 700; color: #1a1d2e; }
+
+  /* Revenue bar */
+  .revbar-track { width: 100%; height: 14px; border-radius: 7px; background: #f1efe8; overflow: hidden; margin-bottom: 8px; }
+  .revbar-fill { height: 100%; border-radius: 7px; }
+  .revbar-value { font-size: 20px; font-weight: 700; color: #1a1d2e; }
+  .revbar-sub { font-size: 10.5px; color: #888780; margin-top: 2px; }
+
+  .compare-cta {
+    margin: 18px 22px 22px; padding: 11px; text-align: center; border-radius: 8px;
+    font-size: 12px; font-weight: 600; cursor: pointer; border: 1px solid #e0ded8;
+    background: #fff; color: #5f5e5a; transition: background 0.12s;
+  }
+  .compare-cta:hover { background: #f1efe8; }
+
+  /* === Vision tab — phone mockup === */
+  .vision-intro { max-width: 640px; margin-bottom: 28px; }
+  .vision-h2 { font-size: 21px; font-weight: 700; color: #1a1d2e; margin-bottom: 8px; }
+  .vision-p { font-size: 13.5px; color: #5f5e5a; line-height: 1.6; }
+
+  .phone-stage { display: grid; grid-template-columns: 300px 1fr; gap: 36px; align-items: start; }
+
+  .phone-frame {
+    width: 280px; height: 572px; background: #0c0d16; border-radius: 42px;
+    padding: 12px; box-sizing: border-box; position: relative; flex-shrink: 0;
+    border: 1px solid #2a2b3a;
+  }
+  .phone-notch {
+    position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+    width: 110px; height: 22px; background: #0c0d16; border-radius: 0 0 14px 14px; z-index: 5;
+  }
+  .phone-screen {
+    width: 100%; height: 100%; background: #1a1d2e; border-radius: 32px; overflow: hidden;
+    display: flex; flex-direction: column; position: relative;
+  }
+
+  .app-statusbar {
+    display: flex; justify-content: space-between; padding: 14px 22px 2px;
+    font-size: 11px; font-weight: 600; color: #fff;
+  }
+  .app-statusbar-icons { font-size: 8px; letter-spacing: 2px; color: #fff; }
+
+  .app-header { padding: 10px 20px 14px; display: flex; flex-direction: column; gap: 2px; }
+  .app-greeting { font-size: 13px; color: #9b8ff4; font-weight: 600; }
+  .app-logo { font-size: 16px; font-weight: 700; color: #fff; }
+  .app-logo span { color: #9b8ff4; }
+
+  .app-scroll { flex: 1; overflow-y: auto; padding: 0 18px; }
+
+  .score-hero { display: flex; flex-direction: column; align-items: center; padding: 8px 0 18px; }
+  .score-hero-ring { position: relative; width: 100px; height: 100px; }
+  .score-hero-number {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    font-size: 28px; font-weight: 700; color: #fff;
+  }
+  .score-hero-label { font-size: 12px; font-weight: 600; color: #fff; margin-top: 8px; }
+  .score-hero-sub { font-size: 10px; color: #9b9bb8; margin-top: 3px; text-align: center; }
+  .score-hero-sub strong { color: #c9c4f7; }
+
+  .score-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 18px; }
+  .score-chip { background: rgba(255,255,255,0.05); border-radius: 12px; padding: 10px 12px; }
+  .score-chip-label { font-size: 9.5px; color: #9b9bb8; margin-bottom: 6px; }
+  .score-chip-bar { width: 100%; height: 5px; border-radius: 3px; background: rgba(255,255,255,0.1); overflow: hidden; margin-bottom: 5px; }
+  .score-chip-fill { height: 100%; border-radius: 3px; }
+  .score-chip-value { font-size: 10.5px; font-weight: 600; color: #fff; }
+
+  .app-section-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #9b9bb8; margin: 14px 0 8px; }
+
+  .today-card { background: rgba(255,255,255,0.05); border-radius: 14px; padding: 12px 14px; margin-bottom: 4px; }
+  .today-row { display: flex; gap: 10px; align-items: flex-start; padding: 7px 0; }
+  .today-icon {
+    width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #fff;
+  }
+  .today-icon-eat { background: #3a9b6e; }
+  .today-icon-avoid { background: #c97b3a; }
+  .today-icon-tip { background: #9b8ff4; }
+  .today-text { font-size: 11px; color: #d9d8ec; line-height: 1.5; }
+  .today-text strong { color: #fff; }
+
+  .symptom-card { background: rgba(255,255,255,0.05); border-radius: 14px; padding: 12px 14px; }
+  .symptom-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; }
+  .symptom-label { font-size: 11.5px; color: #fff; }
+  .symptom-dots { display: flex; gap: 4px; }
+  .symptom-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.15); }
+  .symptom-dot.on { background: #9b8ff4; }
+  .symptom-log-btn {
+    margin-top: 8px; text-align: center; font-size: 11px; font-weight: 600; color: #9b8ff4;
+    border: 1px solid rgba(155,143,244,0.4); border-radius: 10px; padding: 8px;
+  }
+
+  .app-bottom-spacer { height: 14px; }
+
+  .future-section { margin-top: 16px; }
+  .future-title-row { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+  .future-badge { font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: #6b4ff0; background: rgba(155,143,244,0.15); padding: 2px 7px; border-radius: 8px; }
+  .future-grid { display: flex; flex-direction: column; gap: 6px; }
+  .future-chip {
+    display: flex; align-items: center; gap: 9px; background: rgba(255,255,255,0.035);
+    border: 1px dashed rgba(255,255,255,0.15); border-radius: 10px; padding: 9px 11px;
+    pointer-events: none; user-select: none;
+  }
+  .future-chip-icon { font-size: 12px; color: #9b8ff4; flex-shrink: 0; width: 16px; text-align: center; }
+  .future-chip-text { font-size: 10.5px; color: #b8b6cf; line-height: 1.4; }
+  .future-chip-tag { font-size: 8px; font-weight: 700; color: #74708f; margin-left: auto; flex-shrink: 0; white-space: nowrap; }
+
+  .app-tabbar {
+    display: flex; border-top: 1px solid rgba(255,255,255,0.08); padding: 10px 8px 16px;
+    background: #16182a;
+  }
+  .app-tab { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; opacity: 0.45; }
+  .app-tab.active { opacity: 1; }
+  .app-tab-icon { font-size: 13px; color: #9b8ff4; }
+  .app-tab-label { font-size: 8.5px; font-weight: 600; color: #fff; text-align: center; line-height: 1.2; max-width: 70px; }
+
+  .vision-callouts { display: flex; flex-direction: column; gap: 18px; padding-top: 8px; }
+  .vision-callout { display: flex; gap: 12px; align-items: flex-start; }
+  .vision-callout-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+  .vision-callout strong { color: #1a1d2e; }
+  .vision-callout div:last-child { font-size: 13px; color: #5f5e5a; line-height: 1.6; }
+
+  .map-section { background: #fff; border: 1px solid #e0ded8; border-radius: 16px; padding: 24px 26px; margin-top: 28px; }
+  .map-section-title { font-size: 16px; font-weight: 700; color: #1a1d2e; margin-bottom: 6px; }
+  .map-section-sub { font-size: 13px; color: #5f5e5a; line-height: 1.6; max-width: 600px; margin-bottom: 16px; }
+  .map-legend { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 12px; }
+  .map-legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #5f5e5a; }
+  .map-legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+  /* === Deep dive — sticky slider === */
+  .slider-sticky {
+    position: sticky; top: 0; z-index: 20; background: #f7f7f5;
+    padding: 16px 0 14px; margin-bottom: 24px; border-bottom: 1px solid #e0ded8;
+  }
+  .slider-tier-label { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+  .slider-tier-name { font-size: 19px; font-weight: 700; }
+  .slider-tier-sub { font-size: 12px; color: #888780; }
+  .slider-track-wrap { position: relative; padding: 0 4px; }
+  .dd-range {
+    width: 100%; -webkit-appearance: none; appearance: none; height: 8px;
+    border-radius: 4px; background: linear-gradient(90deg, #d3d1c7 0%, #AFA9EC 50%, #ED93B1 100%);
+    outline: none; cursor: pointer; margin: 10px 0 6px;
+  }
+  .dd-range::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none; width: 24px; height: 24px; border-radius: 50%;
+    background: #1a1d2e; border: 3px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.25); cursor: pointer;
+  }
+  .dd-range::-moz-range-thumb {
+    width: 24px; height: 24px; border-radius: 50%; background: #1a1d2e; border: 3px solid #fff;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.25); cursor: pointer;
+  }
+  .slider-ticks { display: flex; justify-content: space-between; font-size: 11px; font-weight: 600; color: #888780; padding: 0 2px; }
+  .slider-tick { cursor: pointer; padding: 2px 6px; border-radius: 6px; transition: background 0.12s, color 0.12s; }
+  .slider-tick.active { color: #1a1d2e; }
+
+  .dd-milestone-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 24px; }
+  .dd-milestone-card { background: #fff; border: 1px solid #e0ded8; border-radius: 10px; padding: 14px 16px; }
+  .dd-milestone-label { font-size: 10px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: #888780; margin-bottom: 6px; }
+  .dd-milestone-value { font-size: 21px; font-weight: 700; color: #1a1d2e; line-height: 1.2; }
+  .dd-milestone-sub { font-size: 11px; color: #5f5e5a; margin-top: 3px; }
+
+  .dd-scope-grid { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
+
+  @keyframes ddFade { from { opacity: 0; } to { opacity: 1; } }
+  .dd-fade { animation: ddFade 0.25s ease; }
+
+  /* Matrix table */
+  .matrix-wrap { background: #fff; border: 1px solid #e0ded8; border-radius: 14px; overflow: hidden; margin-top: 24px; }
+  .matrix-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+  .matrix-table col.cat { width: 17%; }
+  .matrix-table col.tier { width: 27.66%; }
+  .matrix-table th { text-align: left; padding: 14px 16px; font-size: 12px; font-weight: 700; border-bottom: 1px solid #e0ded8; }
+  .matrix-table th.cat-head { background: #f8f7f4; color: #888780; font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .matrix-table th.t1-head { background: #f8f7f4; color: #5f5e5a; }
+  .matrix-table th.t2-head { background: #F4F2FD; color: #3C3489; }
+  .matrix-table th.t3-head { background: #FCF1F5; color: #993556; }
+  .matrix-table td { padding: 12px 16px; vertical-align: top; border-bottom: 1px solid #f1efe8; font-size: 12px; line-height: 1.5; }
+  .matrix-table tr:last-child td { border-bottom: none; }
+  .matrix-cat-cell { background: #f8f7f4; font-weight: 700; color: #1a1d2e; font-size: 11.5px; }
+  .matrix-table td.t1-cell { background: #fcfcfb; color: #3a3a38; }
+  .matrix-table td.t2-cell { background: #FBFAFE; color: #2a2655; }
+  .matrix-table td.t3-cell { background: #FEFAFB; color: #5a2438; }
+  .matrix-item { display: flex; gap: 6px; align-items: flex-start; padding: 2px 0; }
+  .matrix-mark { flex-shrink: 0; width: 14px; font-weight: 700; }
+
+  /* === Tabs 2-4: scenario deep dive === */
+  .scenario-hero {
+    border-radius: 16px; padding: 26px 28px; margin-bottom: 24px;
+  }
+  .scenario-hero-eyebrow { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+  .scenario-hero-title { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+  .scenario-hero-sub { font-size: 13px; line-height: 1.6; max-width: 560px; }
+
+  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 24px; }
+  .kpi-card { background: #fff; border: 1px solid #e0ded8; border-radius: 10px; padding: 14px 16px; }
+  .kpi-card-label { font-size: 10px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: #888780; margin-bottom: 6px; }
+  .kpi-card-value { font-size: 21px; font-weight: 700; color: #1a1d2e; line-height: 1.2; }
+  .kpi-card-sub { font-size: 11px; color: #5f5e5a; margin-top: 3px; }
+
+  .chart-card { background: #fff; border: 1px solid #e0ded8; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+  .chart-card-title { font-size: 13px; font-weight: 600; color: #1a1d2e; margin-bottom: 4px; }
+  .chart-card-sub { font-size: 12px; color: #888780; margin-bottom: 14px; }
+  .chart-legend { display: flex; gap: 18px; margin-bottom: 10px; flex-wrap: wrap; }
+  .chart-legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #5f5e5a; }
+  .chart-legend-swatch { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+  .section-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    color: #888780; margin: 28px 0 12px;
+  }
+  .section-label:first-of-type { margin-top: 0; }
+
+  .scope-box { border-radius: 14px; padding: 18px 20px; margin-bottom: 24px; }
+  .scope-title { font-size: 13px; font-weight: 700; margin-bottom: 10px; }
+  .scope-row { display: flex; gap: 10px; padding: 7px 0; align-items: flex-start; }
+  .scope-row:not(:last-child) { border-bottom: 1px solid rgba(0,0,0,0.06); }
+  .scope-icon { font-size: 13px; font-weight: 700; flex-shrink: 0; width: 18px; }
+  .scope-text { font-size: 12.5px; line-height: 1.5; }
+  .scope-text strong { font-weight: 700; }
+
+  .phase-box { border-radius: 14px; padding: 20px 22px; margin-bottom: 14px; }
+  .phase-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 6px; }
+  .phase-title { font-size: 16px; font-weight: 700; margin-bottom: 14px; }
+  .phase-tactic-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .phase-tactic { background: #fff; border-radius: 10px; padding: 10px 12px; }
+  .phase-tactic-name { font-size: 12px; font-weight: 700; color: #1a1d2e; }
+  .phase-tactic-desc { font-size: 10.5px; color: #5f5e5a; margin-top: 3px; line-height: 1.4; }
+  .phase-note { font-size: 12.5px; }
+  .phase-exit { font-size: 13px; font-weight: 700; margin-top: 8px; }
+
+  .cost-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  .cost-table th { text-align: left; font-weight: 600; font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: #888780; padding: 6px 8px; border-bottom: 1px solid #e0ded8; }
+  .cost-table th:last-child { text-align: right; }
+  .cost-table td { padding: 9px 8px; border-bottom: 1px solid #f1efe8; color: #1a1d2e; }
+  .cost-table td:last-child { text-align: right; font-weight: 600; white-space: nowrap; }
+  .cost-table tr.total td { font-weight: 700; font-size: 13.5px; border-top: 1.5px solid #1a1d2e; border-bottom: none; padding-top: 12px; }
+
+  .series-a-box { border-radius: 14px; padding: 20px 22px; }
+  .series-a-row { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+  .series-a-stat-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.8; }
+  .series-a-stat-value { font-size: 20px; font-weight: 700; margin-top: 3px; }
+
+  .footer { background: #1a1d2e; padding: 18px 40px; font-size: 11px; color: #4a4d6a; text-align: center; margin-top: 20px; }
+
+  @media (max-width: 760px) {
+    .compare-grid { grid-template-columns: 1fr; }
+    .kpi-row { grid-template-columns: 1fr 1fr; }
+    .phase-tactic-grid { grid-template-columns: 1fr; }
+    .header { padding: 16px 20px; }
+    .page { padding: 24px 16px 48px; }
+    .matrix-wrap { overflow-x: auto; }
+    .matrix-table { table-layout: auto; min-width: 680px; }
+    .phone-stage { grid-template-columns: 1fr; justify-items: center; }
+    .dd-milestone-row { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">Eleva<span>me</span></div>
+  <div class="header-tag">Pre-seed investment scenarios · 2026</div>
+</div>
+
+<div class="page">
+
+  <div class="intro">
+    <h1>Three paths to <span>Series A</span></h1>
+    <p>The size of the raise changes more than the runway — it changes what Elevame can attempt, how fast it moves, and how strong the Series A story is. Compare the three scenarios, then go deeper on any one.</p>
+  </div>
+
+  <div class="tab-bar">
+    <button class="tab-btn active" id="tab-btn-vision" onclick="showTab('vision')">The vision</button>
+    <button class="tab-btn" id="tab-btn-compare" onclick="showTab('compare')">Compare scenarios</button>
+    <button class="tab-btn" id="tab-btn-deepdive" onclick="showTab('deepdive')">Deep dive</button>
+  </div>
+
+  <!-- ============ TAB 0: VISION ============ -->
+  <div class="tab-panel active" id="tab-vision">
+
+    <div class="vision-intro">
+      <h2 class="vision-h2">Gut data, smart nutrition — in your pocket</h2>
+      <p class="vision-p">A look at the Elevame app once it's built: a personal dashboard for gut data, today's guidance, symptom tracking, and a direct line to weekly meals and personalised supplements.</p>
+    </div>
+
+    <div class="phone-stage">
+
+      <div class="phone-frame">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+
+          <div class="app-statusbar">
+            <span>9:41</span>
+            <span class="app-statusbar-icons">&#9679;&#9679;&#9679;</span>
+          </div>
+
+          <div class="app-header">
+            <div class="app-greeting">Good morning, Laura</div>
+            <div class="app-logo">Eleva<span>me</span></div>
+          </div>
+
+          <div class="app-scroll">
+
+            <div class="score-hero">
+              <div class="score-hero-ring">
+                <svg width="100" height="100" viewBox="0 0 100 100">
+                  <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="8"/>
+                  <circle cx="50" cy="50" r="42" fill="none" stroke="#9b8ff4" stroke-width="8"
+                    stroke-dasharray="218 264" stroke-linecap="round" transform="rotate(-90 50 50)"/>
+                </svg>
+                <div class="score-hero-number">82</div>
+              </div>
+              <div class="score-hero-label">Wellness score</div>
+              <div class="score-hero-sub">Microbiome age: <strong>29</strong> &#183; biological age: 34</div>
+            </div>
+
+            <div class="score-grid">
+              <div class="score-chip">
+                <div class="score-chip-label">Gut diversity</div>
+                <div class="score-chip-bar"><div class="score-chip-fill" style="width:78%; background:#9b8ff4;"></div></div>
+                <div class="score-chip-value">Good</div>
+              </div>
+              <div class="score-chip">
+                <div class="score-chip-label">Inflammation</div>
+                <div class="score-chip-bar"><div class="score-chip-fill" style="width:54%; background:#f2c14e;"></div></div>
+                <div class="score-chip-value">Moderate</div>
+              </div>
+              <div class="score-chip">
+                <div class="score-chip-label">Digestion</div>
+                <div class="score-chip-bar"><div class="score-chip-fill" style="width:88%; background:#7ad9b0;"></div></div>
+                <div class="score-chip-value">Excellent</div>
+              </div>
+              <div class="score-chip">
+                <div class="score-chip-label">Metabolic</div>
+                <div class="score-chip-bar"><div class="score-chip-fill" style="width:65%; background:#9b8ff4;"></div></div>
+                <div class="score-chip-value">Good</div>
+              </div>
+            </div>
+
+            <div class="app-section-title">What to do today</div>
+            <div class="today-card">
+              <div class="today-row">
+                <div class="today-icon today-icon-eat">&#10003;</div>
+                <div class="today-text"><strong>Eat</strong> sardines, kefir, or leafy greens — supports your gut diversity score</div>
+              </div>
+              <div class="today-row">
+                <div class="today-icon today-icon-avoid">&#8211;</div>
+                <div class="today-text"><strong>Limit</strong> refined sugar today — your inflammation score is trending up</div>
+              </div>
+              <div class="today-row">
+                <div class="today-icon today-icon-tip">&#9733;</div>
+                <div class="today-text"><strong>Tip</strong> a 10-minute walk after lunch can ease post-meal bloating</div>
+              </div>
+            </div>
+
+            <div class="app-section-title">Symptom tracker</div>
+            <div class="symptom-card">
+              <div class="symptom-row">
+                <span class="symptom-label">Bloating</span>
+                <span class="symptom-dots">
+                  <span class="symptom-dot on"></span><span class="symptom-dot on"></span><span class="symptom-dot"></span><span class="symptom-dot"></span><span class="symptom-dot"></span>
+                </span>
+              </div>
+              <div class="symptom-row">
+                <span class="symptom-label">Energy</span>
+                <span class="symptom-dots">
+                  <span class="symptom-dot on"></span><span class="symptom-dot on"></span><span class="symptom-dot on"></span><span class="symptom-dot on"></span><span class="symptom-dot"></span>
+                </span>
+              </div>
+              <div class="symptom-row">
+                <span class="symptom-label">Sleep quality</span>
+                <span class="symptom-dots">
+                  <span class="symptom-dot on"></span><span class="symptom-dot on"></span><span class="symptom-dot on"></span><span class="symptom-dot"></span><span class="symptom-dot"></span>
+                </span>
+              </div>
+              <div class="symptom-log-btn">+ Log today's symptoms</div>
+            </div>
+
+            <div class="future-section">
+              <div class="future-title-row">
+                <span class="future-badge">Coming soon</span>
+              </div>
+              <div class="future-grid">
+                <div class="future-chip">
+                  <span class="future-chip-icon">&#9737;</span>
+                  <span class="future-chip-text">Scan a menu for instant recommendations</span>
+                  <span class="future-chip-tag">Tier 3</span>
+                </div>
+                <div class="future-chip">
+                  <span class="future-chip-icon">&#8635;</span>
+                  <span class="future-chip-text">Compare gut scores across retests</span>
+                  <span class="future-chip-tag">Tier 2</span>
+                </div>
+                <div class="future-chip">
+                  <span class="future-chip-icon">&#9993;</span>
+                  <span class="future-chip-text">Ask Elevame AI about your plan</span>
+                  <span class="future-chip-tag">Tier 2</span>
+                </div>
+                <div class="future-chip">
+                  <span class="future-chip-icon">&#127942;</span>
+                  <span class="future-chip-text">Weekly adherence streaks</span>
+                  <span class="future-chip-tag">Tier 2</span>
+                </div>
+                <div class="future-chip">
+                  <span class="future-chip-icon">&#127968;</span>
+                  <span class="future-chip-text">Grocery delivery for your meal plan</span>
+                  <span class="future-chip-tag">Tier 3</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="app-bottom-spacer"></div>
+          </div>
+
+          <div class="app-tabbar">
+            <div class="app-tab active">
+              <div class="app-tab-icon">&#9679;</div>
+              <div class="app-tab-label">Today</div>
+            </div>
+            <div class="app-tab">
+              <div class="app-tab-icon">&#9651;</div>
+              <div class="app-tab-label">Order weekly meals</div>
+            </div>
+            <div class="app-tab">
+              <div class="app-tab-icon">&#9670;</div>
+              <div class="app-tab-label">Order pre/probiotics</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="vision-callouts">
+        <div class="vision-callout">
+          <div class="vision-callout-dot" style="background:#9b8ff4;"></div>
+          <div><strong>One score, instantly legible.</strong> Wellness score and microbiome age give a single number people check daily — same hook as Whoop or Oura, built on Elevame's own data.</div>
+        </div>
+        <div class="vision-callout">
+          <div class="vision-callout-dot" style="background:#7ad9b0;"></div>
+          <div><strong>Daily guidance, not just a report.</strong> "What to do today" turns a one-time test into a reason to open the app every morning.</div>
+        </div>
+        <div class="vision-callout">
+          <div class="vision-callout-dot" style="background:#f2c14e;"></div>
+          <div><strong>Symptom tracking closes the loop.</strong> Connects what someone eats to how they feel — the data that makes recommendations sharper over time.</div>
+        </div>
+        <div class="vision-callout">
+          <div class="vision-callout-dot" style="background:#6b4ff0;"></div>
+          <div><strong>Commerce built into the bottom tab.</strong> Weekly meals and personalised pre/probiotics turn the app from a dashboard into a recurring revenue channel.</div>
+        </div>
+      </div>
+
+    </div>
+
+    <p class="note" style="text-align:left; font-style:normal; margin-top:8px;">Illustrative concept only — final design, scores, and features will be refined during development. See the Tier 1–3 tabs for what's actually scoped and funded at each investment level.</p>
+
+  </div>
+
+  <!-- ============ TAB 1: COMPARE ============ -->
+  <div class="tab-panel" id="tab-compare">
+
+    <div class="compare-grid">
+
+      <div class="compare-card">
+        <div class="compare-head" style="background:#f8f7f4;">
+          <div class="current-val-row">
+            <span class="current-val-label">Current valuation</span>
+            <span class="current-val-figure" style="color:#5f5e5a;">EUR 1M</span>
+          </div>
+          <span class="compare-badge" style="background:#fff; color:#5f5e5a; border:1px solid #d3d1c7;">Tier 1</span>
+          <div class="compare-headline-figure">EUR 250k</div>
+          <div class="compare-headline-sub">Investment</div>
+          <div class="compare-name">Lean mode</div>
+          <div class="compare-tagline">B2C only, marketing outsourced, Spain + Morocco exclusivity secured</div>
+        </div>
+
+        <div class="compare-section">
+          <div class="compare-section-label">Month 18 objectives</div>
+          <div class="revbar-value">EUR 26k<span style="font-size:12px; font-weight:600; color:#888780;">/mo</span></div>
+          <div class="revbar-track" style="margin-top:6px;"><div class="revbar-fill" style="width:34%; background:linear-gradient(90deg, #e34948, #eb6834);"></div></div>
+          <div class="revbar-sub" style="margin-bottom:10px;">~80 kits/month</div>
+          <div style="display:flex; justify-content:space-between; align-items:center; padding-top:10px; border-top:1px solid #f1efe8;">
+            <span style="font-size:11px; color:#888780;">Future valuation</span>
+            <span style="font-size:15px; font-weight:700; color:#1a1d2e;">~EUR 1.9M</span>
+          </div>
+        </div>
+
+        <div class="compare-section">
+          <div class="compare-section-label">Equity</div>
+          <div class="valuation-row">
+            <svg width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="Pie chart showing investor receives 25 percent equity">
+              <circle cx="32" cy="32" r="22" fill="#f1efe8" stroke="#d3d1c7" stroke-width="0.5"/>
+              <path d="M32 10 A22 22 0 0 1 54 32 L32 32 Z" fill="#5f5e5a"/>
+            </svg>
+            <div class="valuation-stats">
+              <div class="valuation-line"><span class="valuation-line-label">Investor equity</span><span class="valuation-line-value">25%</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="compare-cta" onclick="goToDeepDive(0)">See the full plan</div>
+      </div>
+
+      <div class="compare-card">
+        <div class="compare-head" style="background:#F4F2FD;">
+          <div class="current-val-row">
+            <span class="current-val-label">Current valuation</span>
+            <span class="current-val-figure" style="color:#3C3489;">~EUR 1.6M</span>
+          </div>
+          <span class="compare-badge" style="background:#fff; color:#3C3489; border:1px solid #AFA9EC;">Tier 2</span>
+          <div class="compare-headline-figure">EUR 500k</div>
+          <div class="compare-headline-sub">Investment</div>
+          <div class="compare-name">Accelerated mode</div>
+          <div class="compare-tagline">Spain + Morocco, Mohamed full-time, app MVP and B2B sales live</div>
+        </div>
+
+        <div class="compare-section">
+          <div class="compare-section-label">Month 18 objectives</div>
+          <div class="revbar-value">EUR 53k<span style="font-size:12px; font-weight:600; color:#888780;">/mo</span></div>
+          <div class="revbar-track" style="margin-top:6px;"><div class="revbar-fill" style="width:70%; background:linear-gradient(90deg, #e34948, #eb6834, #eda100);"></div></div>
+          <div class="revbar-sub" style="margin-bottom:10px;">150 kits/month</div>
+          <div style="display:flex; justify-content:space-between; align-items:center; padding-top:10px; border-top:1px solid #f1efe8;">
+            <span style="font-size:11px; color:#888780;">Future valuation</span>
+            <span style="font-size:15px; font-weight:700; color:#1a1d2e;">~EUR 3.8M</span>
+          </div>
+        </div>
+
+        <div class="compare-section">
+          <div class="compare-section-label">Equity</div>
+          <div class="valuation-row">
+            <svg width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="Pie chart showing investor receives 30 percent equity">
+              <circle cx="32" cy="32" r="26" fill="#F4F2FD" stroke="#AFA9EC" stroke-width="0.5"/>
+              <path d="M32 6 A26 26 0 0 1 56.7 40.0 L32 32 Z" fill="#6b4ff0"/>
+            </svg>
+            <div class="valuation-stats">
+              <div class="valuation-line"><span class="valuation-line-label">Investor equity</span><span class="valuation-line-value">30%</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="compare-cta" onclick="goToDeepDive(1)">See the full plan</div>
+      </div>
+
+      <div class="compare-card">
+        <div class="compare-head" style="background:#FCF1F5;">
+          <div class="current-val-row">
+            <span class="current-val-label">Current valuation</span>
+            <span class="current-val-figure" style="color:#993556;">~EUR 1.6M</span>
+          </div>
+          <span class="compare-badge" style="background:#fff; color:#993556; border:1px solid #ED93B1;">Tier 3</span>
+          <div class="compare-headline-figure">EUR 650k</div>
+          <div class="compare-headline-sub">Investment</div>
+          <div class="compare-name">Overdrive mode</div>
+          <div class="compare-tagline">Spain + Morocco, Mohamed full-time with outsourced app development and extra marketing spend</div>
+        </div>
+
+        <div class="compare-section">
+          <div class="compare-section-label">Month 18 objectives</div>
+          <div class="revbar-value">EUR 76k<span style="font-size:12px; font-weight:600; color:#888780;">/mo</span></div>
+          <div class="revbar-track" style="margin-top:6px;"><div class="revbar-fill" style="width:100%; background:linear-gradient(90deg, #e34948, #eb6834, #eda100, #639922);"></div></div>
+          <div class="revbar-sub" style="margin-bottom:10px;">220 kits/month</div>
+          <div style="display:flex; justify-content:space-between; align-items:center; padding-top:10px; border-top:1px solid #f1efe8;">
+            <span style="font-size:11px; color:#888780;">Future valuation</span>
+            <span style="font-size:15px; font-weight:700; color:#1a1d2e;">~EUR 5.5M</span>
+          </div>
+        </div>
+
+        <div class="compare-section">
+          <div class="compare-section-label">Equity</div>
+          <div class="valuation-row">
+            <svg width="70" height="70" viewBox="0 0 70 70" role="img" aria-label="Pie chart showing investor receives 40 percent equity">
+              <circle cx="35" cy="35" r="32" fill="#FCF1F5" stroke="#ED93B1" stroke-width="0.5"/>
+              <path d="M35 3 A32 32 0 0 1 53.8 60.9 L35 35 Z" fill="#D4537E"/>
+            </svg>
+            <div class="valuation-stats">
+              <div class="valuation-line"><span class="valuation-line-label">Investor equity</span><span class="valuation-line-value">40%</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="compare-cta" onclick="goToDeepDive(2)">See the full plan</div>
+      </div>
+
+    </div>
+
+    <div class="matrix-wrap">
+      <table class="matrix-table">
+        <colgroup>
+          <col class="cat"><col class="tier"><col class="tier"><col class="tier">
+        </colgroup>
+        <thead>
+          <tr>
+            <th class="cat-head">Category</th>
+            <th class="t1-head">Tier 1 — Lean mode</th>
+            <th class="t2-head">Tier 2 — Accelerated mode</th>
+            <th class="t3-head">Tier 3 — Overdrive mode</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="matrix-cat-cell">Co-founders<br>involvement</td>
+            <td class="t1-cell">
+              <div class="matrix-item"><span class="matrix-mark" style="color:#5f5e5a;">&#10003;</span><span>Both founders part-time</span></div>
+            </td>
+            <td class="t2-cell">
+              <div class="matrix-item"><span class="matrix-mark" style="color:#534AB7;">&#10003;</span><span>Mohamed full-time</span></div>
+            </td>
+            <td class="t3-cell">
+              <div class="matrix-item"><span class="matrix-mark" style="color:#993556;">&#10003;</span><span>Mohamed full-time</span></div>
+              <div class="matrix-item"><span class="matrix-mark" style="color:#993556;">&#10003;</span><span>Additional funding for app development</span></div>
+              <div class="matrix-item"><span class="matrix-mark" style="color:#993556;">&#10003;</span><span>Additional marketing budget</span></div>
+            </td>
+          </tr>
+          <tr>
+            <td class="matrix-cat-cell">Marketing<br>approach</td>
+            <td class="t1-cell">
+              <div class="matrix-item"><span class="matrix-mark" style="color:#5f5e5a;">&#10003;</span><span>Outsourced to marketing agency</span></div>
+              <div class="matrix-item"><span class="matrix-mark" style="color:#5f5e5a;">&#10003;</span><span>Mainly project management</span></div>
+            </td>
+            <td class="t2-cell">
+              <div class="matrix-item"><span class="matrix-mark" style="color:#534AB7;">&#10003;</span><span>Close collaboration with marketing agency to assure quality</span></div>
+              <div class="matrix-item"><span class="matrix-mark" style="color:#534AB7;">&#10003;</span><span>Barcelona blitz</span></div>
+            </td>
+            <td class="t3-cell">
+              <div class="matrix-item"><span class="matrix-mark" style="color:#993556;">&#10003;</span><span>Everything in Tier 2</span></div>
+              <div class="matrix-item"><span class="matrix-mark" style="color:#993556;">&#10003;</span><span>Additional spend on marketing — ads and agency</span></div>
+            </td>
+          </tr>
+          <tr>
+            <td class="matrix-cat-cell">In-house app<br>development
+              <div style="font-weight:400; font-size:10.5px; color:#888780; margin-top:8px; line-height:1.5;">Live at month 12</div>
+            </td>
+            <td class="t1-cell">
+              <div class="matrix-item"><span class="matrix-mark" style="color:#5f5e5a;">&#10003;</span><span>Gut data dashboard</span></div>
+              <div class="matrix-item"><span class="matrix-mark" style="color:#5f5e5a;">&#10003;</span><span>Recommended foods, diet plan</span></div>
+              <div class="matrix-item"><span class="matrix-mark" style="color:#5f5e5a;">&#10003;</span><span>Symptom tracker, education content</span></div>
+            </td>
+            <td class="t2-cell">
+              <div class="matrix-item"><span class="matrix-mark" style="color:#534AB7;">&#10003;</span><span>Everything in Tier 1</span></div>
+              <div class="matrix-item"><span class="matrix-mark" style="color:#534AB7;">&#10003;</span><span>Retest comparison view, gamification</span></div>
+              <div class="matrix-item"><span class="matrix-mark" style="color:#534AB7;">&#10003;</span><span>Symptom-to-score correlation</span></div>
+              <div class="matrix-item"><span class="matrix-mark" style="color:#534AB7;">&#10003;</span><span>Contextual reminders, AI chat bot</span></div>
+            </td>
+            <td class="t3-cell">
+              <div class="matrix-item"><span class="matrix-mark" style="color:#993556;">&#10003;</span><span>Everything in Tier 2</span></div>
+              <div class="matrix-item"><span class="matrix-mark" style="color:#993556;">&#10003;</span><span>Outsourced app development</span></div>
+              <div class="matrix-item"><span class="matrix-mark" style="color:#993556;">&#10003;</span><span>Menu image recognition</span></div>
+              <div class="matrix-item"><span class="matrix-mark" style="color:#993556;">&#10003;</span><span>Custom pre/probiotics ordering</span></div>
+              <div class="matrix-item"><span class="matrix-mark" style="color:#993556;">&#10003;</span><span>Meal plan + grocery ordering</span></div>
+            </td>
+          </tr>
+          <tr>
+            <td class="matrix-cat-cell">B2B</td>
+            <td class="t1-cell">
+              <div class="matrix-item"><span class="matrix-mark" style="color:#5f5e5a;">&#10003;</span><span>Limited efforts, mostly email</span></div>
+            </td>
+            <td class="t2-cell">
+              <div class="matrix-item"><span class="matrix-mark" style="color:#534AB7;">&#10003;</span><span>In-person visits</span></div>
+            </td>
+            <td class="t3-cell">
+              <div class="matrix-item"><span class="matrix-mark" style="color:#993556;">&#10003;</span><span>In-person visits</span></div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="note" style="margin-top:18px;">Figures are illustrative projections built from the same per-kit economics (EUR 399 B2C / EUR 250 B2B average, EUR 170 cost per kit) with scope and velocity scaled to each tier's funding and founder commitment. Not guarantees — subject to execution and market conditions.</p>
+
+  </div>
+
+  <!-- ============ TAB 2: DEEP DIVE (merged, slider-driven) ============ -->
+  <div class="tab-panel" id="tab-deepdive">
+
+    <div class="slider-sticky">
+      <div class="slider-tier-label">
+        <div>
+          <div class="slider-tier-name" id="dd-tier-name">Lean mode</div>
+          <div class="slider-tier-sub" id="dd-tier-sub">EUR 250k at 25% equity</div>
+          <div class="slider-tier-sub" style="margin-top:2px; color:#888780;">Current valuation: <strong id="dd-current-val">EUR 1M</strong></div>
+        </div>
+        <div style="text-align:right;">
+          <div class="slider-tier-name" id="dd-tier-investment">EUR 250k</div>
+          <div class="slider-tier-sub">Investment</div>
+        </div>
+      </div>
+      <div class="slider-track-wrap">
+        <input type="range" min="0" max="2" step="1" value="0" class="dd-range" id="dd-range" oninput="setDeepDive(this.value)">
+        <div class="slider-ticks">
+          <span class="slider-tick active" id="dd-tick-0" onclick="setDeepDive(0)">Tier 1 — Lean mode</span>
+          <span class="slider-tick" id="dd-tick-1" onclick="setDeepDive(1)">Tier 2 — Accelerated mode</span>
+          <span class="slider-tick" id="dd-tick-2" onclick="setDeepDive(2)">Tier 3 — Overdrive mode</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="dd-content" class="dd-fade">
+
+      <div style="margin-bottom:20px;">
+        <div style="font-size:18px; font-weight:700; color:#1a1d2e; margin-bottom:4px;">18-month objectives</div>
+        <div style="font-size:12px; color:#888780;">Revenue, profit, kits sold and future valuation targets at the end of the 18-month runway funded by this investment.</div>
+      </div>
+      <div class="dd-milestone-row">
+        <div class="dd-milestone-card">
+          <div class="dd-milestone-label">Kits sold</div>
+          <div class="dd-milestone-value" id="dd-m-kits">80</div>
+          <div class="dd-milestone-sub" id="dd-m-kits-sub">per month</div>
+        </div>
+        <div class="dd-milestone-card">
+          <div class="dd-milestone-label">Revenue</div>
+          <div class="dd-milestone-value" id="dd-m-revenue">EUR 26.4k</div>
+          <div class="dd-milestone-sub">per month</div>
+        </div>
+        <div class="dd-milestone-card">
+          <div class="dd-milestone-label">Gross profit</div>
+          <div class="dd-milestone-value" id="dd-m-profit">EUR 12.2k</div>
+          <div class="dd-milestone-sub" id="dd-m-profit-sub">per month (~46%)</div>
+        </div>
+        <div class="dd-milestone-card">
+          <div class="dd-milestone-label">Future valuation (month 18)</div>
+          <div class="dd-milestone-value" id="dd-m-valuation">~EUR 1.9M</div>
+          <div class="dd-milestone-sub" id="dd-m-valuation-sub">target, ~month 18</div>
+        </div>
+      </div>
+
+      <div class="section-label">Scope of operations</div>
+      <div class="scope-box" id="dd-scope-box" style="background:#f1efe8; border:1px solid #d3d1c7; margin-bottom:24px;">
+        <div class="scope-title" id="dd-scope-title" style="color:#1a1d2e;">Scope of operations</div>
+        <div id="dd-scope-rows"></div>
+      </div>
+
+      <div class="section-label">Revenue and gross profit ramp</div>
+      <div class="chart-card">
+        <div class="chart-card-title">Revenue and gross profit ramp</div>
+        <div class="chart-card-sub" id="dd-chart-sub">No founder salary draw keeps fixed costs near zero — but growth is slower without a dedicated operator</div>
+        <div class="chart-legend">
+          <span class="chart-legend-item"><span class="chart-legend-swatch" style="background:#2a78d6"></span>Monthly revenue</span>
+          <span class="chart-legend-item"><span class="chart-legend-swatch" style="background:#1baf7a"></span>Gross profit</span>
+          <span class="chart-legend-item"><span class="chart-legend-swatch" style="background:#e34948; width:10px; height:3px; border-radius:0;"></span>Fixed cost base</span>
+        </div>
+        <div style="position:relative; width:100%; height:280px;"><canvas id="dd-revenue-chart" role="img" aria-label="Line chart of revenue and gross profit over 18 months for the selected tier">Revenue and gross profit ramp over 18 months.</canvas></div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-card-title">Kits sold per month</div>
+        <div class="chart-card-sub">North star metric — everything else is a lever that feeds this number</div>
+        <div style="position:relative; width:100%; height:220px;"><canvas id="dd-kits-chart" role="img" aria-label="Bar chart of kits sold per month over 18 months for the selected tier">Kits sold per month over 18 months.</canvas></div>
+      </div>
+
+      <div class="section-label">What the investment covers</div>
+      <table class="cost-table" id="dd-cost-table">
+        <thead><tr><th>Line item</th><th></th><th>18-month total</th></tr></thead>
+        <tbody id="dd-cost-rows"></tbody>
+      </table>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div class="footer">
+  elevame.es &nbsp;·&nbsp; Barcelona, Spain &nbsp;·&nbsp; Pre-seed round 2026 &nbsp;·&nbsp; Confidential
+</div>
+
+<script>
+function showTab(name) {
+  ['vision','compare','deepdive'].forEach(t => {
+    document.getElementById('tab-' + t).classList.toggle('active', t === name);
+    document.getElementById('tab-btn-' + t).classList.toggle('active', t === name);
+  });
+  if (name === 'deepdive' && !window._ddInitialized) {
+    window._ddInitialized = true;
+    renderDeepDive(0);
+  }
+}
+
+function goToDeepDive(tierIndex) {
+  showTab('deepdive');
+  document.getElementById('dd-range').value = tierIndex;
+  setDeepDive(tierIndex);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+const SCENARIOS = {
+  0: {
+    kits: [8,10,13,16,20,24,28,33,38,44,50,56,62,68,72,75,78,80],
+    b2cRatio: [1,1,1,1,1,.98,.96,.95,.94,.93,.92,.91,.90,.90,.90,.90,.90,.90],
+    fixedCost: 8500,
+    name: 'Lean mode',
+    sub: 'EUR 250k at 25% equity',
+    investment: 'EUR 250k',
+    kitsSub: 'B2C-led, Spain + Morocco exclusivity',
+    revenue: 'EUR 26.4k',
+    profit: 'EUR 12.2k',
+    profitSub: 'per month (~46%)',
+    valuation: '~EUR 1.9M',
+    valuationSub: 'future valuation, month 18',
+    chartSub: 'No founder salary draw keeps fixed costs near zero — but growth is slower without a dedicated operator',
+    currentVal: 'EUR 1M',
+    scopeColor: '#5f5e5a', scopeBg: '#f1efe8', scopeBorder: '#d3d1c7',
+    scopeTitle: 'Scope of operations',
+    scope: [
+      { ok: true, html: '<strong>Mostly B2C, online.</strong> No B2B push, no app, no new product lines — the focus is converting Elevame\'s existing offer as efficiently as possible.' },
+      { ok: true, html: '<strong>Marketing is outsourced.</strong> The retainer agency runs day-to-day execution — content, ads, funnel optimisation.' },
+      { ok: true, html: '<strong>Founders provide vision and project management only</strong> — reviewing, directing and approving, not executing hands-on.' }
+    ],
+    costs: [
+      { label: 'Founder salary', note: 'None — both stay in current roles', value: 0 },
+      { label: 'Enbiosis exclusivity', note: 'Spain + Morocco', value: 50000 },
+      { label: 'Marketing partner retainer', note: 'EUR 3k/month', value: 54000 },
+      { label: 'Paid ads', note: 'EUR 3k/month', value: 54000 },
+      { label: 'Tech stack', note: '', value: 18000 },
+      { label: 'Legal & shareholder agreement', note: 'One-time', value: 15000 },
+      { label: 'Brand & collateral', note: '', value: 12000 },
+      { label: 'Buffer', note: '', value: 47000 }
+    ]
+  },
+  1: {
+    kits: [12,15,20,28,35,45,52,60,68,75,85,95,105,115,125,135,143,150],
+    b2cRatio: [1,1,1,.95,.92,.9,.88,.86,.84,.82,.8,.78,.76,.74,.72,.71,.70,.70],
+    fixedCost: 17000,
+    name: 'Accelerated mode',
+    sub: 'EUR 500k at 30% equity',
+    investment: 'EUR 500k',
+    kitsSub: 'Series A trigger',
+    revenue: 'EUR 53k',
+    profit: 'EUR 26.4k',
+    profitSub: 'per month (~50%)',
+    valuation: '~EUR 3.8M',
+    valuationSub: 'future valuation, month 18',
+    chartSub: 'Contribution margin breakeven at ~120 kits/month, around month 14–15',
+    currentVal: '~EUR 1.6M',
+    scopeColor: '#3C3489', scopeBg: '#EEEDFE', scopeBorder: '#AFA9EC',
+    scopeTitle: 'Scope of operations — everything in Tier 1, plus:',
+    scope: [
+      { ok: true, html: '<strong>App development — MVP.</strong> A branded client portal showing each person\'s gut data and their personalised plan, built on the existing Enbiosis API.' },
+      { ok: true, html: '<strong>B2B sales, broad partner types.</strong> Gyms, clinics, sports clubs, health centres and insurance companies — one B2B motion covering the full range of partner-channel buyers, not just clinics.' },
+      { ok: true, html: '<strong>Double-city blitz in Barcelona.</strong> Launch event, OOH and podcast ads run as two concentrated waves across the city rather than one, deepening reach before expanding elsewhere.' }
+    ],
+    costs: [
+      { label: 'Mohamed salary', note: 'EUR 7k net → ~EUR 10.5k cost/mo', value: 189000 },
+      { label: 'Enbiosis exclusivity', note: 'Spain + Morocco', value: 50000 },
+      { label: 'Barcelona blitz', note: 'Double-city wave — launch event, OOH, podcasts', value: 47000 },
+      { label: 'App MVP', note: 'Data dashboard + personalised plan', value: 20000 },
+      { label: 'Marketing partner retainer', note: 'EUR 3k/month', value: 54000 },
+      { label: 'Paid ads', note: 'EUR 3k/month', value: 54000 },
+      { label: 'Tech stack', note: '', value: 18000 },
+      { label: 'Legal, DPAs, shareholder agreement', note: '', value: 15000 },
+      { label: 'Brand & collateral', note: '', value: 12000 },
+      { label: 'Office space', note: 'EUR 1k/month', value: 18000 },
+      { label: 'Buffer', note: '', value: 23000 }
+    ]
+  },
+  2: {
+    kits: [15,20,28,38,52,68,85,100,115,130,148,164,178,192,202,210,216,220],
+    b2cRatio: [1,1,1,.92,.85,.78,.72,.68,.65,.63,.61,.60,.58,.57,.56,.55,.55,.55],
+    fixedCost: 28000,
+    name: 'Overdrive mode',
+    sub: 'EUR 650k at 40% equity',
+    investment: 'EUR 650k',
+    kitsSub: 'Spain + Morocco, B2B scaled',
+    revenue: 'EUR 75.9k',
+    profit: 'EUR 35.7k',
+    profitSub: 'per month (~47%)',
+    valuation: '~EUR 5.5M',
+    valuationSub: 'future valuation, month 18',
+    chartSub: 'Contribution margin breakeven at ~120 kits/month, around month 11–12 — faster than Tier 2 thanks to outsourced app development and additional marketing spend compounding sooner',
+    currentVal: '~EUR 1.6M',
+    scopeColor: '#72243E', scopeBg: '#FBEAF0', scopeBorder: '#ED93B1',
+    scopeTitle: 'Scope of operations — everything in Tier 2, plus:',
+    scope: [
+      { ok: true, html: '<strong>Outsourced app development — full version.</strong> A dedicated external build team takes the Tier 2 MVP further with image recognition, a meal plan builder, and grocery ordering.' },
+      { ok: true, html: '<strong>Custom pre/probiotics, integrated into the app.</strong> Sold through Elevame\'s existing supplement partner relationship, prescribed from each person\'s gut score data — the recommendation engine becomes a revenue line at no extra build cost.' },
+      { ok: true, html: '<strong>Double-city blitz — Barcelona + Madrid.</strong> The same launch event, OOH and podcast playbook runs in both cities at full strength, amplified by the additional marketing budget.' }
+    ],
+    costs: [
+      { label: 'Mohamed salary', note: 'EUR 7k net → ~EUR 10.5k cost/mo', value: 189000 },
+      { label: 'Enbiosis exclusivity', note: 'Spain + Morocco', value: 50000 },
+      { label: 'Barcelona + Madrid blitz', note: 'Doubled — full launch event, OOH, podcasts in both cities', value: 94000 },
+      { label: 'Outsourced app development', note: 'Full version — image recognition, meal plans', value: 74000 },
+      { label: 'Marketing partner retainer', note: 'EUR 5k/month', value: 90000 },
+      { label: 'Paid ads', note: 'EUR 5k/month', value: 90000 },
+      { label: 'Tech stack', note: '', value: 18000 },
+      { label: 'Legal, DPAs, shareholder agreement', note: '', value: 15000 },
+      { label: 'Brand identity & collateral', note: '', value: 12000 },
+      { label: 'Office space', note: 'EUR 1k/month', value: 18000 }
+    ]
+  }
+};
+
+let ddCurrentTier = 0;
+
+function setDeepDive(idx) {
+  idx = parseInt(idx);
+  ddCurrentTier = idx;
+  const s = SCENARIOS[idx];
+
+  [0,1,2].forEach(i => document.getElementById('dd-tick-' + i).classList.toggle('active', i === idx));
+
+  document.getElementById('dd-tier-name').textContent = s.name;
+  document.getElementById('dd-tier-sub').textContent = s.sub;
+  document.getElementById('dd-tier-investment').textContent = s.investment;
+  document.getElementById('dd-current-val').textContent = s.currentVal;
+
+  document.getElementById('dd-m-kits').textContent = s.kits[17];
+  document.getElementById('dd-m-kits-sub').textContent = s.kitsSub;
+  document.getElementById('dd-m-revenue').textContent = s.revenue;
+  document.getElementById('dd-m-profit').textContent = s.profit;
+  document.getElementById('dd-m-profit-sub').textContent = s.profitSub;
+  document.getElementById('dd-m-valuation').textContent = s.valuation;
+  document.getElementById('dd-m-valuation-sub').textContent = s.valuationSub;
+
+  const scopeBox = document.getElementById('dd-scope-box');
+  scopeBox.style.background = s.scopeBg;
+  scopeBox.style.border = '1px solid ' + s.scopeBorder;
+  document.getElementById('dd-scope-title').style.color = s.scopeColor;
+  document.getElementById('dd-scope-title').textContent = s.scopeTitle;
+  document.getElementById('dd-scope-rows').innerHTML = s.scope.map(row =>
+    `<div class="scope-row"><span class="scope-icon" style="color:${s.scopeColor};">${row.ok ? '&#10003;' : '&#10005;'}</span><div class="scope-text" style="color:${s.scopeColor};">${row.html}</div></div>`
+  ).join('');
+
+  document.getElementById('dd-chart-sub').textContent = s.chartSub;
+
+  const fmt = n => 'EUR ' + n.toLocaleString('en-GB');
+  const costRows = s.costs.map(c =>
+    `<tr><td>${c.label}</td><td style="color:#888780;">${c.note}</td><td>${fmt(c.value)}</td></tr>`
+  ).join('');
+  const total = s.costs.reduce((sum, c) => sum + c.value, 0);
+  document.getElementById('dd-cost-rows').innerHTML = costRows +
+    `<tr class="total"><td colspan="2">Total — ${s.investment}</td><td>${fmt(total)}</td></tr>`;
+
+  renderDeepDiveCharts(idx);
+}
+
+function renderDeepDive(idx) {
+  setDeepDive(idx);
+}
+
+let ddRevenueChart = null, ddKitsChart = null;
+
+function renderDeepDiveCharts(idx) {
+  const s = SCENARIOS[idx];
+  const months = Array.from({length:18}, (_,i) => 'Mo ' + (i+1));
+  const B2C_PRICE = 399, B2B_PRICE = 250, KIT_COST = 170;
+
+  const revenue = s.kits.map((k,i) => {
+    const b2c = Math.round(k * s.b2cRatio[i]);
+    const b2b = k - b2c;
+    return Math.round(b2c * B2C_PRICE + b2b * B2B_PRICE);
+  });
+  const grossProfit = s.kits.map((k,i) => {
+    const b2c = Math.round(k * s.b2cRatio[i]);
+    const b2b = k - b2c;
+    return Math.round(b2c * (B2C_PRICE - KIT_COST) + b2b * (B2B_PRICE - KIT_COST));
+  });
+  const fixedCost = Array(18).fill(s.fixedCost);
+  const gridCol = '#e0ded8', axisCol = '#888780';
+
+  // Fixed scale ceilings computed from Tier 3 (the largest scenario) so all three
+  // tiers render on the same axis and the visual difference between them is real.
+  const t3 = SCENARIOS[2];
+  const t3Revenue = t3.kits.map((k,i) => {
+    const b2c = Math.round(k * t3.b2cRatio[i]);
+    const b2b = k - b2c;
+    return Math.round(b2c * B2C_PRICE + b2b * B2B_PRICE);
+  });
+  const REVENUE_MAX = Math.ceil(Math.max(...t3Revenue, t3.fixedCost) * 1.08 / 5000) * 5000;
+  const KITS_MAX = Math.ceil(Math.max(...t3.kits) * 1.08 / 10) * 10;
+
+  if (ddRevenueChart) ddRevenueChart.destroy();
+  if (ddKitsChart) ddKitsChart.destroy();
+
+  ddRevenueChart = new Chart(document.getElementById('dd-revenue-chart'), {
+    type: 'line',
+    data: {
+      labels: months,
+      datasets: [
+        { label: 'Revenue', data: revenue, borderColor: '#2a78d6', backgroundColor: 'rgba(42,120,214,0.08)', borderWidth: 2, pointRadius: 3, pointBackgroundColor: '#2a78d6', fill: true, tension: 0.3 },
+        { label: 'Gross profit', data: grossProfit, borderColor: '#1baf7a', backgroundColor: 'rgba(27,175,122,0.06)', borderWidth: 2, pointRadius: 3, pointBackgroundColor: '#1baf7a', fill: true, tension: 0.3 },
+        { label: 'Fixed costs', data: fixedCost, borderColor: '#e34948', borderWidth: 1.5, borderDash: [4,3], pointRadius: 0, fill: false, tension: 0 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ` ${ctx.dataset.label}: EUR ${ctx.parsed.y.toLocaleString('en-GB')}` } } },
+      scales: {
+        x: { grid: { color: gridCol }, ticks: { color: axisCol, font: { size: 11 }, autoSkip: false, maxRotation: 0 } },
+        y: { min: 0, max: REVENUE_MAX, grid: { color: gridCol }, ticks: { color: axisCol, font: { size: 11 }, callback: v => v >= 1000 ? 'EUR ' + Math.round(v/1000) + 'k' : 'EUR ' + v } }
+      }
+    }
+  });
+
+  ddKitsChart = new Chart(document.getElementById('dd-kits-chart'), {
+    type: 'bar',
+    data: {
+      labels: months,
+      datasets: [{
+        label: 'Kits', data: s.kits,
+        backgroundColor: 'rgba(107,79,240,0.55)',
+        borderColor: '#6b4ff0',
+        borderWidth: 1, borderRadius: 4
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ` ${ctx.parsed.y} kits/month` } } },
+      scales: {
+        x: { grid: { color: gridCol }, ticks: { color: axisCol, font: { size: 11 }, autoSkip: false, maxRotation: 0 } },
+        y: { min: 0, max: KITS_MAX, grid: { color: gridCol }, ticks: { color: axisCol, font: { size: 11 } }, title: { display: true, text: 'kits/month', color: axisCol, font: { size: 11 } } }
+      }
+    }
+  });
+}
+
+
+</script>
+
+</body>
+</html>
