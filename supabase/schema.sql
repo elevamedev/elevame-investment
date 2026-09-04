@@ -30,9 +30,11 @@ create table if not exists profiles (
 
 alter table profiles enable row level security;
 
+drop policy if exists "profiles_select_own" on profiles;
 create policy "profiles_select_own" on profiles
   for select using (auth.uid() = id);
 
+drop policy if exists "profiles_update_own" on profiles;
 create policy "profiles_update_own" on profiles
   for update using (auth.uid() = id)
   with check (auth.uid() = id);
@@ -52,6 +54,7 @@ create table if not exists foods (
 
 alter table foods enable row level security;
 
+drop policy if exists "foods_select_all" on foods;
 create policy "foods_select_all" on foods
   for select using (true);
 
@@ -78,6 +81,7 @@ create table if not exists gut_scores (
 
 alter table gut_scores enable row level security;
 
+drop policy if exists "gut_scores_select_own" on gut_scores;
 create policy "gut_scores_select_own" on gut_scores
   for select using (auth.uid() = profile_id);
 
@@ -104,6 +108,7 @@ create table if not exists plan_phases (
 
 alter table plan_phases enable row level security;
 
+drop policy if exists "plan_phases_select_own" on plan_phases;
 create policy "plan_phases_select_own" on plan_phases
   for select using (auth.uid() = profile_id);
 
@@ -118,6 +123,7 @@ create table if not exists plan_days (
 
 alter table plan_days enable row level security;
 
+drop policy if exists "plan_days_select_own" on plan_days;
 create policy "plan_days_select_own" on plan_days
   for select using (
     exists (
@@ -141,6 +147,7 @@ create table if not exists plan_meals (
 
 alter table plan_meals enable row level security;
 
+drop policy if exists "plan_meals_select_own" on plan_meals;
 create policy "plan_meals_select_own" on plan_meals
   for select using (
     exists (
@@ -166,6 +173,7 @@ create table if not exists shopping_checks (
 
 alter table shopping_checks enable row level security;
 
+drop policy if exists "shopping_checks_all_own" on shopping_checks;
 create policy "shopping_checks_all_own" on shopping_checks
   for all using (auth.uid() = profile_id)
   with check (auth.uid() = profile_id);
@@ -188,6 +196,7 @@ create table if not exists tracker_entries (
 
 alter table tracker_entries enable row level security;
 
+drop policy if exists "tracker_entries_all_own" on tracker_entries;
 create policy "tracker_entries_all_own" on tracker_entries
   for all using (auth.uid() = profile_id)
   with check (auth.uid() = profile_id);
@@ -211,6 +220,7 @@ create table if not exists milestones (
 
 alter table milestones enable row level security;
 
+drop policy if exists "milestones_all_own" on milestones;
 create policy "milestones_all_own" on milestones
   for all using (auth.uid() = profile_id)
   with check (auth.uid() = profile_id);
