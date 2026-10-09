@@ -2,7 +2,7 @@ import { useState } from "react";
 import { C } from "../theme.js";
 import { useAuth } from "../context/AuthContext.jsx";
 
-export default function LoginView({ t, lang, setLang }) {
+export default function LoginView({ t, lang, setLang, onSwitchToSignUp }) {
   const { signIn } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -51,6 +51,13 @@ export default function LoginView({ t, lang, setLang }) {
             {submitting ? t.login.signingIn : t.login.signIn}
           </button>
         </form>
+      </div>
+
+      <div className="text-center text-sm mt-5" style={{ color: C.textSoft }}>
+        {t.login.noAccount}{" "}
+        <button type="button" onClick={onSwitchToSignUp} className="font-semibold" style={{ color: C.purple }}>
+          {t.login.createOne}
+        </button>
       </div>
     </div>
   );
