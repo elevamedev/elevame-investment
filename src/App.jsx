@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Home, CalendarDays, ShoppingCart, Activity, Search, Gauge, LogOut } from "lucide-react";
+import { Home, CalendarDays, ShoppingCart, Activity, Search, Gauge, LogOut, Apple } from "lucide-react";
 import { C } from "./theme.js";
 import { STRINGS } from "./i18n/strings.js";
 import { MICROBIOME_AGE_DEFAULT, DIVERSITY_DEFAULT } from "./data/gutScoresTemplate.js";
@@ -13,9 +13,10 @@ import ShoppingView from "./views/ShoppingView.jsx";
 import TrackerView from "./views/TrackerView.jsx";
 import ScoresView from "./views/ScoresView.jsx";
 import FoodsView from "./views/FoodsView.jsx";
+import FoodScoresView from "./views/FoodScoresView.jsx";
 
-const TAB_ICONS = { home: Home, scores: Gauge, plan: CalendarDays, shopping: ShoppingCart, tracker: Activity, foods: Search };
-const TAB_ORDER = ["home", "scores", "plan", "shopping", "tracker", "foods"];
+const TAB_ICONS = { home: Home, scores: Gauge, plan: CalendarDays, shopping: ShoppingCart, tracker: Activity, foods: Search, foodScores: Apple };
+const TAB_ORDER = ["home", "scores", "foodScores", "plan", "shopping", "tracker", "foods"];
 
 function AppShell() {
   const { user, signOut } = useAuth();
@@ -110,6 +111,7 @@ function AppShell() {
           microbiomeAge={profile?.microbiome_age ?? MICROBIOME_AGE_DEFAULT}
           diversity={{ value: profile?.diversity_value ?? DIVERSITY_DEFAULT.value, max: profile?.diversity_max ?? DIVERSITY_DEFAULT.max }} />
       )}
+      {tab === "foodScores" && <FoodScoresView t={t} lang={lang} />}
       {tab === "plan" && <PlanView lang={lang} t={t} phases={effectivePhases} phaseIdx={phaseIdx} setPhaseIdx={setPhaseIdx} dayIdx={dayIdx} setDayIdx={setDayIdx} />}
       {tab === "shopping" && (
         <ShoppingView lang={lang} t={t} phases={effectivePhases} phaseIdx={phaseIdx} setPhaseIdx={setPhaseIdx}
