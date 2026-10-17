@@ -107,6 +107,14 @@ begin
   ) then
     alter table profiles drop constraint profiles_id_fkey;
   end if;
+
+  -- An existing table's `id` column never picked up the `default
+  -- gen_random_uuid()` from the `create table if not exists` above
+  -- (that statement is a no-op once the table already exists) —
+  -- without it, inserting a new profile without an explicit id
+  -- (every call in registerKit.mjs / seed.mjs) fails with a
+  -- not-null violation. Safe to run even when it's already set.
+  alter table profiles alter column id set default gen_random_uuid();
 end $$;
 
 alter table profiles enable row level security;
