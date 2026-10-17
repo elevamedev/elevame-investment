@@ -184,4 +184,104 @@ to match exactly.
 
 ---
 
-<!-- Cycle 2, 3 append below as they run. -->
+## Cycle 2 — real reference ranges, full bacteria panel, reworded pattern insights
+
+### Why this cycle
+
+The user shared a second, real 43-page Elevame report (Microbiome Analysis
++ Nutrient Scores + Supplements Report) and gave direct feedback on
+Cycle 1's backlog:
+
+1. **Reference ranges** — previously deferred as "we don't have the
+   boundaries yet." They're actually in the report: every gut score page
+   prints real named anchor points (e.g. Metabolic Score: 15 "Lean" / 35
+   community / 72 "Overweight"). This cycle uses them.
+2. **Taxonomy/sunburst** — explicitly deprioritized. The user's framing:
+   "knowing what bacteria they have simply is useless... it must be added
+   in context, such as when the report shows bacteria related to
+   bloating or autoimmune diseases." No standalone taxonomy chart was
+   built; bacteria are surfaced instead through the existing Key Bacteria
+   drill-down, now covering all 9 bacteria the report actually tracks,
+   each with a plain-language context paragraph.
+3. **Disease-association wording** — useful content, but must not be
+   framed as "disease risk." See below for the section this cycle built
+   and the wording it uses instead.
+4. **Nutrient scores** — deprioritized as "too much detail" for now. Not
+   touched this cycle. The user also clarified the future workflow: two
+   separate per-client uploads going forward — a "normal report" (food
+   scores) and a "doctor's report" (clinical detail, excluding nutrient/
+   food scores). Confirmed by reading the full 43-page PDF: pages 17-36
+   ("Nutrient Scores Report") are purely the per-food 0-10 catalog across
+   14 categories — i.e. what the "normal report" upload will contain.
+
+### Implemented this cycle
+
+- **Real reference-range labels** (`src/data/scoreReferenceRanges.js`):
+  replaced Cycle 1's generic "Low / Typical / High" zone labels with the
+  report's actual named extremes for all 13 gut scores (e.g. Bowel
+  Mobility: "Decreased intestinal motility" / "Increased intestinal
+  motility", ideal in the middle; Lactose Sensitivity: "No sensitivity" /
+  "Lactose sensitivity"). The reference bar's gradient direction now
+  follows each score's real "good side" (low/high/mid) instead of a
+  generic purple gradient. `ScoreDetailSheet.jsx` updated accordingly.
+- **Full 9-bacteria panel**: the report's "Important Bacteria" page tracks
+  9 genera, not 3 — added Alistipes, Eubacterium, Collinsella,
+  Haemophilus, Roseburia and Phascolarctobacterium to Key Bacteria
+  (`gutScoresTemplate.js`), each with a context paragraph in
+  `scoreDetails.js` (what it does, why it matters) rather than a bare
+  percentage — this is the "context, not raw taxonomy" approach the user
+  asked for. Bacteria detail sheets now render a simpler "you vs.
+  community" comparison (matching the report's own bacteria page format)
+  instead of the gut-score reference bar, since bacteria don't have a
+  "good/bad direction" the way scores do.
+- **Corrected screening panel** (`screeningTemplate.js`): replaced Cycle
+  1's representative-but-invented organism list with the exact organisms
+  and category names transcribed from the real "Bacteria and Diseases
+  Report" page (Pathogenic Bacteria, Parasites, Fungi / Yeast, Dysbiotic /
+  Overgrowth Bacteria, Potential Autoimmune Triggers — 29 organisms
+  total, up from 19 placeholders).
+- **"Similar profile patterns" section** (new, `SimilarProfilesReport.jsx`
+  + `similar_profiles` table): the report's "Your Similar Profiles"
+  content — how often a symptom shows up among people with a similar
+  microbiome profile, vs. the population baseline — reworded away from
+  "disease risk." Title is "Similar profile patterns," every card carries
+  an explicit "Not a diagnosis" line, and condition names are shown as
+  symptom/pattern labels rather than inside any "risk" framing.
+  **Caveat worth flagging**: the underlying data is profile-similarity
+  based (not a specific bacterium linked to a specific symptom), so
+  "bacteria-symptom association" as literal wording would overstate what
+  this data shows — used "similar profile patterns" instead, matching
+  what the report itself actually measures.
+- **Dashboard additions**: Wellness Index and Firmicutes/Bacteroidetes
+  ratio cards (new `profiles.wellness_index` / `profiles.f_b_ratio`
+  columns), and the Diversity card now shows a "Needs improvement /
+  Average / Very good" band using the report's own 0–2.94 / 2.94–6.17 /
+  6.17–10 thresholds — all derived from data already in hand, no new
+  per-client upload needed.
+- **Fixed a Cycle 1 inaccuracy**: the Protein Metabolism explanation
+  claimed high fermentation was undesirable ("favours a middle range").
+  The actual report says the opposite — high scores indicate a large,
+  beneficial bacterial variety, same as Carb and Fat Metabolism. Fixed to
+  match the source.
+
+Verified with `npm run build` (clean), `npx eslint .` (clean, same 3
+pre-existing warnings), and a headless smoke test: full Scores tab,
+Bowel Mobility detail sheet (real reference-range labels + mid-good
+gradient), and Alistipes detail sheet (value-vs-community format, no
+zone bar) — no console errors.
+
+### Deferred / backlog for later cycles
+
+- **Nutrient/food score catalog** — explicitly out of scope this cycle.
+  To be driven by the client's separate "normal report" (food) upload
+  once that per-client upload flow exists; the real report's 14-category,
+  ~250-food structure (pp.17-36 of the PDF read this cycle) is a good
+  reference for that future data model, but no app changes were made
+  toward it.
+- Everything already listed in Cycle 0/1's backlog (loading skeletons,
+  dark mode, bundle-size code-splitting, client-specific food exclusions
+  overriding score).
+
+---
+
+<!-- Cycle 3 append below as it runs. -->

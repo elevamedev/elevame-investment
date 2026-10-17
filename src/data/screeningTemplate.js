@@ -24,11 +24,11 @@ export const SCREENING_CATEGORY_ORDER = [
 ];
 
 export const SCREENING_CATEGORY_LABELS = {
-  pathogenic_bacteria: t2("Pathogenic bacteria", "Bacterias patógenas"),
+  pathogenic_bacteria: t2("Pathogenic Bacteria", "Bacterias Patógenas"),
   parasites: t2("Parasites", "Parásitos"),
-  fungi: t2("Fungi", "Hongos"),
-  dysbiotic_bacteria: t2("Dysbiotic bacteria", "Bacterias disbióticas"),
-  autoimmune_triggers: t2("Autoimmune triggers", "Desencadenantes autoinmunes"),
+  fungi: t2("Fungi / Yeast", "Hongos / Levaduras"),
+  dysbiotic_bacteria: t2("Dysbiotic / Overgrowth Bacteria", "Bacterias Disbióticas / de Sobrecrecimiento"),
+  autoimmune_triggers: t2("Potential Autoimmune Triggers", "Posibles Desencadenantes Autoinmunes"),
 };
 
 export const SCREENING_CATEGORY_NOTES = {
@@ -54,35 +54,50 @@ export const SCREENING_CATEGORY_NOTES = {
   ),
 };
 
+// Organism list and category grouping transcribed directly from a real
+// Elevame "Bacteria and Diseases Report" (replacing Cycle 1's placeholder
+// representative list, which was a reasonable guess but not the lab's
+// actual panel).
 export const SCREENING_DEFAULT = [
-  // Pathogenic bacteria
-  { category: "pathogenic_bacteria", key: "c_diff", name: t2("Clostridioides difficile", "Clostridioides difficile"), status: "not_detected" },
-  { category: "pathogenic_bacteria", key: "salmonella", name: t2("Salmonella spp.", "Salmonella spp."), status: "not_detected" },
-  { category: "pathogenic_bacteria", key: "campylobacter", name: t2("Campylobacter jejuni", "Campylobacter jejuni"), status: "not_detected" },
-  { category: "pathogenic_bacteria", key: "shigella", name: t2("Shigella spp.", "Shigella spp."), status: "not_detected" },
+  // Pathogenic Bacteria
+  { category: "pathogenic_bacteria", key: "campylobacter", name: t2("Campylobacter", "Campylobacter"), status: "not_detected" },
+  { category: "pathogenic_bacteria", key: "campylobacter_jejuni", name: t2("Campylobacter jejuni", "Campylobacter jejuni"), status: "not_detected" },
+  { category: "pathogenic_bacteria", key: "campylobacter_coli", name: t2("Campylobacter coli", "Campylobacter coli"), status: "not_detected" },
+  { category: "pathogenic_bacteria", key: "campylobacter_upsaliensis", name: t2("Campylobacter upsaliensis", "Campylobacter upsaliensis"), status: "not_detected" },
+  { category: "pathogenic_bacteria", key: "campylobacter_lari", name: t2("Campylobacter lari", "Campylobacter lari"), status: "not_detected" },
+  { category: "pathogenic_bacteria", key: "c_difficile", name: t2("Clostridium difficile", "Clostridium difficile"), status: "not_detected" },
+  { category: "pathogenic_bacteria", key: "plesiomonas", name: t2("Plesiomonas shigelloides", "Plesiomonas shigelloides"), status: "not_detected" },
+  { category: "pathogenic_bacteria", key: "salmonella", name: t2("Salmonella", "Salmonella"), status: "not_detected" },
+  { category: "pathogenic_bacteria", key: "yersinia", name: t2("Yersinia enterocolitica", "Yersinia enterocolitica"), status: "not_detected" },
+  { category: "pathogenic_bacteria", key: "vibrio_parahaemolyticus", name: t2("Vibrio parahaemolyticus", "Vibrio parahaemolyticus"), status: "not_detected" },
+  { category: "pathogenic_bacteria", key: "vibrio_vulnificus", name: t2("Vibrio vulnificus", "Vibrio vulnificus"), status: "not_detected" },
+  { category: "pathogenic_bacteria", key: "vibrio_cholerae", name: t2("Vibrio cholerae", "Vibrio cholerae"), status: "not_detected" },
+  { category: "pathogenic_bacteria", key: "h_pylori", name: t2("Helicobacter pylori", "Helicobacter pylori"), status: "not_detected" },
 
   // Parasites
-  { category: "parasites", key: "giardia", name: t2("Giardia duodenalis", "Giardia duodenalis"), status: "not_detected" },
-  { category: "parasites", key: "blastocystis", name: t2("Blastocystis hominis", "Blastocystis hominis"), status: "not_detected" },
+  { category: "parasites", key: "cryptosporidium", name: t2("Cryptosporidium", "Cryptosporidium"), status: "not_detected" },
   { category: "parasites", key: "entamoeba", name: t2("Entamoeba histolytica", "Entamoeba histolytica"), status: "not_detected" },
-  { category: "parasites", key: "cryptosporidium", name: t2("Cryptosporidium spp.", "Cryptosporidium spp."), status: "not_detected" },
+  { category: "parasites", key: "giardia", name: t2("Giardia intestinalis", "Giardia intestinalis"), status: "not_detected" },
 
-  // Fungi
-  { category: "fungi", key: "c_albicans", name: t2("Candida albicans", "Candida albicans"), status: "not_detected" },
-  { category: "fungi", key: "c_glabrata", name: t2("Candida glabrata", "Candida glabrata"), status: "not_detected" },
-  { category: "fungi", key: "aspergillus", name: t2("Aspergillus spp.", "Aspergillus spp."), status: "not_detected" },
+  // Fungi / Yeast
+  { category: "fungi", key: "candida", name: t2("Candida", "Candida"), status: "not_detected" },
+  { category: "fungi", key: "candida_albicans", name: t2("Candida albicans", "Candida albicans"), status: "not_detected" },
 
-  // Dysbiotic bacteria
-  { category: "dysbiotic_bacteria", key: "klebsiella", name: t2("Klebsiella pneumoniae", "Klebsiella pneumoniae"), status: "not_detected" },
-  { category: "dysbiotic_bacteria", key: "desulfovibrio", name: t2("Desulfovibrio spp.", "Desulfovibrio spp."), status: "not_detected" },
-  { category: "dysbiotic_bacteria", key: "fusobacterium", name: t2("Fusobacterium nucleatum", "Fusobacterium nucleatum"), status: "not_detected" },
-  { category: "dysbiotic_bacteria", key: "strep_overgrowth", name: t2("Streptococcus spp. (overgrowth)", "Streptococcus spp. (sobrecrecimiento)"), status: "not_detected" },
+  // Dysbiotic / Overgrowth Bacteria
+  { category: "dysbiotic_bacteria", key: "bacillus", name: t2("Bacillus", "Bacillus"), status: "not_detected" },
+  { category: "dysbiotic_bacteria", key: "e_faecalis", name: t2("Enterococcus faecalis", "Enterococcus faecalis"), status: "not_detected" },
+  { category: "dysbiotic_bacteria", key: "staphylococcus", name: t2("Staphylococcus", "Staphylococcus"), status: "not_detected" },
+  { category: "dysbiotic_bacteria", key: "s_aureus", name: t2("Staphylococcus aureus", "Staphylococcus aureus"), status: "not_detected" },
+  { category: "dysbiotic_bacteria", key: "streptococcus", name: t2("Streptococcus", "Streptococcus"), status: "not_detected" },
 
-  // Autoimmune triggers
-  { category: "autoimmune_triggers", key: "klebsiella_aut", name: t2("Klebsiella pneumoniae", "Klebsiella pneumoniae"), status: "not_detected",
-    note: t2("Linked in research to ankylosing spondylitis via molecular mimicry.", "Relacionada en la investigación con la espondilitis anquilosante por mimetismo molecular.") },
-  { category: "autoimmune_triggers", key: "proteus", name: t2("Proteus mirabilis", "Proteus mirabilis"), status: "not_detected",
-    note: t2("Linked in research to rheumatoid arthritis via molecular mimicry.", "Relacionada en la investigación con la artritis reumatoide por mimetismo molecular.") },
-  { category: "autoimmune_triggers", key: "p_copri", name: t2("Prevotella copri", "Prevotella copri"), status: "not_detected",
-    note: t2("Overgrowth has been associated with new-onset rheumatoid arthritis in several studies.", "El sobrecrecimiento se ha asociado con la aparición de artritis reumatoide de inicio reciente en varios estudios.") },
+  // Potential Autoimmune Triggers
+  { category: "autoimmune_triggers", key: "citrobacter", name: t2("Citrobacter", "Citrobacter"), status: "not_detected" },
+  { category: "autoimmune_triggers", key: "citrobacter_freundii", name: t2("Citrobacter freundii", "Citrobacter freundii"), status: "not_detected" },
+  { category: "autoimmune_triggers", key: "fusobacterium", name: t2("Fusobacterium", "Fusobacterium"), status: "not_detected" },
+  { category: "autoimmune_triggers", key: "klebsiella", name: t2("Klebsiella", "Klebsiella"), status: "not_detected" },
+  { category: "autoimmune_triggers", key: "klebsiella_pneumoniae", name: t2("Klebsiella pneumoniae", "Klebsiella pneumoniae"), status: "not_detected" },
+  { category: "autoimmune_triggers", key: "mycobacterium_avium", name: t2("Mycobacterium avium", "Mycobacterium avium"), status: "not_detected" },
+  { category: "autoimmune_triggers", key: "prevotella_copri", name: t2("Prevotella copri", "Prevotella copri"), status: "not_detected" },
+  { category: "autoimmune_triggers", key: "proteus", name: t2("Proteus", "Proteus"), status: "not_detected" },
+  { category: "autoimmune_triggers", key: "proteus_mirabilis", name: t2("Proteus mirabilis", "Proteus mirabilis"), status: "not_detected" },
 ];

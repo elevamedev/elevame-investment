@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { Home, CalendarDays, ShoppingCart, Activity, Search, Gauge, LogOut } from "lucide-react";
 import { C } from "./theme.js";
 import { STRINGS } from "./i18n/strings.js";
-import { MICROBIOME_AGE_DEFAULT, DIVERSITY_DEFAULT } from "./data/gutScoresTemplate.js";
+import { MICROBIOME_AGE_DEFAULT, DIVERSITY_DEFAULT, WELLNESS_INDEX_DEFAULT, FB_RATIO_DEFAULT } from "./data/gutScoresTemplate.js";
 import { PHASES as PHASES_DEFAULT, homeBanners } from "./data/planTemplate.js";
 import { useAuth } from "./context/AuthContext.jsx";
 import { useClientData } from "./hooks/useClientData.js";
@@ -21,7 +21,7 @@ const TAB_ORDER = ["home", "scores", "plan", "shopping", "tracker", "foods"];
 function AppShell() {
   const { user, signOut } = useAuth();
   const {
-    loading, error, profile, phases, gutScores, keyBacteria, screeningFindings, checks, entries, milestones,
+    loading, error, profile, phases, gutScores, keyBacteria, screeningFindings, similarProfiles, checks, entries, milestones,
     updateProfile, toggleShoppingCheck, resetShoppingPhase, saveTrackerEntry, saveMilestoneEntry,
   } = useClientData(user.id);
 
@@ -109,6 +109,9 @@ function AppShell() {
           gutScores={gutScores.length ? gutScores : []}
           keyBacteria={keyBacteria.length ? keyBacteria : []}
           screeningFindings={screeningFindings}
+          similarProfiles={similarProfiles}
+          wellnessIndex={profile?.wellness_index ?? WELLNESS_INDEX_DEFAULT}
+          fbRatio={profile?.f_b_ratio ?? FB_RATIO_DEFAULT}
           microbiomeAge={profile?.microbiome_age ?? MICROBIOME_AGE_DEFAULT}
           diversity={{ value: profile?.diversity_value ?? DIVERSITY_DEFAULT.value, max: profile?.diversity_max ?? DIVERSITY_DEFAULT.max }} />
       )}

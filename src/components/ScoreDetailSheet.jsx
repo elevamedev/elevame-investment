@@ -2,11 +2,13 @@ import { X } from "lucide-react";
 import { C } from "../theme.js";
 import { TAGS } from "../data/gutScoresTemplate.js";
 import { SCORE_DETAILS } from "../data/scoreDetails.js";
+import { SCORE_REFERENCE_RANGES } from "../data/scoreReferenceRanges.js";
 
 export default function ScoreDetailSheet({ t, lang, item, onClose }) {
   if (!item) return null;
   const tagInfo = TAGS[item.tag];
   const detail = SCORE_DETAILS[item.key];
+  const range = SCORE_REFERENCE_RANGES[item.key];
   const pct = Math.min(100, Math.max(0, item.value));
   const avgPct = item.avg != null ? Math.min(100, Math.max(0, item.avg)) : null;
 
@@ -27,23 +29,46 @@ export default function ScoreDetailSheet({ t, lang, item, onClose }) {
           </span>
         </div>
 
-        <div className="mb-1 flex justify-between text-[10px] font-medium" style={{ color: C.textSoft }}>
-          <span>{t.scoreDetail.zoneLow}</span>
-          <span>{t.scoreDetail.zoneTypical}</span>
-          <span>{t.scoreDetail.zoneHigh}</span>
-        </div>
-        <div className="relative rounded-full mb-1" style={{ height: 10, background: `linear-gradient(90deg, ${C.purpleSoft}, ${C.line}, ${C.purpleSoft})` }}>
-          {avgPct != null && (
-            <div className="absolute rounded-full" style={{ left: `calc(${avgPct}% - 1px)`, top: -4, width: 2, height: 18, background: C.textSoft }} />
-          )}
-          <div className="absolute rounded-full" style={{
-            left: `calc(${pct}% - 7px)`, top: -3, width: 14, height: 14, background: tagInfo.color, border: "2px solid #fff", boxShadow: "0 0 0 1px " + tagInfo.color,
-          }} />
-        </div>
-        <div className="flex items-center gap-4 mb-5 text-[11px]" style={{ color: C.textSoft }}>
-          <div className="flex items-center gap-1.5"><span className="inline-block w-2.5 h-2.5 rounded-full" style={{ background: tagInfo.color }} />{t.legendYou}</div>
-          {avgPct != null && <div className="flex items-center gap-1.5"><span className="inline-block w-0.5 h-3" style={{ background: C.textSoft }} />{t.legendAvg}</div>}
-        </div>
+        {range ? (
+          <>
+            <div className="mb-1 flex justify-between text-[10px] font-medium" style={{ color: C.textSoft }}>
+              <span>{range.low[lang]}</span>
+              <span>{range.high[lang]}</span>
+            </div>
+            <div className="relative rounded-full mb-1" style={{
+              height: 10,
+              background: range.goodSide === "mid"
+                ? `linear-gradient(90deg, ${C.red}, ${C.sage}, ${C.red})`
+                : range.goodSide === "low"
+                  ? `linear-gradient(90deg, ${C.sage}, ${C.red})`
+                  : `linear-gradient(90deg, ${C.red}, ${C.sage})`,
+            }}>
+              {avgPct != null && (
+                <div className="absolute rounded-full" style={{ left: `calc(${avgPct}% - 1px)`, top: -4, width: 2, height: 18, background: "#fff" }} />
+              )}
+              <div className="absolute rounded-full" style={{
+                left: `calc(${pct}% - 7px)`, top: -3, width: 14, height: 14, background: tagInfo.color, border: "2px solid #fff", boxShadow: "0 0 0 1px " + tagInfo.color,
+              }} />
+            </div>
+            <div className="flex items-center gap-4 mb-5 text-[11px]" style={{ color: C.textSoft }}>
+              <div className="flex items-center gap-1.5"><span className="inline-block w-2.5 h-2.5 rounded-full" style={{ background: tagInfo.color }} />{t.legendYou}</div>
+              {avgPct != null && <div className="flex items-center gap-1.5"><span className="inline-block w-0.5 h-3" style={{ background: "#fff", border: `1px solid ${C.line}` }} />{t.legendAvg}</div>}
+            </div>
+          </>
+        ) : (
+          <div className="flex items-center gap-6 mb-5">
+            <div>
+              <div className="text-[10px] font-medium mb-0.5" style={{ color: C.textSoft }}>{t.legendYou}</div>
+              <div className="text-xl font-extrabold" style={{ color: tagInfo.color }}>{item.value}</div>
+            </div>
+            {item.avg != null && (
+              <div>
+                <div className="text-[10px] font-medium mb-0.5" style={{ color: C.textSoft }}>{t.legendAvg}</div>
+                <div className="text-xl font-extrabold" style={{ color: C.textSoft }}>{item.avg}</div>
+              </div>
+            )}
+          </div>
+        )}
 
         <div className="text-sm mb-4" style={{ color: C.text }}>{item.note[lang]}</div>
 
