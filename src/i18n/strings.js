@@ -81,7 +81,7 @@ export const STRINGS = {
       disclaimer: "Not a diagnosis — a pattern seen in similar profiles, not a prediction about you specifically.",
       baseline: pct => `Population average: ${pct}%`,
     },
-    wellnessIndex: "Wellness index",
+    wellnessIndex: "Health index",
     wellnessLabel: { good: "Good", fair: "Fair", poor: "Poor" },
     wellnessIndexNote: {
       good: "A pattern not typically seen in chronic-disease-linked profiles.",
@@ -175,7 +175,7 @@ export const STRINGS = {
       disclaimer: "No es un diagnóstico — un patrón observado en perfiles similares, no una predicción sobre ti en particular.",
       baseline: pct => `Media de la población: ${pct}%`,
     },
-    wellnessIndex: "Índice de bienestar",
+    wellnessIndex: "Índice de salud",
     wellnessLabel: { good: "Bueno", fair: "Aceptable", poor: "Bajo" },
     wellnessIndexNote: {
       good: "Un patrón que no suele observarse en perfiles relacionados con enfermedades crónicas.",
