@@ -13,6 +13,7 @@ import ShoppingView from "./views/ShoppingView.jsx";
 import TrackerView from "./views/TrackerView.jsx";
 import ScoresView from "./views/ScoresView.jsx";
 import FoodsView from "./views/FoodsView.jsx";
+import ToastStack from "./components/ToastStack.jsx";
 
 const TAB_ICONS = { home: Home, scores: Gauge, plan: CalendarDays, shopping: ShoppingCart, tracker: Activity, foods: Search };
 const TAB_ORDER = ["home", "scores", "plan", "shopping", "tracker", "foods"];
@@ -81,12 +82,12 @@ function AppShell() {
           <div className="font-extrabold text-lg" style={{ color: C.navy }}>Eleva<span style={{ color: C.purple }}>me</span></div>
           <div className="flex items-center gap-1.5">
             {["en", "es"].map(l => (
-              <button key={l} onClick={() => setLang(l)} className="text-[11px] font-semibold px-2 py-1 rounded-full"
+              <button key={l} onClick={() => setLang(l)} aria-pressed={lang === l} className="text-[11px] font-semibold px-2 py-1 rounded-full"
                 style={{ background: lang === l ? C.navy : "#fff", color: lang === l ? "#fff" : C.textSoft, border: `1px solid ${lang === l ? C.navy : C.line}` }}>
                 {l.toUpperCase()}
               </button>
             ))}
-            <button onClick={signOut} title={t.login.signOut} className="p-1.5 rounded-full" style={{ border: `1px solid ${C.line}` }}>
+            <button onClick={signOut} title={t.login.signOut} aria-label={t.login.signOut} className="p-1.5 rounded-full" style={{ border: `1px solid ${C.line}` }}>
               <LogOut size={13} color={C.textSoft} />
             </button>
           </div>
@@ -122,18 +123,19 @@ function AppShell() {
       )}
       {tab === "foods" && <FoodsView t={t} lang={lang} />}
 
-      <div className="fixed bottom-0 left-0 right-0 max-w-md mx-auto flex" style={{ background: "#fff", borderTop: `1px solid ${C.line}` }}>
+      <nav aria-label={t.nav.primary} className="fixed bottom-0 left-0 right-0 max-w-md mx-auto flex"
+        style={{ background: "#fff", borderTop: `1px solid ${C.line}`, paddingBottom: "env(safe-area-inset-bottom)" }}>
         {TAB_ORDER.map(key => {
           const Icon = TAB_ICONS[key];
           const active = tab === key;
           return (
-            <button key={key} onClick={() => setTab(key)} className="flex-1 flex flex-col items-center gap-1 py-2.5">
+            <button key={key} onClick={() => setTab(key)} aria-current={active ? "page" : undefined} className="flex-1 flex flex-col items-center gap-1 py-2.5">
               <Icon size={20} color={active ? C.purple : C.textSoft} strokeWidth={active ? 2.4 : 2} />
               <span className="text-[10px] font-medium" style={{ color: active ? C.purple : C.textSoft }}>{t.tabs[key]}</span>
             </button>
           );
         })}
-      </div>
+      </nav>
     </div>
   );
 }
@@ -142,13 +144,16 @@ export default function App() {
   const { user, loading } = useAuth();
   const [loginLang, setLoginLang] = useState("en");
 
-  if (loading) {
-    return (
-      <div style={{ background: C.bg, minHeight: "100vh" }} className="max-w-md mx-auto flex items-center justify-center text-sm" />
-    );
-  }
-  if (!user) {
-    return <LoginView t={STRINGS[loginLang]} lang={loginLang} setLang={setLoginLang} />;
-  }
-  return <AppShell />;
+  return (
+    <>
+      <ToastStack />
+      {loading ? (
+        <div style={{ background: C.bg, minHeight: "100vh" }} className="max-w-md mx-auto flex items-center justify-center text-sm" />
+      ) : !user ? (
+        <LoginView t={STRINGS[loginLang]} lang={loginLang} setLang={setLoginLang} />
+      ) : (
+        <AppShell />
+      )}
+    </>
+  );
 }
