@@ -29,6 +29,7 @@ import {
   MICROBIOME_AGE_DEFAULT,
   DIVERSITY_DEFAULT,
 } from "../src/data/gutScoresTemplate.js";
+import { SCREENING_DEFAULT } from "../src/data/screeningTemplate.js";
 
 const { values: args } = parseArgs({
   options: {
@@ -136,6 +137,25 @@ async function seedGutScores(userId) {
   console.log(`Seeded ${rows.length} gut score rows.`);
 }
 
+async function seedScreeningFindings(userId) {
+  await supabase.from("screening_findings").delete().eq("profile_id", userId);
+  const rows = SCREENING_DEFAULT.map((f, i) => ({
+    profile_id: userId,
+    category: f.category,
+    key: f.key,
+    name_en: f.name.en,
+    name_es: f.name.es,
+    status: f.status,
+    abundance_pct: f.abundance_pct ?? null,
+    note_en: f.note?.en ?? null,
+    note_es: f.note?.es ?? null,
+    sort_order: i,
+  }));
+  const { error } = await supabase.from("screening_findings").insert(rows);
+  if (error) throw error;
+  console.log(`Seeded ${rows.length} screening finding rows.`);
+}
+
 async function seedPlan(userId) {
   // Deleting plan_phases cascades to plan_days and plan_meals.
   await supabase.from("plan_phases").delete().eq("profile_id", userId);
@@ -199,6 +219,7 @@ async function main() {
   const { user, generatedPassword } = await getOrCreateUser(args.email, args.password);
   await upsertProfile(user.id, { name: args.name, kit: args.kit, lang: args.lang, startDate });
   await seedGutScores(user.id);
+  await seedScreeningFindings(user.id);
   await seedPlan(user.id);
 
   console.log("\nDone.");

@@ -51,11 +51,26 @@ function buildScoreList(rows) {
     }));
 }
 
+function buildScreeningList(rows) {
+  return rows
+    .slice()
+    .sort((a, b) => a.sort_order - b.sort_order)
+    .map(r => ({
+      key: r.key,
+      category: r.category,
+      name: { en: r.name_en, es: r.name_es },
+      status: r.status,
+      abundance_pct: r.abundance_pct,
+      note: r.note_en ? { en: r.note_en, es: r.note_es } : null,
+    }));
+}
+
 const EMPTY = {
   profile: null,
   phases: [],
   gutScores: [],
   keyBacteria: [],
+  screeningFindings: [],
   checks: {},
   entries: [],
   milestones: {},
@@ -86,6 +101,7 @@ export function useClientData(userId) {
         { data: profile, error: profileErr },
         { data: phaseRows, error: phasesErr },
         { data: scoreRows, error: scoresErr },
+        { data: screeningRows, error: screeningErr },
         { data: checkRows, error: checksErr },
         { data: entryRows, error: entriesErr },
         { data: milestoneRows, error: milestonesErr },
@@ -93,6 +109,7 @@ export function useClientData(userId) {
         supabase.from("profiles").select("*").eq("id", userId).single(),
         supabase.from("plan_phases").select("*").eq("profile_id", userId),
         supabase.from("gut_scores").select("*").eq("profile_id", userId),
+        supabase.from("screening_findings").select("*").eq("profile_id", userId),
         supabase.from("shopping_checks").select("*").eq("profile_id", userId),
         supabase.from("tracker_entries").select("*").eq("profile_id", userId).order("date"),
         supabase.from("milestones").select("*").eq("profile_id", userId),
@@ -100,6 +117,7 @@ export function useClientData(userId) {
       if (profileErr) throw profileErr;
       if (phasesErr) throw phasesErr;
       if (scoresErr) throw scoresErr;
+      if (screeningErr) throw screeningErr;
       if (checksErr) throw checksErr;
       if (entriesErr) throw entriesErr;
       if (milestonesErr) throw milestonesErr;
@@ -133,6 +151,7 @@ export function useClientData(userId) {
         phases: buildPhasesFromRows(phaseRows, dayRows, mealRows),
         gutScores: buildScoreList(scoreRows.filter(r => r.category === "gut_score")),
         keyBacteria: buildScoreList(scoreRows.filter(r => r.category === "key_bacteria")),
+        screeningFindings: buildScreeningList(screeningRows),
         checks,
         entries: entryRows,
         milestones,

@@ -86,6 +86,34 @@ create policy "gut_scores_select_own" on gut_scores
   for select using (auth.uid() = profile_id);
 
 -- ------------------------------------------------------------
+-- screening_findings: the pathogen/parasite/fungus/dysbiosis/
+-- autoimmune-trigger panel from a client's microbiome report.
+-- Mirrors the report's "Bacteria and Diseases Report" section —
+-- most clients are "not_detected" across the board, but the shape
+-- supports a "detected" result with an abundance percentage.
+-- ------------------------------------------------------------
+create table if not exists screening_findings (
+  id uuid primary key default gen_random_uuid(),
+  profile_id uuid not null references profiles (id) on delete cascade,
+  category text not null check (category in ('pathogenic_bacteria', 'parasites', 'fungi', 'dysbiotic_bacteria', 'autoimmune_triggers')),
+  key text not null,
+  name_en text not null,
+  name_es text not null,
+  status text not null default 'not_detected' check (status in ('detected', 'not_detected')),
+  abundance_pct numeric,
+  note_en text,
+  note_es text,
+  sort_order int not null default 0,
+  unique (profile_id, category, key)
+);
+
+alter table screening_findings enable row level security;
+
+drop policy if exists "screening_findings_select_own" on screening_findings;
+create policy "screening_findings_select_own" on screening_findings
+  for select using (auth.uid() = profile_id);
+
+-- ------------------------------------------------------------
 -- plan_phases / plan_days / plan_meals: a client's 6-week plan.
 -- Nutritionists edit these (via the Supabase table editor, or a
 -- future admin tool) to personalise a client's plan beyond the
