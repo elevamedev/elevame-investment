@@ -21,7 +21,7 @@ const TAB_ORDER = ["home", "scores", "plan", "shopping", "tracker", "foods"];
 function AppShell() {
   const { user, signOut } = useAuth();
   const {
-    loading, error, profile, phases, gutScores, keyBacteria, checks, entries, milestones,
+    loading, error, profile, phases, gutScores, keyBacteria, screeningFindings, checks, entries, milestones,
     updateProfile, toggleShoppingCheck, resetShoppingPhase, saveTrackerEntry, saveMilestoneEntry,
   } = useClientData(user.id);
 
@@ -108,6 +108,7 @@ function AppShell() {
         <ScoresView t={t} lang={lang}
           gutScores={gutScores.length ? gutScores : []}
           keyBacteria={keyBacteria.length ? keyBacteria : []}
+          screeningFindings={screeningFindings}
           microbiomeAge={profile?.microbiome_age ?? MICROBIOME_AGE_DEFAULT}
           diversity={{ value: profile?.diversity_value ?? DIVERSITY_DEFAULT.value, max: profile?.diversity_max ?? DIVERSITY_DEFAULT.max }} />
       )}

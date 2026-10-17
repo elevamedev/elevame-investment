@@ -1,8 +1,12 @@
+import { useState } from "react";
 import { C } from "../theme.js";
 import SectionLabel from "../components/SectionLabel.jsx";
 import ScoreRow from "../components/ScoreRow.jsx";
+import ScoreDetailSheet from "../components/ScoreDetailSheet.jsx";
+import ScreeningReport from "../components/ScreeningReport.jsx";
 
-export default function ScoresView({ t, lang, gutScores, keyBacteria, microbiomeAge, diversity }) {
+export default function ScoresView({ t, lang, gutScores, keyBacteria, microbiomeAge, diversity, screeningFindings }) {
+  const [openScore, setOpenScore] = useState(null);
   return (
     <div className="px-4 pt-4 pb-24">
       <div className="text-sm mb-4" style={{ color: C.textSoft }}>{t.scoresIntro}</div>
@@ -24,10 +28,19 @@ export default function ScoresView({ t, lang, gutScores, keyBacteria, microbiome
       </div>
 
       <SectionLabel>{t.yourGutScores}</SectionLabel>
-      <div className="mb-6">{gutScores.map(item => <ScoreRow key={item.key} t={t} lang={lang} item={item} />)}</div>
+      <div className="mb-6">{gutScores.map(item => <ScoreRow key={item.key} t={t} lang={lang} item={item} onOpen={setOpenScore} />)}</div>
 
       <SectionLabel>{t.keyBacteria}</SectionLabel>
-      <div>{keyBacteria.map(item => <ScoreRow key={item.key} t={t} lang={lang} item={item} />)}</div>
+      <div className="mb-6">{keyBacteria.map(item => <ScoreRow key={item.key} t={t} lang={lang} item={item} onOpen={setOpenScore} />)}</div>
+
+      {screeningFindings?.length > 0 && (
+        <>
+          <SectionLabel>{t.screening.title}</SectionLabel>
+          <ScreeningReport t={t} lang={lang} findings={screeningFindings} />
+        </>
+      )}
+
+      <ScoreDetailSheet t={t} lang={lang} item={openScore} onClose={() => setOpenScore(null)} />
     </div>
   );
 }

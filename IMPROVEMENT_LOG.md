@@ -86,4 +86,102 @@ the toast, empty-state, and nav changes (no console errors).
 
 ---
 
-<!-- Cycle 1, 2, 3 append below as they run. -->
+## Cycle 1 — score drill-down + pathogen/parasite screening
+
+### Why this cycle
+
+Prompted directly by the user uploading a real 51-page Elevame microbiome
+report and its matching 15-page diet plan, with two specific complaints:
+
+1. *"When someone sees their motility score, there's no way to click in
+   and get more information."* — every `ScoreRow` was static; nothing was
+   tappable.
+2. *"There's also information around pathogenic bacteria etc etc."* — the
+   real report has a whole "Bacteria and Diseases Report" section
+   (pathogenic bacteria, parasites, fungi, dysbiotic bacteria, autoimmune
+   triggers, each marked Detected/Not Detected with an abundance % when
+   detected) that the app had no equivalent of at all.
+
+The real report also has per-score deep-dive pages (what the score means,
+a labelled reference-range bar, related bacteria) and 12 disease-specific
+association deep-dives, taxonomic/genus-level charts, a Wellness Index,
+nutrient/supplement scoring, and branded product recommendations — far
+more than this cycle covers. This cycle intentionally tackles the two
+things the user named explicitly; the rest is listed below as backlog
+for a follow-up cycle, to be prioritised with the user rather than
+built unilaterally.
+
+### Implemented this cycle
+
+- **Score detail drill-down** (`src/components/ScoreDetailSheet.jsx`):
+  every row in "Your gut scores" and "Key bacteria" is now a tappable
+  button (`ScoreRow.jsx`, with a chevron affordance) that opens a bottom
+  sheet showing the score's value/tag, a labelled Low/Typical/High
+  reference bar with the client's value and community average marked,
+  the existing per-client note, a plain-language "About this score"
+  explanation, and (where relevant) the specific bacteria genera that
+  score is derived from. Explanatory copy lives in
+  `src/data/scoreDetails.js` — one entry per score/bacteria key, en/es —
+  since it's the same educational content for every client (like a
+  report's printed glossary), while the value/avg/tag/note stay
+  per-client from the database as before.
+- **Bacteria & pathogen screening report**
+  (`src/components/ScreeningReport.jsx`): a new collapsible section
+  below Key Bacteria, grouped into the same five categories as the real
+  report (Pathogenic Bacteria, Parasites, Fungi, Dysbiotic Bacteria,
+  Autoimmune Triggers), each collapsed to an at-a-glance "Nothing
+  detected" / "Found in your sample" summary with a shield icon, and
+  expandable to show each organism individually with a Detected
+  (+ abundance %) or Not Detected pill. Default content lives in
+  `src/data/screeningTemplate.js`, seeded all-clear (matching the
+  uploaded sample report) but structured to carry a real "detected"
+  result per client.
+- **Schema + data pipeline**: new `screening_findings` table in
+  `supabase/schema.sql` (profile-scoped, RLS select-own, same shape as
+  `gut_scores`), fetched and grouped in `useClientData.js`, and seeded
+  by default in `scripts/seed.mjs` via `seedScreeningFindings()` so new
+  clients get sensible "not detected" starter rows alongside their
+  gut scores.
+
+Verified with `npm run build` (clean, same pre-existing bundle-size
+warning as before), `npx eslint .` (clean, same 3 pre-existing
+fast-refresh warnings), and a headless-browser smoke test of the Scores
+tab: default view, the Bowel Mobility (motility) detail sheet open, and
+the Pathogenic Bacteria category expanded with one item flipped to
+"Detected" to confirm that render path too — no console errors.
+
+### Known limitation — confirm before relying on this for real clients
+
+The organism list in `screeningTemplate.js` (*C. difficile*, *Giardia*,
+*Candida albicans*, etc.) is representative of what a commercial gut
+panel like this typically screens for, **not a transcription of
+Elevame's actual lab panel** — the exact list wasn't available to copy
+from this cycle. Before this ships real per-client data, whoever enters
+a client's lab results should confirm the category/organism list against
+the lab's own report and adjust `screeningTemplate.js` / the seeded rows
+to match exactly.
+
+### Deferred / backlog for later cycles
+
+- **Per-score deep-dive pages** from the report (exact labelled
+  reference ranges, Wellness Index, F/B ratio) — this cycle's reference
+  bar is a generic Low/Typical/High band, not the report's precise
+  per-score clinical thresholds.
+- **Taxonomic/genus-level breakdown** (the report's genus-level bar
+  chart and Krona sunburst) — no equivalent in the app yet.
+- **12 disease-association deep-dives** (Positively/Negatively
+  Associated bacteria tables per disease) — not started.
+- **Nutrient/Supplement Report** (Fermented Food/Phytochemicals/
+  Carbohydrates/Lipids/Proteins scored 0-10, branded probiotic/prebiotic
+  recommendations) — not started.
+- **Client-specific food exclusions overriding score** (the diet plan's
+  pattern of excluding a disliked/intolerant food regardless of its
+  Elevame score, e.g. the sample client's lamb and cinnamon) — not
+  modeled in the app's food/plan data at all; would need a per-client
+  exclusion list and a check wherever a food is recommended.
+- Everything already listed in Cycle 0's backlog (loading skeletons,
+  toast/name-chip overlap, dark mode, bundle-size code-splitting).
+
+---
+
+<!-- Cycle 2, 3 append below as they run. -->
