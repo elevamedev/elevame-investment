@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient.js";
+import { STRINGS } from "../i18n/strings.js";
+import { useToast } from "../context/ToastContext.jsx";
 
 function buildPhasesFromRows(phaseRows, dayRows, mealRows) {
   const mealsByDay = {};
@@ -63,6 +65,17 @@ export function useClientData(userId) {
   const [state, setState] = useState(EMPTY);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { show } = useToast();
+
+  // A background save (shopping check, tracker entry, ...) failing
+  // silently would leave the client thinking it worked — surface it
+  // as a toast rather than just setting `error` (which only the
+  // full-page loadError state reads, and only for the initial load).
+  function reportSaveError(err) {
+    setError(err);
+    const lang = state.profile?.language || "en";
+    show(STRINGS[lang].toast.saveError, "error");
+  }
 
   const load = useCallback(async () => {
     if (!userId) { setState(EMPTY); setLoading(false); return; }
@@ -135,7 +148,7 @@ export function useClientData(userId) {
 
   async function updateProfile(patch) {
     const { data, error } = await supabase.from("profiles").update(patch).eq("id", userId).select().single();
-    if (error) throw error;
+    if (error) { reportSaveError(error); return; }
     setState(s => ({ ...s, profile: data }));
   }
 
@@ -150,19 +163,19 @@ export function useClientData(userId) {
     const { error } = await supabase.from("shopping_checks").upsert({
       profile_id: userId, phase_key: phaseKey, food_id: foodId, checked: next, updated_at: new Date().toISOString(),
     });
-    if (error) setError(error);
+    if (error) reportSaveError(error);
   }
 
   async function resetShoppingPhase(phaseKey) {
     setState(s => ({ ...s, checks: { ...s.checks, [phaseKey]: {} } }));
     const { error } = await supabase.from("shopping_checks").delete().eq("profile_id", userId).eq("phase_key", phaseKey);
-    if (error) setError(error);
+    if (error) reportSaveError(error);
   }
 
   async function saveTrackerEntry(date, form) {
     const row = { profile_id: userId, date, ...form, updated_at: new Date().toISOString() };
     const { data, error } = await supabase.from("tracker_entries").upsert(row).select().single();
-    if (error) { setError(error); return; }
+    if (error) { reportSaveError(error); return; }
     setState(s => ({
       ...s,
       entries: [...s.entries.filter(e => e.date !== date), data].sort((a, b) => a.date.localeCompare(b.date)),
@@ -175,7 +188,7 @@ export function useClientData(userId) {
       ...form, updated_at: new Date().toISOString(),
     };
     const { data, error } = await supabase.from("milestones").upsert(row).select().single();
-    if (error) { setError(error); return; }
+    if (error) { reportSaveError(error); return; }
     setState(s => ({ ...s, milestones: { ...s.milestones, [milestoneId]: data } }));
   }
 

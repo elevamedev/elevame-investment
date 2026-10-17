@@ -13,14 +13,14 @@ export default function PlanView({ lang, t, phases, phaseIdx, setPhaseIdx, dayId
       <div className="text-sm mb-4" style={{ color: C.textSoft }}>{phase.blurb[lang]}</div>
 
       <div className="flex items-center justify-between mb-4">
-        <button onClick={() => setDayIdx(Math.max(0, dayIdx - 1))} className="p-2 rounded-lg" style={{ background: C.card, border: `1px solid ${C.line}` }}><ChevronLeft size={16} color={C.text} /></button>
+        <button onClick={() => setDayIdx(Math.max(0, dayIdx - 1))} aria-label={t.nav.previousDay} className="p-2 rounded-lg" style={{ background: C.card, border: `1px solid ${C.line}` }}><ChevronLeft size={16} color={C.text} /></button>
         <div className="flex gap-1.5">
           {phase.days.map((_, i) => (
             <button key={i} onClick={() => setDayIdx(i)} className="w-8 h-8 rounded-full text-xs font-semibold"
               style={{ background: i === dayIdx ? C.purple : C.card, color: i === dayIdx ? "#fff" : C.textSoft, border: `1px solid ${i === dayIdx ? C.purple : C.line}` }}>{i + 1}</button>
           ))}
         </div>
-        <button onClick={() => setDayIdx(Math.min(phase.days.length - 1, dayIdx + 1))} className="p-2 rounded-lg" style={{ background: C.card, border: `1px solid ${C.line}` }}><ChevronRight size={16} color={C.text} /></button>
+        <button onClick={() => setDayIdx(Math.min(phase.days.length - 1, dayIdx + 1))} aria-label={t.nav.nextDay} className="p-2 rounded-lg" style={{ background: C.card, border: `1px solid ${C.line}` }}><ChevronRight size={16} color={C.text} /></button>
       </div>
 
       <div className="space-y-3">
