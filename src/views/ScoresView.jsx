@@ -10,13 +10,13 @@ function diversityBand(value, max) {
   const pct = (value / max) * 10;
   if (pct < 2.94) return { key: "poor", color: C.red };
   if (pct < 6.17) return { key: "fair", color: C.amber };
-  return { key: "good", color: C.teal };
+  return { key: "good", color: C.blue };
 }
 
 export default function ScoresView({ t, lang, gutScores, keyBacteria, microbiomeAge, diversity, wellnessIndex, fbRatio, similarProfiles, screeningFindings }) {
   const [openScore, setOpenScore] = useState(null);
   const band = diversityBand(diversity.value, diversity.max);
-  const wellnessColor = wellnessIndex === "good" ? C.teal : wellnessIndex === "poor" ? C.red : C.amber;
+  const wellnessColor = wellnessIndex === "good" ? C.blue : wellnessIndex === "poor" ? C.red : C.amber;
 
   return (
     <div className="px-4 pt-4 pb-24">

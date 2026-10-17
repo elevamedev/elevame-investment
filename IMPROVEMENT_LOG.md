@@ -284,4 +284,73 @@ zone bar) — no console errors.
 
 ---
 
-<!-- Cycle 3 append below as it runs. -->
+## Cycle 3 — overnight refinement, pass 1 of 3: rebrand + copy compliance
+
+### Context
+
+The user requested 3 unattended bi-hourly refinement cycles while away,
+auditing 7 fixed areas each time (customer value, UX, UI, mobile,
+accessibility, copy/language, bugs/reliability), with a hard rule: never
+change meal plan logic, food scores, or anything scientific without
+asking first. Cycles 2 and 3 of this 3-cycle run must start by reviewing
+the previous cycle's changes before looking for new issues. A final
+summary is due after cycle 3, then this autonomous run stops.
+
+Before starting, one real decision needed the user's input: the brand
+spec (purple #5131da / blue #42a2fd / white / black) doesn't mention the
+red/amber/green used today for error states and score-quality coloring.
+Asked directly — confirmed: keep semantic status colors, brand palette
+becomes the primary UI identity (buttons, accents, dark cards), not a
+replacement for status color-coding.
+
+### Audit findings this pass (copy/language area)
+
+Grepped the whole `src/` tree for the banned words (wellness, detox,
+holistic, journey, transformation) and for "Enbiosis" (the white-label
+AI provider name from the PDF reports, which must never surface to a
+client). Found exactly one violation: the "Wellness index" dashboard
+label added in Cycle 2 (English) and its Spanish equivalent "Índice de
+bienestar" (bienestar = wellbeing, same banned concept). No other hits —
+"Enbiosis" never appeared in app code, and the other four banned words
+don't appear anywhere in the UI strings.
+
+### Implemented this cycle
+
+- **Rebrand** (`src/theme.js`): `purple` is now the real brand purple
+  (#5131da, was a lighter #6b4ff0); `navy` (used for dark cards/headings)
+  is now near-black (#121018, was a navy-blue #1a1d2e) to match the
+  "black" brand color without using flat #000 on a light background;
+  `teal` renamed to `blue` and recolored to the brand blue (#42a2fd) —
+  it was functioning as an accent/info color already, now it's on-brand
+  (updated all 6 call sites: MilestoneRow, HomeView's milestone banner,
+  TrackerView's chart line, and `scoreColor()`). `bg`/`line`/`text` tints
+  nudged slightly cooler to read as a more premium near-white/near-black
+  rather than the previous warm-gray. Semantic `amber`/`red`/`sage` left
+  untouched per the user's explicit call.
+- **Font**: swapped Plus Jakarta Sans for Inter everywhere (Google Fonts
+  link in `index.html`, inline `fontFamily` in `App.jsx` and
+  `LoginView.jsx`).
+- **Copy fix**: "Wellness index" → "Health index" (en), "Índice de
+  bienestar" → "Índice de salud" (es) — same meaning, no banned word.
+- Spot-checked for stray hardcoded hex colors bypassing the `C` theme
+  token system — the handful found are all literal `"#fff"` used
+  interchangeably with `C.card` (same value), not a branding
+  inconsistency, just a minor naming nit — left alone, not worth the
+  diff.
+
+Verified with `npm run build` (clean), `npx eslint .` (clean, same 3
+pre-existing warnings), and a headless screenshot of the Scores tab
+confirming the new palette/font render correctly with good contrast
+(near-black dashboard card, brand-purple diversity card, blue "Health
+index — Good" label) — no console errors.
+
+### Deferred to pass 2/3 of this run
+
+Didn't get to the full UX walkthrough (login → results → plan →
+shopping → check-in), mobile tap-target sizing, or a deeper
+accessibility pass this round — the rebrand plus the copy-compliance
+grep took this pass's time budget. Explicitly picking those up next.
+
+---
+
+<!-- Cycle 4, 5 append below as they run. -->

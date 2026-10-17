@@ -19,7 +19,7 @@ export default function LoginView({ t, lang, setLang }) {
   }
 
   return (
-    <div style={{ fontFamily: "'Plus Jakarta Sans', -apple-system, sans-serif", background: C.bg, minHeight: "100vh" }} className="max-w-md mx-auto relative flex flex-col justify-center px-6">
+    <div style={{ fontFamily: "'Inter', -apple-system, sans-serif", background: C.bg, minHeight: "100vh" }} className="max-w-md mx-auto relative flex flex-col justify-center px-6">
       <div className="flex items-center justify-between mb-8">
         <div className="font-extrabold text-lg" style={{ color: C.navy }}>Eleva<span style={{ color: C.purple }}>me</span></div>
         <div className="flex items-center gap-1.5">
