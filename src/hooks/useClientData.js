@@ -51,6 +51,18 @@ function buildScoreList(rows) {
     }));
 }
 
+function buildSimilarProfilesList(rows) {
+  return rows
+    .slice()
+    .sort((a, b) => a.sort_order - b.sort_order)
+    .map(r => ({
+      key: r.key,
+      label: { en: r.label_en, es: r.label_es },
+      client_pct: r.client_pct,
+      baseline_pct: r.baseline_pct,
+    }));
+}
+
 function buildScreeningList(rows) {
   return rows
     .slice()
@@ -71,6 +83,7 @@ const EMPTY = {
   gutScores: [],
   keyBacteria: [],
   screeningFindings: [],
+  similarProfiles: [],
   checks: {},
   entries: [],
   milestones: {},
@@ -102,6 +115,7 @@ export function useClientData(userId) {
         { data: phaseRows, error: phasesErr },
         { data: scoreRows, error: scoresErr },
         { data: screeningRows, error: screeningErr },
+        { data: similarProfileRows, error: similarProfilesErr },
         { data: checkRows, error: checksErr },
         { data: entryRows, error: entriesErr },
         { data: milestoneRows, error: milestonesErr },
@@ -110,6 +124,7 @@ export function useClientData(userId) {
         supabase.from("plan_phases").select("*").eq("profile_id", userId),
         supabase.from("gut_scores").select("*").eq("profile_id", userId),
         supabase.from("screening_findings").select("*").eq("profile_id", userId),
+        supabase.from("similar_profiles").select("*").eq("profile_id", userId),
         supabase.from("shopping_checks").select("*").eq("profile_id", userId),
         supabase.from("tracker_entries").select("*").eq("profile_id", userId).order("date"),
         supabase.from("milestones").select("*").eq("profile_id", userId),
@@ -118,6 +133,7 @@ export function useClientData(userId) {
       if (phasesErr) throw phasesErr;
       if (scoresErr) throw scoresErr;
       if (screeningErr) throw screeningErr;
+      if (similarProfilesErr) throw similarProfilesErr;
       if (checksErr) throw checksErr;
       if (entriesErr) throw entriesErr;
       if (milestonesErr) throw milestonesErr;
@@ -152,6 +168,7 @@ export function useClientData(userId) {
         gutScores: buildScoreList(scoreRows.filter(r => r.category === "gut_score")),
         keyBacteria: buildScoreList(scoreRows.filter(r => r.category === "key_bacteria")),
         screeningFindings: buildScreeningList(screeningRows),
+        similarProfiles: buildSimilarProfilesList(similarProfileRows),
         checks,
         entries: entryRows,
         milestones,

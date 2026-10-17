@@ -63,9 +63,6 @@ export const STRINGS = {
     scoreDetail: {
       about: "About this score",
       relatedBacteria: "Related bacteria",
-      zoneLow: "Low",
-      zoneTypical: "Typical",
-      zoneHigh: "High",
       close: "Close",
       tapForDetail: label => `${label} — tap for details`,
     },
@@ -77,6 +74,26 @@ export const STRINGS = {
       detected: "Detected",
       detectedPct: n => `Detected · ${n}% abundance`,
       notDetected: "Not detected",
+    },
+    similarProfiles: {
+      title: "Similar profile patterns",
+      intro: "How often each symptom shows up among people whose microbiome profile is similar to yours, compared with the overall population.",
+      disclaimer: "Not a diagnosis — a pattern seen in similar profiles, not a prediction about you specifically.",
+      baseline: pct => `Population average: ${pct}%`,
+    },
+    wellnessIndex: "Wellness index",
+    wellnessLabel: { good: "Good", fair: "Fair", poor: "Poor" },
+    wellnessIndexNote: {
+      good: "A pattern not typically seen in chronic-disease-linked profiles.",
+      fair: "A mixed pattern — some signals worth keeping an eye on.",
+      poor: "A pattern more often seen alongside chronic-disease-linked profiles.",
+    },
+    fbRatioLabel: "Firmicutes/Bacteroidetes ratio",
+    fbRatioNote: "Reflects the balance between your gut's two dominant bacterial groups — plays a role in energy regulation, immune function and gut barrier integrity. There's no single 'ideal' number; it varies by diet, lifestyle and genetics.",
+    diversityBand: {
+      poor: "Needs improvement",
+      fair: "Average",
+      good: "Very good",
     },
   },
   es: {
@@ -140,9 +157,6 @@ export const STRINGS = {
     scoreDetail: {
       about: "Sobre este score",
       relatedBacteria: "Bacterias relacionadas",
-      zoneLow: "Bajo",
-      zoneTypical: "Típico",
-      zoneHigh: "Alto",
       close: "Cerrar",
       tapForDetail: label => `${label} — toca para más información`,
     },
@@ -154,6 +168,26 @@ export const STRINGS = {
       detected: "Detectado",
       detectedPct: n => `Detectado · ${n}% de abundancia`,
       notDetected: "No detectado",
+    },
+    similarProfiles: {
+      title: "Patrones de perfiles similares",
+      intro: "Con qué frecuencia aparece cada síntoma entre personas cuyo perfil de microbioma es similar al tuyo, en comparación con la población general.",
+      disclaimer: "No es un diagnóstico — un patrón observado en perfiles similares, no una predicción sobre ti en particular.",
+      baseline: pct => `Media de la población: ${pct}%`,
+    },
+    wellnessIndex: "Índice de bienestar",
+    wellnessLabel: { good: "Bueno", fair: "Aceptable", poor: "Bajo" },
+    wellnessIndexNote: {
+      good: "Un patrón que no suele observarse en perfiles relacionados con enfermedades crónicas.",
+      fair: "Un patrón mixto — algunas señales a tener en cuenta.",
+      poor: "Un patrón que se observa con más frecuencia junto a perfiles relacionados con enfermedades crónicas.",
+    },
+    fbRatioLabel: "Ratio Firmicutes/Bacteroidetes",
+    fbRatioNote: "Refleja el equilibrio entre los dos grupos bacterianos dominantes de tu intestino — influye en la regulación energética, la función inmunitaria y la integridad de la barrera intestinal. No existe un número 'ideal' único; varía según la dieta, el estilo de vida y la genética.",
+    diversityBand: {
+      poor: "Necesita mejorar",
+      fair: "Media",
+      good: "Muy buena",
     },
   },
 };

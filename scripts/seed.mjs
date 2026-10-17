@@ -28,8 +28,11 @@ import {
   KEY_BACTERIA_DEFAULT,
   MICROBIOME_AGE_DEFAULT,
   DIVERSITY_DEFAULT,
+  WELLNESS_INDEX_DEFAULT,
+  FB_RATIO_DEFAULT,
 } from "../src/data/gutScoresTemplate.js";
 import { SCREENING_DEFAULT } from "../src/data/screeningTemplate.js";
+import { SIMILAR_PROFILES_DEFAULT } from "../src/data/similarProfilesTemplate.js";
 
 const { values: args } = parseArgs({
   options: {
@@ -109,6 +112,8 @@ async function upsertProfile(userId, { name, kit, lang, startDate }) {
     microbiome_age: MICROBIOME_AGE_DEFAULT,
     diversity_value: DIVERSITY_DEFAULT.value,
     diversity_max: DIVERSITY_DEFAULT.max,
+    wellness_index: WELLNESS_INDEX_DEFAULT,
+    f_b_ratio: FB_RATIO_DEFAULT,
   });
   if (error) throw error;
   console.log(`Profile saved for ${name}.`);
@@ -154,6 +159,22 @@ async function seedScreeningFindings(userId) {
   const { error } = await supabase.from("screening_findings").insert(rows);
   if (error) throw error;
   console.log(`Seeded ${rows.length} screening finding rows.`);
+}
+
+async function seedSimilarProfiles(userId) {
+  await supabase.from("similar_profiles").delete().eq("profile_id", userId);
+  const rows = SIMILAR_PROFILES_DEFAULT.map((p, i) => ({
+    profile_id: userId,
+    key: p.key,
+    label_en: p.label.en,
+    label_es: p.label.es,
+    client_pct: p.client_pct,
+    baseline_pct: p.baseline_pct,
+    sort_order: i,
+  }));
+  const { error } = await supabase.from("similar_profiles").insert(rows);
+  if (error) throw error;
+  console.log(`Seeded ${rows.length} similar-profile pattern rows.`);
 }
 
 async function seedPlan(userId) {
@@ -220,6 +241,7 @@ async function main() {
   await upsertProfile(user.id, { name: args.name, kit: args.kit, lang: args.lang, startDate });
   await seedGutScores(user.id);
   await seedScreeningFindings(user.id);
+  await seedSimilarProfiles(user.id);
   await seedPlan(user.id);
 
   console.log("\nDone.");

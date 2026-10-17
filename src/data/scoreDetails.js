@@ -28,8 +28,8 @@ export const SCORE_DETAILS = {
   },
   protein: {
     about: t2(
-      "Measures bacterial capacity to ferment dietary protein. Very high protein fermentation can produce by-products (like ammonia and certain amines) linked to gut irritation, so this score favours a middle range rather than 'more is better'.",
-      "Mide la capacidad bacteriana para fermentar la proteína de la dieta. Una fermentación de proteína muy alta puede producir subproductos (como amoníaco y ciertas aminas) asociados con irritación intestinal, por lo que este score favorece un rango medio en lugar de 'más es mejor'."
+      "Reflects the amount and activity of bacteria involved in digesting dietary protein. A high score indicates a large variety of these bacteria, which generally aids the body's ability to digest and utilise protein.",
+      "Refleja la cantidad y actividad de las bacterias implicadas en la digestión de la proteína de la dieta. Un score alto indica una gran variedad de estas bacterias, lo que generalmente favorece la capacidad del cuerpo para digerir y utilizar la proteína."
     ),
     bacteria: ["Bacteroides", "Clostridium"],
   },
@@ -121,6 +121,48 @@ export const SCORE_DETAILS = {
     about: t2(
       "A well-studied beneficial genus that supports gut barrier function, immune regulation and vitamin synthesis. Higher levels are generally a favourable sign.",
       "Un género beneficioso muy estudiado que favorece la función de barrera intestinal, la regulación inmunitaria y la síntesis de vitaminas. Niveles más altos son, en general, una señal favorable."
+    ),
+    bacteria: [],
+  },
+  alistipes: {
+    about: t2(
+      "A common gut genus involved in breaking down dietary fibre and bile acids. It's generally abundant in fibre-rich diets — levels well below the community average can be a sign of a lower-fibre diet or recent gut disruption.",
+      "Un género intestinal común implicado en la descomposición de la fibra dietética y los ácidos biliares. Suele ser abundante en dietas ricas en fibra: niveles muy por debajo de la media de la comunidad pueden indicar una dieta baja en fibra o una alteración intestinal reciente."
+    ),
+    bacteria: [],
+  },
+  eubacterium: {
+    about: t2(
+      "A genus that produces butyrate, a short-chain fatty acid that is the primary fuel source for the cells lining your colon and supports gut barrier integrity.",
+      "Un género que produce butirato, un ácido graso de cadena corta que es la principal fuente de energía para las células que recubren el colon y favorece la integridad de la barrera intestinal."
+    ),
+    bacteria: [],
+  },
+  collinsella: {
+    about: t2(
+      "A genus involved in carbohydrate fermentation and bile acid metabolism. It's usually present in small amounts — a level well above the community average is sometimes seen alongside higher-fat diets.",
+      "Un género implicado en la fermentación de carbohidratos y el metabolismo de los ácidos biliares. Suele estar presente en pequeñas cantidades: un nivel muy por encima de la media de la comunidad a veces se observa junto con dietas más altas en grasa."
+    ),
+    bacteria: [],
+  },
+  haemophilus: {
+    about: t2(
+      "A genus present in small amounts in most healthy gut communities. On its own, presence at typical levels isn't a cause for concern.",
+      "Un género presente en pequeñas cantidades en la mayoría de las comunidades intestinales sanas. Por sí sola, su presencia en niveles típicos no es motivo de preocupación."
+    ),
+    bacteria: [],
+  },
+  roseburia: {
+    about: t2(
+      "Another butyrate-producing genus linked to gut barrier health and anti-inflammatory activity. It tends to thrive on fibre from whole grains, legumes and vegetables.",
+      "Otro género productor de butirato relacionado con la salud de la barrera intestinal y la actividad antiinflamatoria. Tiende a prosperar con la fibra de cereales integrales, legumbres y verduras."
+    ),
+    bacteria: [],
+  },
+  phascolarctobacterium: {
+    about: t2(
+      "A genus that uses succinate (a by-product of other gut bacteria) to produce propionate, another beneficial short-chain fatty acid involved in metabolic regulation.",
+      "Un género que utiliza succinato (un subproducto de otras bacterias intestinales) para producir propionato, otro ácido graso de cadena corta beneficioso implicado en la regulación metabólica."
     ),
     bacteria: [],
   },

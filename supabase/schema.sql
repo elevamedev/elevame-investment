@@ -28,6 +28,25 @@ create table if not exists profiles (
   created_at timestamptz not null default now()
 );
 
+-- Idempotent migration for columns added after the table first shipped —
+-- `create table if not exists` is a no-op against an existing live table,
+-- so new columns need their own guarded ALTER to reach production safely.
+do $$
+begin
+  if not exists (
+    select 1 from information_schema.columns
+    where table_name = 'profiles' and column_name = 'wellness_index'
+  ) then
+    alter table profiles add column wellness_index text check (wellness_index in ('good', 'fair', 'poor'));
+  end if;
+  if not exists (
+    select 1 from information_schema.columns
+    where table_name = 'profiles' and column_name = 'f_b_ratio'
+  ) then
+    alter table profiles add column f_b_ratio numeric;
+  end if;
+end $$;
+
 alter table profiles enable row level security;
 
 drop policy if exists "profiles_select_own" on profiles;
@@ -111,6 +130,30 @@ alter table screening_findings enable row level security;
 
 drop policy if exists "screening_findings_select_own" on screening_findings;
 create policy "screening_findings_select_own" on screening_findings
+  for select using (auth.uid() = profile_id);
+
+-- ------------------------------------------------------------
+-- similar_profiles: "Your Similar Profiles" — how often a symptom
+-- shows up among people whose microbiome profile is similar to this
+-- client's, vs. the overall population baseline. Not a diagnosis —
+-- see src/data/similarProfilesTemplate.js for the framing rationale.
+-- ------------------------------------------------------------
+create table if not exists similar_profiles (
+  id uuid primary key default gen_random_uuid(),
+  profile_id uuid not null references profiles (id) on delete cascade,
+  key text not null,
+  label_en text not null,
+  label_es text not null,
+  client_pct numeric not null,
+  baseline_pct numeric not null,
+  sort_order int not null default 0,
+  unique (profile_id, key)
+);
+
+alter table similar_profiles enable row level security;
+
+drop policy if exists "similar_profiles_select_own" on similar_profiles;
+create policy "similar_profiles_select_own" on similar_profiles
   for select using (auth.uid() = profile_id);
 
 -- ------------------------------------------------------------

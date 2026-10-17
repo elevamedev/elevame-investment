@@ -4,14 +4,25 @@ import SectionLabel from "../components/SectionLabel.jsx";
 import ScoreRow from "../components/ScoreRow.jsx";
 import ScoreDetailSheet from "../components/ScoreDetailSheet.jsx";
 import ScreeningReport from "../components/ScreeningReport.jsx";
+import SimilarProfilesReport from "../components/SimilarProfilesReport.jsx";
 
-export default function ScoresView({ t, lang, gutScores, keyBacteria, microbiomeAge, diversity, screeningFindings }) {
+function diversityBand(value, max) {
+  const pct = (value / max) * 10;
+  if (pct < 2.94) return { key: "poor", color: C.red };
+  if (pct < 6.17) return { key: "fair", color: C.amber };
+  return { key: "good", color: C.teal };
+}
+
+export default function ScoresView({ t, lang, gutScores, keyBacteria, microbiomeAge, diversity, wellnessIndex, fbRatio, similarProfiles, screeningFindings }) {
   const [openScore, setOpenScore] = useState(null);
+  const band = diversityBand(diversity.value, diversity.max);
+  const wellnessColor = wellnessIndex === "good" ? C.teal : wellnessIndex === "poor" ? C.red : C.amber;
+
   return (
     <div className="px-4 pt-4 pb-24">
       <div className="text-sm mb-4" style={{ color: C.textSoft }}>{t.scoresIntro}</div>
 
-      <div className="flex gap-3 mb-6">
+      <div className="flex gap-3 mb-3">
         <div className="flex-1 rounded-2xl p-4" style={{ background: C.navy }}>
           <div className="text-white/60 text-xs font-medium mb-1">{t.microbiomeAge}</div>
           <div className="text-white text-3xl font-extrabold">{microbiomeAge}</div>
@@ -19,8 +30,30 @@ export default function ScoresView({ t, lang, gutScores, keyBacteria, microbiome
         <div className="flex-1 rounded-2xl p-4" style={{ background: C.purple }}>
           <div className="text-white/70 text-xs font-medium mb-1">{t.diversityLabel}</div>
           <div className="text-white text-3xl font-extrabold">{diversity.value}</div>
+          <div className="text-[10px] font-semibold mt-1 px-1.5 py-0.5 rounded-full inline-block" style={{ background: "rgba(255,255,255,0.2)", color: "#fff" }}>
+            {t.diversityBand[band.key]}
+          </div>
         </div>
       </div>
+
+      {(wellnessIndex || fbRatio != null) && (
+        <div className="flex gap-3 mb-6">
+          {wellnessIndex && (
+            <div className="flex-1 rounded-2xl p-4" style={{ background: C.card, border: `1px solid ${C.line}` }}>
+              <div className="text-xs font-medium mb-1" style={{ color: C.textSoft }}>{t.wellnessIndex}</div>
+              <div className="text-lg font-extrabold mb-1" style={{ color: wellnessColor }}>{t.wellnessLabel[wellnessIndex] || wellnessIndex}</div>
+              <div className="text-[11px]" style={{ color: C.textSoft }}>{t.wellnessIndexNote[wellnessIndex]}</div>
+            </div>
+          )}
+          {fbRatio != null && (
+            <div className="flex-1 rounded-2xl p-4" style={{ background: C.card, border: `1px solid ${C.line}` }}>
+              <div className="text-xs font-medium mb-1" style={{ color: C.textSoft }}>{t.fbRatioLabel}</div>
+              <div className="text-lg font-extrabold mb-1" style={{ color: C.navy }}>{fbRatio}</div>
+              <div className="text-[11px]" style={{ color: C.textSoft }}>{t.fbRatioNote}</div>
+            </div>
+          )}
+        </div>
+      )}
 
       <div className="flex items-center gap-4 mb-3 text-[11px]" style={{ color: C.textSoft }}>
         <div className="flex items-center gap-1.5"><span className="inline-block w-2.5 h-2.5 rounded-full" style={{ background: C.purple }} />{t.legendYou}</div>
@@ -32,6 +65,13 @@ export default function ScoresView({ t, lang, gutScores, keyBacteria, microbiome
 
       <SectionLabel>{t.keyBacteria}</SectionLabel>
       <div className="mb-6">{keyBacteria.map(item => <ScoreRow key={item.key} t={t} lang={lang} item={item} onOpen={setOpenScore} />)}</div>
+
+      {similarProfiles?.length > 0 && (
+        <>
+          <SectionLabel>{t.similarProfiles.title}</SectionLabel>
+          <div className="mb-6"><SimilarProfilesReport t={t} lang={lang} profiles={similarProfiles} /></div>
+        </>
+      )}
 
       {screeningFindings?.length > 0 && (
         <>
