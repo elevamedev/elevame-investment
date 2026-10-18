@@ -581,7 +581,18 @@ async function main() {
     .filter(Boolean);
   insightRows.push(...draftRows);
 
-  const { error: insErr } = await supabase.from("insights").insert(insightRows);
+  // PostgREST builds a bulk insert's column list from the union of
+  // keys across every row in the array — a row that omits a key
+  // (relying on the column's db default) gets that key sent as an
+  // explicit null instead once ANY other row in the same batch sets
+  // it, which fails insights' not-null array columns. Normalize every
+  // row to the same full key set so that can't happen.
+  const normalizedInsightRows = insightRows.map(row => ({
+    linked_metric_ids: [], linked_taxon_ids: [], linked_condition_ids: [], linked_food_ids: [],
+    ...row,
+  }));
+
+  const { error: insErr } = await supabase.from("insights").insert(normalizedInsightRows);
   if (insErr) throw insErr;
   console.log(`Insight drafts seeded: ${insightRows.length} total (${insightRows.length - draftRows.length} auto-approved from already-given text, ${draftRows.length} condition-risk drafts awaiting nutritionist review)`);
 
