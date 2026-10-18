@@ -1,11 +1,12 @@
 import { useMemo, useState } from "react";
-import { Home, CalendarDays, ShoppingCart, Activity, Search, Gauge, LogOut } from "lucide-react";
+import { Home, CalendarDays, ShoppingCart, Activity, Search, Gauge, LogOut, ChevronLeft } from "lucide-react";
 import { C } from "./theme.js";
 import { STRINGS } from "./i18n/strings.js";
 import { MICROBIOME_AGE_DEFAULT, DIVERSITY_DEFAULT, WELLNESS_INDEX_DEFAULT, FB_RATIO_DEFAULT } from "./data/gutScoresTemplate.js";
 import { PHASES as PHASES_DEFAULT, homeBanners } from "./data/planTemplate.js";
 import { useAuth } from "./context/AuthContext.jsx";
 import { useClientData } from "./hooks/useClientData.js";
+import { useStaffRole } from "./hooks/useAdminData.js";
 import LoginView from "./views/LoginView.jsx";
 import SignUpView from "./views/SignUpView.jsx";
 import ClaimKitView from "./views/ClaimKitView.jsx";
@@ -15,12 +16,15 @@ import ShoppingView from "./views/ShoppingView.jsx";
 import TrackerView from "./views/TrackerView.jsx";
 import ScoresView from "./views/ScoresView.jsx";
 import FoodsView from "./views/FoodsView.jsx";
+import ReportView from "./views/ReportView.jsx";
+import SupplementsView from "./views/SupplementsView.jsx";
+import AdminView from "./views/AdminView.jsx";
 import ToastStack from "./components/ToastStack.jsx";
 
 const TAB_ICONS = { home: Home, scores: Gauge, plan: CalendarDays, shopping: ShoppingCart, tracker: Activity, foods: Search };
 const TAB_ORDER = ["home", "scores", "plan", "shopping", "tracker", "foods"];
 
-function AppShell({ data }) {
+function AppShell({ data, user }) {
   const { signOut } = useAuth();
   const {
     profile, phases, gutScores, keyBacteria, screeningFindings, similarProfiles, checks, entries, milestones,
@@ -31,6 +35,16 @@ function AppShell({ data }) {
   const [phaseIdx, setPhaseIdx] = useState(0);
   const [dayIdx, setDayIdx] = useState(0);
   const [openMilestone, setOpenMilestone] = useState(null);
+  // "report" tab state: which sub-view is showing. The new
+  // theme-based Report view is the default landing spot (replaces
+  // the old flat score list per the brief); "classic" keeps the
+  // original full-detail view (drill-down sheets, screening,
+  // similar-profile rings) reachable with one tap rather than
+  // deleting functionality the theme pages don't fully replicate yet.
+  const [reportMode, setReportMode] = useState("theme");
+  const [showSupplements, setShowSupplements] = useState(false);
+
+  function goToTab(key) { setShowSupplements(false); setReportMode("theme"); setTab(key); }
 
   const lang = profile?.language || "en";
   const t = STRINGS[lang];
@@ -53,11 +67,11 @@ function AppShell({ data }) {
   const todayStr = new Date().toISOString().slice(0, 10);
   const todayEntry = entries.find(e => e.date === todayStr);
 
-  function goToMilestone(id) { setOpenMilestone(id); setTab("tracker"); }
+  function goToMilestone(id) { setOpenMilestone(id); goToTab("tracker"); }
   function goToShopping(phaseId) {
     const idx = effectivePhases.findIndex(p => p.id === phaseId);
     setPhaseIdx(idx === -1 ? 0 : idx);
-    setTab("shopping");
+    goToTab("shopping");
   }
   function setLang(l) { updateProfile({ language: l }); }
   function setStartDate(d) { updateProfile({ plan_start_date: d }); }
@@ -87,20 +101,43 @@ function AppShell({ data }) {
       {tab === "home" && (
         <HomeView lang={lang} t={t} startDate={startDate} setStartDate={setStartDate} planDay={planDay}
           phaseIdx={homePhaseIdx} dayIdx={homeDayIdx} phases={effectivePhases}
-          goToPlan={() => { setPhaseIdx(homePhaseIdx); setDayIdx(homeDayIdx); setTab("plan"); }}
-          goToScores={() => setTab("scores")}
+          goToPlan={() => { setPhaseIdx(homePhaseIdx); setDayIdx(homeDayIdx); goToTab("plan"); }}
+          goToScores={() => goToTab("scores")}
           banners={banners} goToMilestone={goToMilestone} goToShopping={goToShopping} />
       )}
-      {tab === "scores" && (
-        <ScoresView t={t} lang={lang}
-          gutScores={gutScores.length ? gutScores : []}
-          keyBacteria={keyBacteria.length ? keyBacteria : []}
-          screeningFindings={screeningFindings}
-          similarProfiles={similarProfiles}
-          wellnessIndex={profile?.wellness_index ?? WELLNESS_INDEX_DEFAULT}
-          fbRatio={profile?.f_b_ratio ?? FB_RATIO_DEFAULT}
-          microbiomeAge={profile?.microbiome_age ?? MICROBIOME_AGE_DEFAULT}
-          diversity={{ value: profile?.diversity_value ?? DIVERSITY_DEFAULT.value, max: profile?.diversity_max ?? DIVERSITY_DEFAULT.max }} />
+      {tab === "scores" && showSupplements && (
+        <div className="px-4 pt-4 pb-24">
+          <button onClick={() => setShowSupplements(false)} className="flex items-center gap-1 mb-2 text-sm font-medium" style={{ color: C.purple }}>
+            <ChevronLeft size={16} /> {t.scoreDetail?.back || "Back"}
+          </button>
+          <SupplementsView lang={lang} user={user} />
+        </div>
+      )}
+      {tab === "scores" && !showSupplements && (
+        <>
+          <div className="px-4 pt-3 flex gap-1.5">
+            {["theme", "classic"].map(mode => (
+              <button key={mode} onClick={() => setReportMode(mode)} aria-pressed={reportMode === mode}
+                className="px-3 py-1.5 rounded-full text-[11px] font-semibold"
+                style={{ background: reportMode === mode ? C.navy : "#fff", color: reportMode === mode ? "#fff" : C.textSoft, border: `1px solid ${reportMode === mode ? C.navy : C.line}` }}>
+                {mode === "theme" ? (lang === "es" ? "Por tema" : "By topic") : (lang === "es" ? "Lista clásica" : "Classic list")}
+              </button>
+            ))}
+          </div>
+          {reportMode === "theme" ? (
+            <ReportView lang={lang} user={user} onGoToFoods={() => goToTab("foods")} onOpenSupplements={() => setShowSupplements(true)} />
+          ) : (
+            <ScoresView t={t} lang={lang}
+              gutScores={gutScores.length ? gutScores : []}
+              keyBacteria={keyBacteria.length ? keyBacteria : []}
+              screeningFindings={screeningFindings}
+              similarProfiles={similarProfiles}
+              wellnessIndex={profile?.wellness_index ?? WELLNESS_INDEX_DEFAULT}
+              fbRatio={profile?.f_b_ratio ?? FB_RATIO_DEFAULT}
+              microbiomeAge={profile?.microbiome_age ?? MICROBIOME_AGE_DEFAULT}
+              diversity={{ value: profile?.diversity_value ?? DIVERSITY_DEFAULT.value, max: profile?.diversity_max ?? DIVERSITY_DEFAULT.max }} />
+          )}
+        </>
       )}
       {tab === "plan" && <PlanView lang={lang} t={t} phases={effectivePhases} phaseIdx={phaseIdx} setPhaseIdx={setPhaseIdx} dayIdx={dayIdx} setDayIdx={setDayIdx} />}
       {tab === "shopping" && (
@@ -112,7 +149,7 @@ function AppShell({ data }) {
           milestones={milestones} saveMilestone={saveMilestoneEntry} planDay={planDay}
           openMilestone={openMilestone} setOpenMilestone={setOpenMilestone} />
       )}
-      {tab === "foods" && <FoodsView t={t} lang={lang} />}
+      {tab === "foods" && <FoodsView t={t} lang={lang} user={user} />}
 
       <nav aria-label={t.nav.primary} className="fixed bottom-0 left-0 right-0 max-w-md mx-auto flex"
         style={{ background: "#fff", borderTop: `1px solid ${C.line}`, paddingBottom: "env(safe-area-inset-bottom)" }}>
@@ -120,7 +157,7 @@ function AppShell({ data }) {
           const Icon = TAB_ICONS[key];
           const active = tab === key;
           return (
-            <button key={key} onClick={() => setTab(key)} aria-current={active ? "page" : undefined} className="flex-1 flex flex-col items-center gap-1 py-2.5">
+            <button key={key} onClick={() => goToTab(key)} aria-current={active ? "page" : undefined} className="flex-1 flex flex-col items-center gap-1 py-2.5">
               <Icon size={20} color={active ? C.purple : C.textSoft} strokeWidth={active ? 2.4 : 2} />
               <span className="text-[10px] font-medium" style={{ color: active ? C.purple : C.textSoft }}>{t.tabs[key]}</span>
             </button>
@@ -133,9 +170,21 @@ function AppShell({ data }) {
 
 function AuthenticatedApp() {
   const { user } = useAuth();
+  const staffRole = useStaffRole(user.id);
+  const [adminLang, setAdminLang] = useState("en");
   const data = useClientData(user.id);
   const [claimLang, setClaimLang] = useState("en");
   const t = STRINGS[claimLang];
+
+  // Staff (clinician/admin) never see the client flow — they land
+  // straight in the review panel. See src/hooks/useAdminData.js and
+  // scripts/grantStaffRole.mjs for how a `staff` row gets created.
+  if (staffRole === undefined) {
+    return <div style={{ background: C.bg, minHeight: "100vh" }} className="max-w-md mx-auto flex items-center justify-center text-sm" />;
+  }
+  if (staffRole) {
+    return <AdminView lang={adminLang} setLang={setAdminLang} />;
+  }
 
   if (data.loading) {
     return (
@@ -154,7 +203,7 @@ function AuthenticatedApp() {
   if (!data.profile) {
     return <ClaimKitView t={t} lang={claimLang} setLang={setClaimLang} onClaimed={data.refetch} />;
   }
-  return <AppShell data={data} />;
+  return <AppShell data={data} user={user} />;
 }
 
 export default function App() {
