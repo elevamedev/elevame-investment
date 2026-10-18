@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient.js";
+import { STRINGS } from "../i18n/strings.js";
+import { useToast } from "../context/ToastContext.jsx";
 
 function buildPhasesFromRows(phaseRows, dayRows, mealRows) {
   const mealsByDay = {};
@@ -49,44 +51,108 @@ function buildScoreList(rows) {
     }));
 }
 
+function buildSimilarProfilesList(rows) {
+  return rows
+    .slice()
+    .sort((a, b) => a.sort_order - b.sort_order)
+    .map(r => ({
+      key: r.key,
+      label: { en: r.label_en, es: r.label_es },
+      client_pct: r.client_pct,
+      baseline_pct: r.baseline_pct,
+    }));
+}
+
+function buildScreeningList(rows) {
+  return rows
+    .slice()
+    .sort((a, b) => a.sort_order - b.sort_order)
+    .map(r => ({
+      key: r.key,
+      category: r.category,
+      name: { en: r.name_en, es: r.name_es },
+      status: r.status,
+      abundance_pct: r.abundance_pct,
+      note: r.note_en ? { en: r.note_en, es: r.note_es } : null,
+    }));
+}
+
 const EMPTY = {
   profile: null,
   phases: [],
   gutScores: [],
   keyBacteria: [],
+  screeningFindings: [],
+  similarProfiles: [],
   checks: {},
   entries: [],
   milestones: {},
 };
 
+/**
+ * Loads everything for the signed-in client, keyed off their auth
+ * user id. A `profiles` row only exists once the client has claimed
+ * a kit (see ClaimKitView) — until then this resolves with
+ * `profile: null` and no error, which App.jsx treats as "show the
+ * claim screen," not a failure.
+ *
+ * Every child table (gut_scores, plan_*, shopping_checks, ...)
+ * stores profiles.id (an internal id), not the auth user id, so
+ * every read/write below goes through `profile.id` once it's known
+ * — never the raw `userId` argument past the initial profile lookup.
+ */
 export function useClientData(userId) {
   const [state, setState] = useState(EMPTY);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { show } = useToast();
+
+  // A background save (shopping check, tracker entry, ...) failing
+  // silently would leave the client thinking it worked — surface it
+  // as a toast rather than just setting `error` (which only the
+  // full-page loadError state reads, and only for the initial load).
+  function reportSaveError(err) {
+    setError(err);
+    const lang = state.profile?.language || "en";
+    show(STRINGS[lang].toast.saveError, "error");
+  }
 
   const load = useCallback(async () => {
     if (!userId) { setState(EMPTY); setLoading(false); return; }
     setLoading(true);
     setError(null);
     try {
+      const { data: profile, error: profileErr } = await supabase
+        .from("profiles").select("*").eq("user_id", userId).maybeSingle();
+      if (profileErr) throw profileErr;
+
+      if (!profile) {
+        setState(EMPTY);
+        return;
+      }
+
+      const profileId = profile.id;
       const [
-        { data: profile, error: profileErr },
         { data: phaseRows, error: phasesErr },
         { data: scoreRows, error: scoresErr },
+        { data: screeningRows, error: screeningErr },
+        { data: similarProfileRows, error: similarProfilesErr },
         { data: checkRows, error: checksErr },
         { data: entryRows, error: entriesErr },
         { data: milestoneRows, error: milestonesErr },
       ] = await Promise.all([
-        supabase.from("profiles").select("*").eq("id", userId).single(),
-        supabase.from("plan_phases").select("*").eq("profile_id", userId),
-        supabase.from("gut_scores").select("*").eq("profile_id", userId),
-        supabase.from("shopping_checks").select("*").eq("profile_id", userId),
-        supabase.from("tracker_entries").select("*").eq("profile_id", userId).order("date"),
-        supabase.from("milestones").select("*").eq("profile_id", userId),
+        supabase.from("plan_phases").select("*").eq("profile_id", profileId),
+        supabase.from("gut_scores").select("*").eq("profile_id", profileId),
+        supabase.from("screening_findings").select("*").eq("profile_id", profileId),
+        supabase.from("similar_profiles").select("*").eq("profile_id", profileId),
+        supabase.from("shopping_checks").select("*").eq("profile_id", profileId),
+        supabase.from("tracker_entries").select("*").eq("profile_id", profileId).order("date"),
+        supabase.from("milestones").select("*").eq("profile_id", profileId),
       ]);
-      if (profileErr) throw profileErr;
       if (phasesErr) throw phasesErr;
       if (scoresErr) throw scoresErr;
+      if (screeningErr) throw screeningErr;
+      if (similarProfilesErr) throw similarProfilesErr;
       if (checksErr) throw checksErr;
       if (entriesErr) throw entriesErr;
       if (milestonesErr) throw milestonesErr;
@@ -120,6 +186,8 @@ export function useClientData(userId) {
         phases: buildPhasesFromRows(phaseRows, dayRows, mealRows),
         gutScores: buildScoreList(scoreRows.filter(r => r.category === "gut_score")),
         keyBacteria: buildScoreList(scoreRows.filter(r => r.category === "key_bacteria")),
+        screeningFindings: buildScreeningList(screeningRows),
+        similarProfiles: buildSimilarProfilesList(similarProfileRows),
         checks,
         entries: entryRows,
         milestones,
@@ -134,12 +202,16 @@ export function useClientData(userId) {
   useEffect(() => { load(); }, [load]);
 
   async function updateProfile(patch) {
-    const { data, error } = await supabase.from("profiles").update(patch).eq("id", userId).select().single();
-    if (error) throw error;
+    const profileId = state.profile?.id;
+    if (!profileId) return;
+    const { data, error } = await supabase.from("profiles").update(patch).eq("id", profileId).select().single();
+    if (error) { reportSaveError(error); return; }
     setState(s => ({ ...s, profile: data }));
   }
 
   async function toggleShoppingCheck(phaseKey, foodId) {
+    const profileId = state.profile?.id;
+    if (!profileId) return;
     const isChecked = !!state.checks[phaseKey]?.[foodId];
     const next = !isChecked;
     setState(s => {
@@ -148,21 +220,25 @@ export function useClientData(userId) {
       return { ...s, checks: { ...s.checks, [phaseKey]: phaseChecks } };
     });
     const { error } = await supabase.from("shopping_checks").upsert({
-      profile_id: userId, phase_key: phaseKey, food_id: foodId, checked: next, updated_at: new Date().toISOString(),
+      profile_id: profileId, phase_key: phaseKey, food_id: foodId, checked: next, updated_at: new Date().toISOString(),
     });
-    if (error) setError(error);
+    if (error) reportSaveError(error);
   }
 
   async function resetShoppingPhase(phaseKey) {
+    const profileId = state.profile?.id;
+    if (!profileId) return;
     setState(s => ({ ...s, checks: { ...s.checks, [phaseKey]: {} } }));
-    const { error } = await supabase.from("shopping_checks").delete().eq("profile_id", userId).eq("phase_key", phaseKey);
-    if (error) setError(error);
+    const { error } = await supabase.from("shopping_checks").delete().eq("profile_id", profileId).eq("phase_key", phaseKey);
+    if (error) reportSaveError(error);
   }
 
   async function saveTrackerEntry(date, form) {
-    const row = { profile_id: userId, date, ...form, updated_at: new Date().toISOString() };
+    const profileId = state.profile?.id;
+    if (!profileId) return;
+    const row = { profile_id: profileId, date, ...form, updated_at: new Date().toISOString() };
     const { data, error } = await supabase.from("tracker_entries").upsert(row).select().single();
-    if (error) { setError(error); return; }
+    if (error) { reportSaveError(error); return; }
     setState(s => ({
       ...s,
       entries: [...s.entries.filter(e => e.date !== date), data].sort((a, b) => a.date.localeCompare(b.date)),
@@ -170,12 +246,14 @@ export function useClientData(userId) {
   }
 
   async function saveMilestoneEntry(milestoneId, form) {
+    const profileId = state.profile?.id;
+    if (!profileId) return;
     const row = {
-      profile_id: userId, milestone_id: milestoneId, date: new Date().toISOString().slice(0, 10),
+      profile_id: profileId, milestone_id: milestoneId, date: new Date().toISOString().slice(0, 10),
       ...form, updated_at: new Date().toISOString(),
     };
     const { data, error } = await supabase.from("milestones").upsert(row).select().single();
-    if (error) { setError(error); return; }
+    if (error) { reportSaveError(error); return; }
     setState(s => ({ ...s, milestones: { ...s.milestones, [milestoneId]: data } }));
   }
 
