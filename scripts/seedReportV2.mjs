@@ -55,6 +55,17 @@ const PANEL_ID_MAP = {
 
 const STATUS_MAP = { "Not Detected": "not_detected", Low: "low", Normal: "normal", High: "high" };
 
+// The extractor sometimes wrote a page RANGE as a string (a section
+// spanning two PDF pages, e.g. "30-31" for tma_conversion) instead of
+// a single integer — every `page` column here is a plain int, so
+// take the first number rather than letting the insert fail.
+function toPageInt(value) {
+  if (value == null) return null;
+  if (typeof value === "number") return value;
+  const match = String(value).match(/\d+/);
+  return match ? Number(match[0]) : null;
+}
+
 function taxonRank(name) {
   if (/aceae$/.test(name)) return "family";
   if (/ales$/.test(name)) return "order";
@@ -326,10 +337,10 @@ async function main() {
   const metricResultRows = doctor.headline_metrics.map(m => ({
     test_id: testId,
     metric_id: m.metric_id === "fb_ratio" ? "f_b_ratio" : m.metric_id,
-    value: m.value, value_text: m.value_text, printed_badge: m.printed_badge, printed_comment: m.printed_comment, page: m.page,
+    value: m.value, value_text: m.value_text, printed_badge: m.printed_badge, printed_comment: m.printed_comment, page: toPageInt(m.page),
   })).concat(doctor.gut_scores.map(g => ({
     test_id: testId, metric_id: g.metric_id, value: g.value, community_value: g.community_value,
-    printed_badge: g.printed_badge, printed_comment: g.printed_comment, page: g.page_detail,
+    printed_badge: g.printed_badge, printed_comment: g.printed_comment, page: toPageInt(g.page_detail),
   })));
   const { error: mrErr } = await supabase.from("metric_results").upsert(metricResultRows, { onConflict: "test_id,metric_id" });
   if (mrErr) throw mrErr;
@@ -361,7 +372,7 @@ async function main() {
     panel.items.forEach(it => {
       const taxonId = touchTaxon(it.organism);
       if (!taxonId) return;
-      readings.push({ taxon_id: taxonId, context_type: "screen", context_id: PANEL_ID_MAP[panelKey], status: STATUS_MAP[it.status === "not_detected" ? "Not Detected" : it.status] || it.status, abundance_pct: it.abundance_pct, page: panel.page });
+      readings.push({ taxon_id: taxonId, context_type: "screen", context_id: PANEL_ID_MAP[panelKey], status: STATUS_MAP[it.status === "not_detected" ? "Not Detected" : it.status] || it.status, abundance_pct: it.abundance_pct, page: toPageInt(panel.page) });
     });
   });
   Object.entries(doctor.pathway_tables).forEach(([key, table]) => {
@@ -370,7 +381,7 @@ async function main() {
     pathwayRows(table).forEach(r => {
       const taxonId = touchTaxon(r.taxon);
       if (!taxonId) return;
-      readings.push({ taxon_id: taxonId, context_type: "pathway", context_id: conditionId, status: STATUS_MAP[r.status] || r.status.toLowerCase(), abundance_pct: null, page: table.page });
+      readings.push({ taxon_id: taxonId, context_type: "pathway", context_id: conditionId, status: STATUS_MAP[r.status] || r.status.toLowerCase(), abundance_pct: null, page: toPageInt(table.page) });
     });
   });
 
@@ -474,8 +485,8 @@ async function main() {
   await supabase.from("report_comments").delete().eq("test_id", testId);
   const commentRows = doctor.headline_metrics
     .filter(m => m.printed_comment)
-    .map(m => ({ test_id: testId, section_key: m.metric_id === "fb_ratio" ? "f_b_ratio" : m.metric_id, metric_id: m.metric_id === "fb_ratio" ? "f_b_ratio" : m.metric_id, text: m.printed_comment, language: "en", page: m.page, show_to_client: true }))
-    .concat(doctor.gut_scores.filter(g => g.printed_comment).map(g => ({ test_id: testId, section_key: g.metric_id, metric_id: g.metric_id, text: g.printed_comment, language: "en", page: g.page_detail, show_to_client: true })));
+    .map(m => ({ test_id: testId, section_key: m.metric_id === "fb_ratio" ? "f_b_ratio" : m.metric_id, metric_id: m.metric_id === "fb_ratio" ? "f_b_ratio" : m.metric_id, text: m.printed_comment, language: "en", page: toPageInt(m.page), show_to_client: true }))
+    .concat(doctor.gut_scores.filter(g => g.printed_comment).map(g => ({ test_id: testId, section_key: g.metric_id, metric_id: g.metric_id, text: g.printed_comment, language: "en", page: toPageInt(g.page_detail), show_to_client: true })));
   const { error: rcErr } = await supabase.from("report_comments").insert(commentRows);
   if (rcErr) throw rcErr;
   console.log(`Report comments: ${commentRows.length}`);
