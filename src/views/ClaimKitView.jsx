@@ -13,18 +13,34 @@ const ERROR_KEYS = {
 // their profile already being linked. Shows exactly what the browser's
 // session id is and what the same query App.jsx runs actually returns.
 // Remove once the mismatch is found.
+function decodeJwt(token) {
+  try {
+    const payload = token.split(".")[1];
+    const json = atob(payload.replace(/-/g, "+").replace(/_/g, "/"));
+    return JSON.parse(json);
+  } catch {
+    return null;
+  }
+}
+
 function DebugPanel({ userId }) {
   const [result, setResult] = useState(null);
+  const [jwt, setJwt] = useState(null);
   useEffect(() => {
     if (!userId) return;
     supabase.from("profiles").select("*").eq("user_id", userId).maybeSingle()
       .then(({ data, error }) => setResult({ data, error }));
+    supabase.auth.getSession().then(({ data }) => {
+      const token = data?.session?.access_token;
+      setJwt(token ? decodeJwt(token) : "no access_token on session");
+    });
   }, [userId]);
   return (
     <div className="rounded-xl p-3 mt-4 text-[11px]" style={{ background: "#fff3cd", border: "1px solid #ffe69c", color: "#000", wordBreak: "break-all" }}>
       <div style={{ fontWeight: 700 }}>DEBUG (temporary)</div>
       <div>browser session user.id: {userId || "(none)"}</div>
       <div>profiles query result: {result ? JSON.stringify(result) : "loading..."}</div>
+      <div>JWT sub/role/exp: {jwt ? JSON.stringify({ sub: jwt.sub, role: jwt.role, exp: jwt.exp, aud: jwt.aud }) : "loading..."}</div>
     </div>
   );
 }
