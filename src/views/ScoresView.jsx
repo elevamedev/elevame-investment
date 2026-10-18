@@ -13,10 +13,21 @@ function diversityBand(value, max) {
   return { key: "good", color: C.blue };
 }
 
+function jumpTo(id) {
+  document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
 export default function ScoresView({ t, lang, gutScores, keyBacteria, microbiomeAge, diversity, wellnessIndex, fbRatio, similarProfiles, screeningFindings }) {
   const [openScore, setOpenScore] = useState(null);
   const band = diversityBand(diversity.value, diversity.max);
   const wellnessColor = wellnessIndex === "good" ? C.blue : wellnessIndex === "poor" ? C.red : C.amber;
+
+  const sections = [
+    { id: "section-gut-scores", label: t.yourGutScores },
+    { id: "section-key-bacteria", label: t.keyBacteria },
+    ...(similarProfiles?.length > 0 ? [{ id: "section-similar-profiles", label: t.similarProfiles.title }] : []),
+    ...(screeningFindings?.length > 0 ? [{ id: "section-screening", label: t.screening.title }] : []),
+  ];
 
   return (
     <div className="px-4 pt-4 pb-24">
@@ -55,27 +66,38 @@ export default function ScoresView({ t, lang, gutScores, keyBacteria, microbiome
         </div>
       )}
 
+      {sections.length > 1 && (
+        <nav aria-label={t.jumpToSection} className="flex gap-1.5 mb-4 overflow-x-auto pb-1">
+          {sections.map(s => (
+            <button key={s.id} onClick={() => jumpTo(s.id)} className="px-3 py-2 rounded-full text-xs font-medium whitespace-nowrap"
+              style={{ background: C.card, color: C.purple, border: `1px solid ${C.purple}44` }}>
+              {s.label}
+            </button>
+          ))}
+        </nav>
+      )}
+
       <div className="flex items-center gap-4 mb-3 text-[11px]" style={{ color: C.textSoft }}>
         <div className="flex items-center gap-1.5"><span className="inline-block w-2.5 h-2.5 rounded-full" style={{ background: C.purple }} />{t.legendYou}</div>
         <div className="flex items-center gap-1.5"><span className="inline-block w-0.5 h-3" style={{ background: C.textSoft }} />{t.legendAvg}</div>
       </div>
 
-      <SectionLabel>{t.yourGutScores}</SectionLabel>
+      <SectionLabel id="section-gut-scores">{t.yourGutScores}</SectionLabel>
       <div className="mb-6">{gutScores.map(item => <ScoreRow key={item.key} t={t} lang={lang} item={item} onOpen={setOpenScore} />)}</div>
 
-      <SectionLabel>{t.keyBacteria}</SectionLabel>
+      <SectionLabel id="section-key-bacteria">{t.keyBacteria}</SectionLabel>
       <div className="mb-6">{keyBacteria.map(item => <ScoreRow key={item.key} t={t} lang={lang} item={item} onOpen={setOpenScore} />)}</div>
 
       {similarProfiles?.length > 0 && (
         <>
-          <SectionLabel>{t.similarProfiles.title}</SectionLabel>
+          <SectionLabel id="section-similar-profiles">{t.similarProfiles.title}</SectionLabel>
           <div className="mb-6"><SimilarProfilesReport t={t} lang={lang} profiles={similarProfiles} /></div>
         </>
       )}
 
       {screeningFindings?.length > 0 && (
         <>
-          <SectionLabel>{t.screening.title}</SectionLabel>
+          <SectionLabel id="section-screening">{t.screening.title}</SectionLabel>
           <ScreeningReport t={t} lang={lang} findings={screeningFindings} />
         </>
       )}

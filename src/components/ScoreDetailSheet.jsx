@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { X } from "lucide-react";
 import { C } from "../theme.js";
 import { TAGS } from "../data/gutScoresTemplate.js";
@@ -5,6 +6,16 @@ import { SCORE_DETAILS } from "../data/scoreDetails.js";
 import { SCORE_REFERENCE_RANGES } from "../data/scoreReferenceRanges.js";
 
 export default function ScoreDetailSheet({ t, lang, item, onClose }) {
+  const closeRef = useRef(null);
+
+  useEffect(() => {
+    if (!item) return;
+    closeRef.current?.focus();
+    function onKeyDown(e) { if (e.key === "Escape") onClose(); }
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [item, onClose]);
+
   if (!item) return null;
   const tagInfo = TAGS[item.tag];
   const detail = SCORE_DETAILS[item.key];
@@ -18,7 +29,7 @@ export default function ScoreDetailSheet({ t, lang, item, onClose }) {
       <div className="relative w-full max-w-md rounded-t-2xl p-5 max-h-[85vh] overflow-y-auto" style={{ background: C.card }}>
         <div className="flex items-start justify-between mb-1">
           <div className="font-semibold text-base pr-4" style={{ color: C.text }}>{item.label[lang]}</div>
-          <button onClick={onClose} aria-label={t.scoreDetail.close} className="p-1.5 rounded-full flex-shrink-0" style={{ border: `1px solid ${C.line}` }}>
+          <button ref={closeRef} onClick={onClose} aria-label={t.scoreDetail.close} className="p-1.5 rounded-full flex-shrink-0" style={{ border: `1px solid ${C.line}` }}>
             <X size={14} color={C.textSoft} />
           </button>
         </div>

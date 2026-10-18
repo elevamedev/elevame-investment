@@ -353,4 +353,90 @@ grep took this pass's time budget. Explicitly picking those up next.
 
 ---
 
-<!-- Cycle 4, 5 append below as they run. -->
+## Cycle 5 — overnight refinement, pass 2 of 3: UX walkthrough, mobile, accessibility
+
+### Review of pass 1 (Cycle 3)
+
+Confirmed the rebrand and copy fix from pass 1 are intact and render
+correctly (re-checked `theme.js`, `index.html`, and the two "Wellness"
+string fixes — all still in place, no regressions from this pass's
+changes). Pass 1 explicitly deferred the full UX walkthrough, mobile
+tap-target sizing, and a deeper accessibility pass — this pass picks
+those up directly.
+
+### Audit findings this pass
+
+Walked the main journeys (login, Scores, Plan, Shopping, Tracker) at
+phone width (420px) and against WCAG-style tap-target/keyboard/contrast
+checks:
+
+1. **Undersized tap targets.** The Plan tab's day-selector pills were
+   32×32px (`w-8 h-8`) — below the ~40-44px comfort threshold — used
+   every single day a client opens their plan. The food-search
+   clear-search button (`FoodsView`) had *no* padding at all: its tap
+   target was the bare 15px icon, the smallest target found in the app.
+2. **No keyboard escape route from the score detail sheet.** Opening a
+   score's detail (the headline Cycle 1 feature) and pressing Escape did
+   nothing — a keyboard user had to tab to the close button specifically.
+   No focus moved into the dialog on open either.
+3. **Inconsistent "current selection" semantics.** The bottom tab bar
+   had `aria-current="page"`, but the Plan day-pills, `PhaseTabs`
+   (phase 1/2/3 selector), and the Foods category filter — all
+   functionally identical tab-like selectors — had no `aria-current` or
+   `aria-pressed`, so a screen reader couldn't tell which one was active.
+4. **Long Scores page, no wayfinding.** Customer-value concern: the
+   Scores tab is now 13 gut scores + 9 bacteria + 6 pattern cards +
+   5 screening categories — a genuinely long scroll with no way to jump
+   between sections or orient at a glance.
+5. **Shopping list has no sense of progress.** A client ticking off a
+   78-item grocery list had no way to see "how much is left" without
+   scrolling the whole list.
+
+### Implemented this cycle
+
+- **Tap targets**: Plan day-pills 32px → 36px (`w-9 h-9`); Plan's
+  prev/next day buttons and Foods' category filter nudged from `p-2`/
+  `py-1.5` to `p-2.5`/`py-2`; `PhaseTabs` from `py-2` to `py-2.5`; the
+  Foods clear-search button now has a proper `p-1.5` hit area instead of
+  none.
+- **Keyboard accessibility for the score detail sheet**
+  (`ScoreDetailSheet.jsx`): Escape now closes it; the close button
+  receives focus automatically when the sheet opens.
+- **Consistent `aria-current`** added to the Plan day-pills, `PhaseTabs`,
+  and the Foods category filter, matching the pattern the bottom nav
+  already used.
+- **In-page jump navigation on the Scores tab**: a row of chips at the
+  top ("Your gut scores" / "Key bacteria" / "Similar profile patterns" /
+  "Bacteria & pathogen screening") that smooth-scrolls to each section,
+  only rendered when there's more than one section to jump to.
+  `SectionLabel` now accepts an `id` and sets `scroll-margin-top` so the
+  app's sticky header doesn't cover the section when jumped to.
+- **Shopping list progress**: "X of Y checked" under the list header,
+  computed live across all categories in the current phase.
+
+Verified with `npm run build` (clean), `npx eslint .` (clean, same 3
+pre-existing warnings), and a headless smoke test covering: the Scores
+tab's new jump-nav, the detail sheet opening/closing (including the
+Escape-key path), the Plan tab's larger day-pills, and the Shopping
+list's progress counter updating live after a checkbox tap — no console
+errors on any of them.
+
+### Deferred to pass 3
+
+- Didn't get to a full color-contrast audit (spot-checked the new brand
+  palette visually in pass 1, but no systematic WCAG ratio check yet).
+- No focus trap in the score detail sheet (Escape and initial focus are
+  covered; tabbing past the sheet's contents back into the page behind
+  it is still possible) — a full trap is more involved and lower-value
+  given the sheet is short.
+- Haven't re-verified Spanish copy against this pass's new strings
+  (`checkedOfTotal`, `jumpToSection`) beyond writing them in both
+  languages — worth a native-speaker pass eventually, out of scope for
+  an automated cycle.
+- Everything still open from Cycles 0-3's backlogs (loading skeletons,
+  dark mode, bundle-size code-splitting, nutrient/food catalog, client
+  food exclusions).
+
+---
+
+<!-- Cycle 6 appends below as it runs. -->

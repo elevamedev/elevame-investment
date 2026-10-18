@@ -22,11 +22,11 @@ export default function FoodsView({ t, lang }) {
         <Search size={16} color={C.textSoft} />
         <input value={query} onChange={e => setQuery(e.target.value)} placeholder={t.searchPlaceholder}
           className="w-full py-3 text-sm outline-none" style={{ color: C.text, background: "transparent" }} />
-        {query && <button onClick={() => setQuery("")} aria-label={t.clearSearch}><X size={15} color={C.textSoft} /></button>}
+        {query && <button onClick={() => setQuery("")} aria-label={t.clearSearch} className="p-1.5 -mr-1.5 rounded-full flex-shrink-0"><X size={15} color={C.textSoft} /></button>}
       </div>
       <div className="flex gap-1.5 mb-4 overflow-x-auto pb-1">
         {categories.map(c => (
-          <button key={c} onClick={() => setCat(c)} className="px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap"
+          <button key={c} onClick={() => setCat(c)} aria-current={cat === c ? "true" : undefined} className="px-3 py-2 rounded-full text-xs font-medium whitespace-nowrap"
             style={{ background: cat === c ? C.navy : "#fff", color: cat === c ? "#fff" : C.textSoft, border: `1px solid ${cat === c ? C.navy : C.line}` }}>
             {c === "all" ? t.all : t.categories[c]}
           </button>
