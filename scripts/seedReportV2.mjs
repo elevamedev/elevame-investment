@@ -9,18 +9,24 @@
  * Reads (fixed paths — this script is for this one report only):
  *   doctor_report_extracted.json, user_report_extracted.json,
  *   diet_plan_extracted.json, food_names_es.json
- * from the scratchpad directory passed as SCRATCH env var.
+ * from scripts/data/elvmwb6271/ (override with the SCRATCH env var).
  *
  * Requires SUPABASE_SERVICE_ROLE_KEY + VITE_SUPABASE_URL in .env.
  * Safe to re-run — every write is an upsert.
  */
 import "dotenv/config";
 import { readFileSync, existsSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { dirname, join } from "node:path";
 import { createClient } from "@supabase/supabase-js";
 import { slugify } from "./lib/slug.mjs";
 import { seedThemes, seedMetrics, seedScreenPanels, seedFoodCategories, FOOD_CATEGORIES } from "./lib/catalogV2.mjs";
 
-const SCRATCH = process.env.SCRATCH || "/tmp/claude-0/-home-user-elevame-investment/7635052c-95ed-5c9a-bbcf-3df1d50b2771/scratchpad";
+const __dirname = dirname(fileURLToPath(import.meta.url));
+// The extracted report JSON ships in the repo (scripts/data/elvmwb6271/)
+// so this script runs the same for anyone who clones it — SCRATCH only
+// needs overriding if you're re-running extraction for a different kit.
+const SCRATCH = process.env.SCRATCH || join(__dirname, "data/elvmwb6271");
 const KIT_CODE = "ELVMWB6271";
 const CLIENT_NAME = "El Hachemi Abdelhak";
 const PLACEHOLDER_EMAIL = `pending-email+${KIT_CODE.toLowerCase()}@elevame.es`;
