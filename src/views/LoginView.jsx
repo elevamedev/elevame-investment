@@ -2,7 +2,7 @@ import { useState } from "react";
 import { C } from "../theme.js";
 import { useAuth } from "../context/AuthContext.jsx";
 
-export default function LoginView({ t, lang, setLang }) {
+export default function LoginView({ t, lang, setLang, onSwitchToSignUp }) {
   const { signIn } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -19,7 +19,7 @@ export default function LoginView({ t, lang, setLang }) {
   }
 
   return (
-    <div style={{ fontFamily: "'Plus Jakarta Sans', -apple-system, sans-serif", background: C.bg, minHeight: "100vh" }} className="max-w-md mx-auto relative flex flex-col justify-center px-6">
+    <div style={{ fontFamily: "'Inter', -apple-system, sans-serif", background: C.bg, minHeight: "100vh" }} className="max-w-md mx-auto relative flex flex-col justify-center px-6">
       <div className="flex items-center justify-between mb-8">
         <div className="font-extrabold text-lg" style={{ color: C.navy }}>Eleva<span style={{ color: C.purple }}>me</span></div>
         <div className="flex items-center gap-1.5">
@@ -45,12 +45,19 @@ export default function LoginView({ t, lang, setLang }) {
           <input type="password" required autoComplete="current-password" value={password} onChange={e => setPassword(e.target.value)}
             className="w-full text-sm rounded-lg px-3 py-2.5 mb-4" style={{ border: `1px solid ${C.line}`, color: C.text }} />
 
-          {error && <div className="text-xs mb-4" style={{ color: C.red }}>{t.login.error}</div>}
+          {error && <div className="text-xs mb-4" style={{ color: C.redText }}>{t.login.error}</div>}
 
           <button type="submit" disabled={submitting} className="w-full py-3 rounded-xl font-semibold text-white text-sm disabled:opacity-60" style={{ background: C.purple }}>
             {submitting ? t.login.signingIn : t.login.signIn}
           </button>
         </form>
+      </div>
+
+      <div className="text-center text-sm mt-5" style={{ color: C.textSoft }}>
+        {t.login.noAccount}{" "}
+        <button type="button" onClick={onSwitchToSignUp} className="font-semibold" style={{ color: C.purple }}>
+          {t.login.createOne}
+        </button>
       </div>
     </div>
   );

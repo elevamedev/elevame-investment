@@ -8,14 +8,19 @@ import { C } from "../theme.js";
    `gut_scores` table, not here.
    tag: 'focus' | 'strength' | 'onTrack' — drives the pill colour.
 ============================================================ */
+// `color` is for backgrounds/borders/dots; `textColor` is a WCAG-AA-safe
+// variant for when the tag's color is the actual text (see theme.js) —
+// C.sage fails contrast as small text, so `strength` needs a darker shade.
 export const TAGS = {
-  focus: { color: C.purple },
-  strength: { color: C.sage },
-  onTrack: { color: C.textSoft },
+  focus: { color: C.purple, textColor: C.purple },
+  strength: { color: C.sage, textColor: C.sageText },
+  onTrack: { color: C.textSoft, textColor: C.textSoft },
 };
 
 export const MICROBIOME_AGE_DEFAULT = 64;
 export const DIVERSITY_DEFAULT = { value: 1.1, max: 10 };
+export const WELLNESS_INDEX_DEFAULT = "good";
+export const FB_RATIO_DEFAULT = 1.8;
 
 export const GUT_SCORES_DEFAULT = [
   { key: "metabolic", label: t2("Metabolic Score","Score Metabólico"), value: 29, avg: 35, tag: "strength",
@@ -53,4 +58,16 @@ export const KEY_BACTERIA_DEFAULT = [
     note: t2("Much higher than average — typical for a plant-forward diet like yours.","Mucho más alta que la media: típico de una dieta tan basada en plantas como la tuya.") },
   { key: "bifido", label: t2("Bifidobacterium","Bifidobacterium"), value: 12, avg: 1, tag: "strength",
     note: t2("Well above average — a beneficial bacteria already thriving in your gut.","Muy por encima de la media: una bacteria beneficiosa que ya prospera en tu intestino.") },
+  { key: "alistipes", label: t2("Alistipes","Alistipes"), value: 82, avg: 82, tag: "onTrack",
+    note: t2("Right at the community average.","Justo en la media de la comunidad.") },
+  { key: "eubacterium", label: t2("Eubacterium","Eubacterium"), value: 6, avg: 6, tag: "onTrack",
+    note: t2("Right at the community average.","Justo en la media de la comunidad.") },
+  { key: "collinsella", label: t2("Collinsella","Collinsella"), value: 1, avg: 1, tag: "onTrack",
+    note: t2("Right at the community average.","Justo en la media de la comunidad.") },
+  { key: "haemophilus", label: t2("Haemophilus","Haemophilus"), value: 11, avg: 11, tag: "onTrack",
+    note: t2("Right at the community average.","Justo en la media de la comunidad.") },
+  { key: "roseburia", label: t2("Roseburia","Roseburia"), value: 2, avg: 2, tag: "onTrack",
+    note: t2("Right at the community average.","Justo en la media de la comunidad.") },
+  { key: "phascolarctobacterium", label: t2("Phascolarctobacterium","Phascolarctobacterium"), value: 11, avg: 11, tag: "onTrack",
+    note: t2("Right at the community average.","Justo en la media de la comunidad.") },
 ];

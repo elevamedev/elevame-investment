@@ -5,7 +5,14 @@ export const BLANK_ENTRY = { energy: 3, digestion: 3, sleep: 3, mood: 3, bloatin
 
 export default function CheckinForm({ t, initial, onSave, saveLabel, extraField }) {
   const [form, setForm] = useState(initial || BLANK_ENTRY);
+  const [saving, setSaving] = useState(false);
   useEffect(() => { setForm(initial || BLANK_ENTRY); }, [initial]);
+
+  async function handleSave() {
+    setSaving(true);
+    try { await onSave(form); } finally { setSaving(false); }
+  }
+
   return (
     <div className="rounded-xl p-4" style={{ background: C.card, border: `1px solid ${C.line}` }}>
       {["energy", "digestion", "sleep", "mood"].map(k => (
@@ -14,7 +21,8 @@ export default function CheckinForm({ t, initial, onSave, saveLabel, extraField 
             <span style={{ color: C.text }}>{t.fields[k]}</span>
             <span style={{ color: C.purple }} className="font-semibold">{form[k]}/5</span>
           </div>
-          <input type="range" min="1" max="5" value={form[k]} onChange={e => setForm({ ...form, [k]: Number(e.target.value) })} className="w-full" style={{ accentColor: C.purple }} />
+          <input type="range" min="1" max="5" value={form[k]} onChange={e => setForm({ ...form, [k]: Number(e.target.value) })}
+            aria-label={t.fields[k]} aria-valuetext={`${form[k]}/5`} className="w-full" style={{ accentColor: C.purple }} />
         </div>
       ))}
       <div className="flex items-center justify-between mb-4 mt-4">
@@ -28,7 +36,9 @@ export default function CheckinForm({ t, initial, onSave, saveLabel, extraField 
       </div>
       <textarea value={form.notes} onChange={e => setForm({ ...form, notes: e.target.value })} placeholder={extraField || t.notesPlaceholder}
         className="w-full text-sm rounded-lg px-3 py-2 resize-none" style={{ border: `1px solid ${C.line}`, color: C.text, minHeight: 70 }} />
-      <button onClick={() => onSave(form)} className="w-full mt-3 py-3 rounded-xl font-semibold text-white text-sm" style={{ background: C.purple }}>{saveLabel}</button>
+      <button onClick={handleSave} disabled={saving} className="w-full mt-3 py-3 rounded-xl font-semibold text-white text-sm disabled:opacity-60" style={{ background: C.purple }}>
+        {saving ? t.saving : saveLabel}
+      </button>
     </div>
   );
 }

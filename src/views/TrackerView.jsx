@@ -33,7 +33,7 @@ export default function TrackerView({ t, lang, entries, todayEntry, saveEntry, m
                 <YAxis domain={[1, 5]} tick={{ fontSize: 10, fill: C.textSoft }} />
                 <Tooltip contentStyle={{ fontSize: 12, borderRadius: 8, border: `1px solid ${C.line}` }} />
                 <Legend wrapperStyle={{ fontSize: 11 }} />
-                <Line type="monotone" dataKey={t.chart.Energy} stroke={C.teal} strokeWidth={2} dot={false} />
+                <Line type="monotone" dataKey={t.chart.Energy} stroke={C.blue} strokeWidth={2} dot={false} />
                 <Line type="monotone" dataKey={t.chart.Digestion} stroke={C.purple} strokeWidth={2} dot={false} />
                 <Line type="monotone" dataKey={t.chart.Sleep} stroke={C.amber} strokeWidth={2} dot={false} />
                 <Line type="monotone" dataKey={t.chart.Mood} stroke={C.sage} strokeWidth={2} dot={false} />
