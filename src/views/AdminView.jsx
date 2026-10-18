@@ -35,7 +35,7 @@ const COPY = {
     client: "Client", kit: "Kit", test: "Test", status: "Status", issues: "open issues", none: "No tests yet.",
     published: "Published", unpublished: "Draft", publish: "Publish", unpublish: "Unpublish",
     dataQuality: "Data quality issues", noIssues: "No issues logged.", resolved: "Resolved", unresolve: "Re-open", resolve: "Mark resolved",
-    atRisk: "At-risk conditions (clinician only)", noRisk: "Nothing flagged at risk.",
+    atRisk: "At-risk conditions (clinician only)", noRisk: "Nothing flagged at risk.", associatedBacteria: "Associated bacteria",
     insights: "Insights (client-facing, theme pages)", noInsights: "No insights written yet.",
     addInsight: "Write an insight", theme: "Theme", insightStatus: "Status (optional)", title_en: "Title (EN)", title_es: "Title (ES)",
     text_en: "Client text (EN)", text_es: "Client text (ES)", save: "Save insight", approved: "Approved — visible to client", approve: "Approve", unapprove: "Unapprove",
@@ -50,7 +50,7 @@ const COPY = {
     client: "Cliente", kit: "Kit", test: "Test", status: "Estado", issues: "incidencias abiertas", none: "Todavía no hay tests.",
     published: "Publicado", unpublished: "Borrador", publish: "Publicar", unpublish: "Despublicar",
     dataQuality: "Incidencias de calidad de datos", noIssues: "No hay incidencias registradas.", resolved: "Resuelta", unresolve: "Reabrir", resolve: "Marcar resuelta",
-    atRisk: "Condiciones en riesgo (solo clínico)", noRisk: "Nada marcado en riesgo.",
+    atRisk: "Condiciones en riesgo (solo clínico)", noRisk: "Nada marcado en riesgo.", associatedBacteria: "Bacterias asociadas",
     insights: "Insights (visibles al cliente, páginas de tema)", noInsights: "Todavía no hay insights escritos.",
     addInsight: "Escribir un insight", theme: "Tema", insightStatus: "Estado (opcional)", title_en: "Título (EN)", title_es: "Título (ES)",
     text_en: "Texto para el cliente (EN)", text_es: "Texto para el cliente (ES)", save: "Guardar insight", approved: "Aprobado — visible para el cliente", approve: "Aprobar", unapprove: "Quitar aprobación",
@@ -143,13 +143,21 @@ function AdminTestReview({ test, lang, onBack }) {
       <SectionTitle>{c.atRisk}</SectionTitle>
       <Card>
         {!r.conditionResults.length ? <div className="text-xs" style={{ color: C.textSoft }}>{c.noRisk}</div> : (
-          <div className="flex flex-wrap gap-1.5">
-            {r.conditionResults.map(cr => (
-              <span key={cr.condition_id} className="text-[11px] font-semibold px-2 py-1 rounded-full" style={{ background: C.red + "1c", color: C.redText }}>
-                {cr.conditions?.name_en || cr.condition_id}
-              </span>
-            ))}
-          </div>
+          r.conditionResults.map((cr, i) => {
+            const bacteriaNames = (cr.flagged_taxon_ids || []).map(id => r.taxaById[id] || id);
+            return (
+              <div key={cr.condition_id} className="py-2" style={{ borderTop: i === 0 ? "none" : `1px solid ${C.line}` }}>
+                <span className="text-[11px] font-semibold px-2 py-1 rounded-full inline-block mb-1" style={{ background: C.red + "1c", color: C.redText }}>
+                  {cr.conditions?.name_en || cr.condition_id}
+                </span>
+                {bacteriaNames.length > 0 && (
+                  <div className="text-xs" style={{ color: C.textSoft }}>
+                    {c.associatedBacteria}: <span style={{ color: C.navy, fontWeight: 600 }}>{bacteriaNames.join(", ")}</span>
+                  </div>
+                )}
+              </div>
+            );
+          })
         )}
       </Card>
 
