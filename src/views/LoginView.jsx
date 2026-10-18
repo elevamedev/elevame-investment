@@ -45,7 +45,7 @@ export default function LoginView({ t, lang, setLang }) {
           <input type="password" required autoComplete="current-password" value={password} onChange={e => setPassword(e.target.value)}
             className="w-full text-sm rounded-lg px-3 py-2.5 mb-4" style={{ border: `1px solid ${C.line}`, color: C.text }} />
 
-          {error && <div className="text-xs mb-4" style={{ color: C.red }}>{t.login.error}</div>}
+          {error && <div className="text-xs mb-4" style={{ color: C.redText }}>{t.login.error}</div>}
 
           <button type="submit" disabled={submitting} className="w-full py-3 rounded-xl font-semibold text-white text-sm disabled:opacity-60" style={{ background: C.purple }}>
             {submitting ? t.login.signingIn : t.login.signIn}

@@ -9,7 +9,7 @@ function CategoryGroup({ t, lang, category, items, open, onToggle }) {
     <div className="rounded-xl mb-3 overflow-hidden" style={{ background: C.card, border: `1px solid ${C.line}` }}>
       <button onClick={onToggle} aria-expanded={open} className="w-full flex items-center justify-between px-4 py-3 text-left">
         <div className="flex items-center gap-2.5">
-          {anyDetected ? <ShieldAlert size={16} color={C.red} /> : <ShieldCheck size={16} color={C.sage} />}
+          {anyDetected ? <ShieldAlert size={16} color={C.redText} /> : <ShieldCheck size={16} color={C.sageText} />}
           <div>
             <div className="text-sm font-semibold" style={{ color: C.text }}>{SCREENING_CATEGORY_LABELS[category][lang]}</div>
             <div className="text-[11px]" style={{ color: C.textSoft }}>
@@ -27,7 +27,7 @@ function CategoryGroup({ t, lang, category, items, open, onToggle }) {
               <span className="text-sm" style={{ color: C.text }}>{item.name[lang]}</span>
               <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full flex-shrink-0 ml-2" style={{
                 background: item.status === "detected" ? C.red + "1c" : C.sage + "1c",
-                color: item.status === "detected" ? C.red : C.sage,
+                color: item.status === "detected" ? C.redText : C.sageText,
               }}>
                 {item.status === "detected" ? (item.abundance_pct != null ? t.screening.detectedPct(item.abundance_pct) : t.screening.detected) : t.screening.notDetected}
               </span>

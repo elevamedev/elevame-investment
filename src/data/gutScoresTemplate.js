@@ -8,10 +8,13 @@ import { C } from "../theme.js";
    `gut_scores` table, not here.
    tag: 'focus' | 'strength' | 'onTrack' — drives the pill colour.
 ============================================================ */
+// `color` is for backgrounds/borders/dots; `textColor` is a WCAG-AA-safe
+// variant for when the tag's color is the actual text (see theme.js) —
+// C.sage fails contrast as small text, so `strength` needs a darker shade.
 export const TAGS = {
-  focus: { color: C.purple },
-  strength: { color: C.sage },
-  onTrack: { color: C.textSoft },
+  focus: { color: C.purple, textColor: C.purple },
+  strength: { color: C.sage, textColor: C.sageText },
+  onTrack: { color: C.textSoft, textColor: C.textSoft },
 };
 
 export const MICROBIOME_AGE_DEFAULT = 64;

@@ -9,7 +9,7 @@ export default function MilestoneRow({ t, lang, milestone, entry, planDay, isOpe
     <div className="rounded-xl mb-3 overflow-hidden" style={{ border: `1px solid ${C.line}` }}>
       <button onClick={() => !locked && onOpen(isOpen ? null : milestone.id)} disabled={locked} className="w-full flex items-center gap-3 px-4 py-3 text-left" style={{ background: C.card }}>
         <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: done ? C.blue + "22" : locked ? C.line : C.purpleSoft }}>
-          {done ? <Check size={15} color={C.blue} strokeWidth={3} /> : <Activity size={14} color={locked ? C.textSoft : C.purple} />}
+          {done ? <Check size={15} color={C.blueText} strokeWidth={3} /> : <Activity size={14} color={locked ? C.textSoft : C.purple} />}
         </div>
         <div className="flex-1">
           <div className="text-sm font-semibold" style={{ color: C.text }}>{milestone.label[lang]}</div>

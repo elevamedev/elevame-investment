@@ -69,7 +69,7 @@ function AppShell() {
   }
   if (error) {
     return (
-      <div style={{ background: C.bg, minHeight: "100vh", color: C.red }} className="max-w-md mx-auto flex items-center justify-center text-sm px-6 text-center">
+      <div style={{ background: C.bg, minHeight: "100vh", color: C.redText }} className="max-w-md mx-auto flex items-center justify-center text-sm px-6 text-center">
         {t.loadError}
       </div>
     );
