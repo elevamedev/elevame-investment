@@ -570,7 +570,12 @@ async function main() {
       const factorEn = names.length > 1 ? "factors" : "a factor";
       const factorEs = names.length > 1 ? "factores" : "un factor";
       return {
-        test_id: testId, theme_id: condition.theme_id, status: "watch",
+        // "act" (red, "Focus area") — not "watch" ("Within range", which
+        // would directly contradict a risk-flag card saying a specific
+        // bacterium was flagged as a factor. These conditions came from
+        // the report's own at-risk flag, so the urgent framing is the
+        // one that actually matches what's being said.
+        test_id: testId, theme_id: condition.theme_id, status: "act",
         title_en: condition.name_en, title_es: condition.name_es,
         client_text_en: `Your report flags ${namesEn} as ${factorEn} associated with your ${condition.name_en} risk flag.`,
         client_text_es: `Tu informe señala ${namesEs} como ${factorEs} asociado${names.length > 1 ? "s" : ""} a tu indicador de riesgo de ${condition.name_es}.`,

@@ -15,16 +15,23 @@ function StatusPill({ status, cp }) {
   );
 }
 
-function InsightCard({ insight, lang, cp }) {
+function InsightCard({ insight, lang, cp, open, onToggle }) {
   const title = lang === "es" ? (insight.title_es || insight.title_en) : (insight.title_en || insight.title_es);
   const body = lang === "es" ? (insight.client_text_es || insight.client_text_en) : (insight.client_text_en || insight.client_text_es);
   return (
-    <div className="rounded-xl p-4 mb-3" style={{ background: C.card, border: `1px solid ${C.line}` }}>
-      <div className="flex items-center justify-between gap-2 mb-1">
-        <span className="text-sm font-semibold" style={{ color: C.text }}>{title}</span>
-        <StatusPill status={insight.status} cp={cp} />
-      </div>
-      {body && <div className="text-xs" style={{ color: C.textSoft }}>{body}</div>}
+    <div className="rounded-xl mb-3 overflow-hidden" style={{ background: C.card, border: `1px solid ${C.line}` }}>
+      <button onClick={onToggle} aria-expanded={open} className="w-full text-left p-4" style={{ cursor: "pointer" }}>
+        <div className="flex items-center justify-between gap-2">
+          <span className="text-sm font-semibold" style={{ color: C.text }}>{title}</span>
+          <div className="flex items-center gap-1.5">
+            <StatusPill status={insight.status} cp={cp} />
+            <ChevronDown size={14} color={C.textSoft} style={{ transform: open ? "rotate(180deg)" : "none", transition: "transform .15s" }} />
+          </div>
+        </div>
+      </button>
+      {open && body && (
+        <div className="px-4 pb-4 text-xs" style={{ color: C.textSoft, borderTop: `1px solid ${C.line}`, paddingTop: 12 }}>{body}</div>
+      )}
     </div>
   );
 }
@@ -101,6 +108,7 @@ export default function ThemeDetailView({ theme, lang, data, onBack }) {
   const cp = REPORT_COPY[lang] || REPORT_COPY.en;
   const name = lang === "es" ? (theme.name_es || theme.name_en) : (theme.name_en || theme.name_es);
   const [openMetricId, setOpenMetricId] = useState(null);
+  const [openInsightId, setOpenInsightId] = useState(null);
 
   // Theme-level insights (no specific metric tag) stay at the top,
   // same as before. Insights linked to one specific metric (via
@@ -125,7 +133,11 @@ export default function ThemeDetailView({ theme, lang, data, onBack }) {
       <div className="text-lg font-extrabold mb-4" style={{ color: C.navy }}>{name}</div>
 
       {insights.length > 0 ? (
-        insights.map(ins => <InsightCard key={ins.id} insight={ins} lang={lang} cp={cp} />)
+        insights.map(ins => (
+          <InsightCard key={ins.id} insight={ins} lang={lang} cp={cp}
+            open={openInsightId === ins.id}
+            onToggle={() => setOpenInsightId(id => id === ins.id ? null : ins.id)} />
+        ))
       ) : (
         <div className="rounded-xl p-4 mb-4 text-sm text-center" style={{ border: `1px solid ${C.line}`, color: C.textSoft }}>{cp.nothingFlagged}</div>
       )}
