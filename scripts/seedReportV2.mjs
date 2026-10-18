@@ -472,6 +472,52 @@ async function main() {
   if (dqErr) throw dqErr;
   console.log(`Data quality issues logged: ${dqRows.length}`);
 
+  // ---- 22. Insight drafts, sourced ONLY from text already given to
+  // this client (the report's own printed comments + the diet plan's
+  // rationale) — never new clinical interpretation written by this
+  // script. approved=true because nothing here is a new claim, just
+  // the same text restructured into the theme-insight shape; author
+  // is 'ai' (this script assembled it) for an honest paper trail.
+  // Anything beyond this — new interpretive insights — is for a
+  // nutritionist to write via the admin review panel. ----
+  const HEADLINE_TITLES = {
+    microbiome_age: ["Microbiome age", "Edad del microbioma"],
+    wellness_index: ["Wellness index", "Índice de bienestar"],
+    diversity: ["Diversity", "Diversidad"],
+    fb_ratio: ["F/B ratio", "Ratio F/B"],
+  };
+  const HEADLINE_ES = {
+    microbiome_age: "¡Parece que tu microbioma es más joven que tú! El plan de nutrición personalizado que hemos preparado para ti te ayudará a mantener tu microbioma joven por más tiempo.",
+    wellness_index: "Tu Índice de Bienestar es alto, lo que indica un bajo riesgo de enfermedad crónica. El perfil de tu microbioma no está asociado con patrones microbianos vinculados a enfermedades crónicas.",
+    diversity: "Baja, con necesidad de mejora: aunque tienes un nivel de diversidad bastante bajo, nuestro plan de nutrición personalizado te ayudará a mejorarlo y lograr un microbioma más diverso.",
+    fb_ratio: "Tu ratio F/B es alto. Esto significa que los Firmicutes son más dominantes, lo que puede estar relacionado con una mayor extracción de calorías y una mayor tendencia al aumento de peso en algunas personas. ¡Con tu guía de nutrición personalizada es posible modular tu microbioma!",
+  };
+  await supabase.from("insights").delete().eq("test_id", testId);
+  const insightRows = doctor.headline_metrics.filter(m => m.printed_comment).map(m => {
+    const key = m.metric_id === "fb_ratio" ? "fb_ratio" : m.metric_id;
+    return {
+      test_id: testId, theme_id: "overview", status: m.printed_badge,
+      title_en: HEADLINE_TITLES[key]?.[0] || key, title_es: HEADLINE_TITLES[key]?.[1] || key,
+      client_text_en: m.printed_comment, client_text_es: HEADLINE_ES[key] || null,
+      linked_metric_ids: [m.metric_id === "fb_ratio" ? "f_b_ratio" : m.metric_id],
+      author: "ai", approved: true,
+    };
+  });
+  if (existsSync(`${SCRATCH}/diet_plan_extracted_es.json`)) {
+    const dietPlan = readJSON("diet_plan_extracted_es.json");
+    if (dietPlan.notes?.rationale_intro) {
+      insightRows.push({
+        test_id: testId, theme_id: "overview", status: null,
+        title_en: "Your plan, explained", title_es: "Tu plan, explicado",
+        client_text_en: dietPlan.notes.rationale_intro, client_text_es: dietPlan.notes.rationale_intro_es || null,
+        linked_metric_ids: ["metabolic_score", "protein_metabolism", "diversity"], author: "ai", approved: true,
+      });
+    }
+  }
+  const { error: insErr } = await supabase.from("insights").insert(insightRows);
+  if (insErr) throw insErr;
+  console.log(`Insight drafts seeded (from already-given text only): ${insightRows.length}`);
+
   console.log(`\nDone. test_id = ${testId}, client_id = ${clientId}, kit_id = ${kitId}`);
   console.log(`\nNOTE: no v1 profiles row was created by this script — run scripts/registerKitFromV2.mjs next to also create the v1 self-serve-claimable profile (gut_scores/screening_findings/similar_profiles/plan) so the client can actually sign in and see their report in the current app UI.`);
 }
