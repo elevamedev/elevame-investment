@@ -282,10 +282,22 @@ async function main() {
     ({ id: testId, client_id: clientId, kit_id: kitId } = existingTest);
     console.log(`Reusing existing v2 test ${testId} for kit ${KIT_CODE}.`);
   } else {
+    // If registerKitFromV2.mjs already ran for this kit (or an older
+    // run of this script backfilled one), there's a real v1 profile
+    // and possibly a claimed auth account — link the new clients row
+    // to both now, instead of leaving it an orphan that nothing else
+    // can find later (this bit anyone running these two scripts out
+    // of order, or re-running after the other already ran).
+    const { data: legacyProfile } = await supabase.from("profiles").select("id, user_id").eq("kit_code", KIT_CODE).maybeSingle();
     const { data: client, error: clientErr } = await supabase
-      .from("clients").insert({ name: CLIENT_NAME, language: "en" }).select().single();
+      .from("clients").insert({
+        name: CLIENT_NAME, language: "en",
+        legacy_profile_id: legacyProfile?.id ?? null,
+        auth_user_id: legacyProfile?.user_id ?? null,
+      }).select().single();
     if (clientErr) throw clientErr;
     clientId = client.id;
+    if (legacyProfile) console.log(`Linked new clients row to existing v1 profile ${legacyProfile.id}${legacyProfile.user_id ? ` (claimed, auth_user_id synced)` : " (unclaimed)"}.`);
 
     const { data: kit, error: kitErr } = await supabase
       .from("kits").upsert({ client_id: clientId, kit_code: KIT_CODE, status: "claimed" }, { onConflict: "kit_code" }).select().single();

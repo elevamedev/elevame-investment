@@ -170,10 +170,23 @@ async function main() {
   console.log(`Profile: ${profileId}`);
 
   if (authUser) {
-    const { error: clientSyncErr } = await supabase
-      .from("clients").update({ auth_user_id: authUser.id }).eq("legacy_profile_id", profileId);
-    if (clientSyncErr) throw clientSyncErr;
-    console.log(`Synced v2 clients.auth_user_id for profile ${profileId} -> ${authUser.id}`);
+    // Go through kit_code -> kits -> clients, not legacy_profile_id:
+    // seedReportV2.mjs creates its own `clients` row for a brand new
+    // kit without setting legacy_profile_id (it has no v1 profile to
+    // link to yet at that point), so matching on legacy_profile_id
+    // here would silently update zero rows. kit_code is the one link
+    // both scripts actually share.
+    const { data: kit, error: kitErr } = await supabase.from("kits").select("client_id").eq("kit_code", KIT_CODE).maybeSingle();
+    if (kitErr) throw kitErr;
+    if (!kit) {
+      console.warn(`⚠ No v2 kit row found for ${KIT_CODE} — did you run seedReportV2.mjs first? The v2-powered screens (Report tab, Supplements) won't resolve for this client until you do.`);
+    } else {
+      const { data: updated, error: clientSyncErr } = await supabase
+        .from("clients").update({ auth_user_id: authUser.id }).eq("id", kit.client_id).select();
+      if (clientSyncErr) throw clientSyncErr;
+      if (!updated?.length) console.warn(`⚠ clients row ${kit.client_id} (for kit ${KIT_CODE}) wasn't updated — check it still exists.`);
+      else console.log(`Synced v2 clients.auth_user_id for client ${kit.client_id} -> ${authUser.id}`);
+    }
   }
 
   // ---- gut_scores (13 panel scores + 9 key bacteria) ----
