@@ -1,0 +1,697 @@
+{
+  "client_name": "El Hachemi",
+  "kit_code": "ELVMWB6271",
+  "report_date": "2026-09-24",
+  "notes": {
+    "shared_with": "Deborah (partner, shares lunch/dinner/snack; breakfast is individual to each person)",
+    "shellfish_allergy": "Deborah is allergic to shellfish; no shellfish in any shared meal even where it would score well for El Hachemi. Shell-free fish (sea bream, hake, sea bass, mackerel) substituted.",
+    "halal": "No pork in any meal, individual or shared, even though pork scores well in both reports. Mutton used instead (scores 9 for El Hachemi same dishes).",
+    "el_hachemi_reduce_list": [
+      {
+        "food": "Whole Milk",
+        "score": 0
+      },
+      {
+        "food": "Ginger",
+        "score": 2
+      },
+      {
+        "food": "Salmon",
+        "score": 2
+      },
+      {
+        "food": "Chili",
+        "score": 3
+      },
+      {
+        "food": "Cinnamon",
+        "score": 3
+      },
+      {
+        "food": "Soy Milk",
+        "score": 3
+      },
+      {
+        "food": "Okra",
+        "score": 3
+      },
+      {
+        "food": "Leek",
+        "score": 3
+      }
+    ],
+    "shared_avoid_from_deborah": [
+      "leek",
+      "okra",
+      "turmeric",
+      "onion",
+      "tomato",
+      "soy milk",
+      "goat milk",
+      "honey"
+    ],
+    "rationale_intro": "You've told us the gas and heavy digestion you feel after eating seem 'normal', but your report points to some concrete causes: your protein metabolism is low, your Akkermansia is well below the community average (a key bacteria for gut wall health), and your microbial diversity is low. On weight: your metabolic score (45) is higher than you'd like, mostly because your sugar and processed-food index are also elevated. Your already-good fat metabolism is a point in your favor.",
+    "rationale_intro_es": "Nos has contado que los gases y la digestión pesada que sientes después de comer te parecen 'normales', pero tu informe señala causas concretas: tu metabolismo de proteínas es bajo, tu Akkermansia está muy por debajo de la media de la comunidad (una bacteria clave para la salud de la pared intestinal), y tu diversidad microbiana es baja. En cuanto al peso: tu score metabólico (45) es más alto de lo que te gustaría, sobre todo porque tu índice de azúcar y de alimentos procesados también están elevados. Tu metabolismo de grasas, que ya es bueno, juega a tu favor."
+  },
+  "phases": [
+    {
+      "phase_index": 0,
+      "phase_key": "foundations",
+      "weeks_en": "Weeks 1-2",
+      "weeks_es": "Semanas 1-2",
+      "subtitle_en": "Foundations",
+      "blurb_en": "We immediately remove every food that scores 0-3 for either of you. Simple, well-cooked meals, with easy-to-digest proteins (lamb, chicken, white fish) and moderate portions, designed to ease El Hachemi's heavy digestion and start working on Deborah's metabolic score without sudden changes.",
+      "days": [
+        {
+          "day_index": 0,
+          "breakfast": {
+            "dish": "Toast with mascarpone and pomegranate",
+            "desc": "Whole wheat bread (10) toasted with mascarpone (10) and pomegranate seeds (10).",
+            "dish_es": "Tostada con mascarpone y granada",
+            "desc_es": "Pan integral (10) tostado con mascarpone (10) y semillas de granada (10)."
+          },
+          "lunch": {
+            "dish": "Grilled lamb with rice and carrot",
+            "desc": "Lamb (9) grilled with rice (8) and steamed carrot (9).",
+            "dish_es": "Cordero a la plancha con arroz y zanahoria",
+            "desc_es": "Cordero (9) a la plancha con arroz (8) y zanahoria al vapor (9)."
+          },
+          "dinner": {
+            "dish": "Baked hake with sweet potato and green beans",
+            "desc": "Hake (6) baked with roasted sweet potato (9) and green beans (8).",
+            "dish_es": "Merluza al horno con boniato y judías verdes",
+            "desc_es": "Merluza (6) al horno con boniato asado (9) y judías verdes (8)."
+          },
+          "snack": {
+            "dish": "Pear with walnuts",
+            "desc": "Pear (10) with a handful of walnuts (5).",
+            "dish_es": "Pera con nueces",
+            "desc_es": "Pera (10) con un puñado de nueces (5)."
+          },
+          "tip": "We start with simple proteins and moderate portions, keeping El Hachemi's digestion in mind.",
+          "tip_es": "Empezamos con proteínas sencillas y raciones moderadas, teniendo en cuenta la digestión de El Hachemi."
+        },
+        {
+          "day_index": 1,
+          "breakfast": {
+            "dish": "Oat bran bowl with kiwi",
+            "desc": "Oat bran (8) with kiwi (9) and pumpkin seeds (8).",
+            "dish_es": "Bol de salvado de avena con kiwi",
+            "desc_es": "Salvado de avena (8) con kiwi (9) y semillas de calabaza (8)."
+          },
+          "lunch": {
+            "dish": "Baked chicken with sweet potato and asparagus",
+            "desc": "Chicken (7) baked with sweet potato (9) and asparagus (7).",
+            "dish_es": "Pollo al horno con boniato y espárragos",
+            "desc_es": "Pollo (7) al horno con boniato (9) y espárragos (7)."
+          },
+          "dinner": {
+            "dish": "Cod with cauliflower puree and carrot",
+            "desc": "Cod (6), cauliflower puree (9), and carrot (9).",
+            "dish_es": "Bacalao con puré de coliflor y zanahoria",
+            "desc_es": "Bacalao (6), puré de coliflor (9) y zanahoria (9)."
+          },
+          "snack": {
+            "dish": "Green olives with feta",
+            "desc": "Green olives (10) with a piece of feta cheese (7).",
+            "dish_es": "Aceitunas verdes con feta",
+            "desc_es": "Aceitunas verdes (10) con un trozo de queso feta (7)."
+          }
+        },
+        {
+          "day_index": 2,
+          "breakfast": {
+            "dish": "Cornmeal porridge with raspberry",
+            "desc": "Cornmeal (9) cooked as porridge with raspberry (9) and sunflower seeds.",
+            "dish_es": "Gachas de maíz con frambuesa",
+            "desc_es": "Maíz (9) cocinado como gachas con frambuesa (9) y semillas de girasol."
+          },
+          "lunch": {
+            "dish": "Grilled mutton with potato and green beans",
+            "desc": "Mutton (9) grilled with potato (9) and green beans (8).",
+            "dish_es": "Carnero a la plancha con patata y judías verdes",
+            "desc_es": "Carnero (9) a la plancha con patata (9) y judías verdes (8)."
+          },
+          "dinner": {
+            "dish": "Carrot and celery soup with chicken",
+            "desc": "Carrot (9) and celery (8), with shredded chicken (7).",
+            "dish_es": "Sopa de zanahoria y apio con pollo",
+            "desc_es": "Zanahoria (9) y apio (8), con pollo desmenuzado (7)."
+          },
+          "snack": {
+            "dish": "Black grapes",
+            "desc": "Black grapes (9) plain.",
+            "dish_es": "Uvas negras",
+            "desc_es": "Uvas negras (9) solas."
+          }
+        },
+        {
+          "day_index": 3,
+          "breakfast": {
+            "dish": "Whole wheat toast with olive oil and tomato",
+            "desc": "Whole wheat bread (10) with olive oil (7) and avocado.",
+            "dish_es": "Tostada integral con aceite de oliva y tomate",
+            "desc_es": "Pan integral (10) con aceite de oliva (7) y aguacate."
+          },
+          "lunch": {
+            "dish": "Lamb stew with carrot and potato",
+            "desc": "Lamb (9) stewed with carrot (9), potato (9) and bay leaf (7).",
+            "dish_es": "Estofado de cordero con zanahoria y patata",
+            "desc_es": "Cordero (9) estofado con zanahoria (9), patata (9) y hoja de laurel (7)."
+          },
+          "dinner": {
+            "dish": "Hake with asparagus and olive oil",
+            "desc": "Hake (6), asparagus (7), olive oil (7) and lemon (8).",
+            "dish_es": "Merluza con espárragos y aceite de oliva",
+            "desc_es": "Merluza (6), espárragos (7), aceite de oliva (7) y limón (8)."
+          },
+          "snack": {
+            "dish": "Kiwi with sesame",
+            "desc": "Kiwi (9) with sesame seeds (8).",
+            "dish_es": "Kiwi con sésamo",
+            "desc_es": "Kiwi (9) con semillas de sésamo (8)."
+          }
+        },
+        {
+          "day_index": 4,
+          "breakfast": {
+            "dish": "Scrambled egg white with spinach",
+            "desc": "Egg white (7) scrambled with spinach, on whole wheat bread (10).",
+            "dish_es": "Clara de huevo revuelta con espinaca",
+            "desc_es": "Clara de huevo (7) revuelta con espinaca, sobre pan integral (10)."
+          },
+          "lunch": {
+            "dish": "Chicken with rice and broccoli",
+            "desc": "Chicken (7) with rice (8) and broccoli (8).",
+            "dish_es": "Pollo con arroz y brócoli",
+            "desc_es": "Pollo (7) con arroz (8) y brócoli (8)."
+          },
+          "dinner": {
+            "dish": "Cod with zucchini and carrot",
+            "desc": "Cod (6), zucchini (7), and carrot (9).",
+            "dish_es": "Bacalao con calabacín y zanahoria",
+            "desc_es": "Bacalao (6), calabacín (7) y zanahoria (9)."
+          },
+          "snack": {
+            "dish": "Banana",
+            "desc": "Banana (6) plain.",
+            "dish_es": "Plátano",
+            "desc_es": "Plátano (6) solo."
+          }
+        },
+        {
+          "day_index": 5,
+          "breakfast": {
+            "dish": "Toast with sour cream and blueberry",
+            "desc": "Oat bread (9) with sour cream (9) and blueberry (7).",
+            "dish_es": "Tostada con nata agria y arándano",
+            "desc_es": "Pan de avena (9) con nata agria (9) y arándano (7)."
+          },
+          "lunch": {
+            "dish": "Lamb with mashed potato and carrot",
+            "desc": "Lamb (9), mashed potato (9), carrot (9).",
+            "dish_es": "Cordero con puré de patata y zanahoria",
+            "desc_es": "Cordero (9), puré de patata (9), zanahoria (9)."
+          },
+          "dinner": {
+            "dish": "Chicken with asparagus and rice",
+            "desc": "Chicken (7), asparagus (7), rice (8).",
+            "dish_es": "Pollo con espárragos y arroz",
+            "desc_es": "Pollo (7), espárragos (7), arroz (8)."
+          },
+          "snack": {
+            "dish": "Pear",
+            "desc": "Pear (10) plain.",
+            "dish_es": "Pera",
+            "desc_es": "Pera (10) sola."
+          }
+        },
+        {
+          "day_index": 6,
+          "breakfast": {
+            "dish": "Mascarpone and grapefruit smoothie",
+            "desc": "Mascarpone (10) blended with grapefruit juice (7) and ice.",
+            "dish_es": "Batido de mascarpone y pomelo",
+            "desc_es": "Mascarpone (10) batido con zumo de pomelo (7) y hielo."
+          },
+          "lunch": {
+            "dish": "Hake with pumpkin puree and carrot",
+            "desc": "Hake (6), pumpkin puree (7), carrot (9).",
+            "dish_es": "Merluza con puré de calabaza y zanahoria",
+            "desc_es": "Merluza (6), puré de calabaza (7), zanahoria (9)."
+          },
+          "dinner": {
+            "dish": "Mutton with sweet potato and green beans",
+            "desc": "Mutton (9), sweet potato (9), green beans (8).",
+            "dish_es": "Carnero con boniato y judías verdes",
+            "desc_es": "Carnero (9), boniato (9), judías verdes (8)."
+          },
+          "snack": {
+            "dish": "Olives and feta",
+            "desc": "Green olives (10) with feta cheese (7).",
+            "dish_es": "Aceitunas y feta",
+            "desc_es": "Aceitunas verdes (10) con queso feta (7)."
+          },
+          "tip": "A gentler day to close the week, with easy portions for both of you.",
+          "tip_es": "Un día más suave para cerrar la semana, con raciones sencillas para los dos."
+        }
+      ],
+      "subtitle_es": "Fundamentos",
+      "blurb_es": "Eliminamos de inmediato todos los alimentos con score 0-3 para cualquiera de los dos. Comidas sencillas y bien cocinadas, con proteínas fáciles de digerir (cordero, pollo, pescado blanco) y raciones moderadas, pensadas para aliviar la digestión pesada de El Hachemi y empezar a trabajar en el score metabólico de Deborah sin cambios bruscos."
+    },
+    {
+      "phase_index": 1,
+      "phase_key": "diversity",
+      "weeks_en": "Weeks 3-4",
+      "weeks_es": "Semanas 3-4",
+      "subtitle_en": "Expanding Diversity",
+      "blurb_en": "Diversity is low for both of you (0.5), so this phase introduces fermented sauerkraut and a new plant food every few days: artichoke, beetroot, buckwheat, pomegranate, blackberries. The goal: grow, together, the number of different plant foods you eat each week.",
+      "days": [
+        {
+          "day_index": 0,
+          "breakfast": {
+            "dish": "Buckwheat pancakes with blackberry",
+            "desc": "Buckwheat pancakes (7) topped with blackberry (9) and pumpkin seeds (8).",
+            "dish_es": "Tortitas de trigo sarraceno con mora",
+            "desc_es": "Tortitas de trigo sarraceno (7) con mora (9) y semillas de calabaza (8) por encima."
+          },
+          "lunch": {
+            "dish": "Artichokes stuffed with kidney beans",
+            "desc": "Artichoke (6), kidney beans (8), and parsley (9).",
+            "dish_es": "Alcachofas rellenas de judías rojas",
+            "desc_es": "Alcachofa (6), judías rojas (8) y perejil (9)."
+          },
+          "dinner": {
+            "dish": "Lamb with kale and sauerkraut",
+            "desc": "Lamb (9), kale (9), and a spoonful of sauerkraut (8).",
+            "dish_es": "Cordero con col rizada y chucrut",
+            "desc_es": "Cordero (9), col rizada (9) y una cucharada de chucrut (8)."
+          },
+          "snack": {
+            "dish": "Pomegranate with walnuts",
+            "desc": "Pomegranate (10) with a handful of walnuts (5).",
+            "dish_es": "Granada con nueces",
+            "desc_es": "Granada (10) con un puñado de nueces (5)."
+          },
+          "tip": "Sauerkraut is your first fermented food, exactly what a diversity score this low calls for, for both of you.",
+          "tip_es": "El chucrut es vuestro primer alimento fermentado, justo lo que pide un score de diversidad tan bajo como el de los dos."
+        },
+        {
+          "day_index": 1,
+          "breakfast": {
+            "dish": "Whole wheat bread with cream cheese and pomegranate",
+            "desc": "Whole wheat bread (10) with cream cheese (7) and pomegranate seeds (10).",
+            "dish_es": "Pan integral con queso crema y granada",
+            "desc_es": "Pan integral (10) con queso crema (7) y semillas de granada (10)."
+          },
+          "lunch": {
+            "dish": "Sea bream with asparagus and arugula salad",
+            "desc": "Sea bream (8) baked, asparagus (7), and arugula (9).",
+            "dish_es": "Dorada con espárragos y ensalada de rúcula",
+            "desc_es": "Dorada (8) al horno, espárragos (7) y rúcula (9)."
+          },
+          "dinner": {
+            "dish": "Beef with beetroot and potato",
+            "desc": "Beef (6) baked with roasted beetroot (9) and potato (9).",
+            "dish_es": "Ternera con remolacha y patata",
+            "desc_es": "Ternera (6) al horno con remolacha asada (9) y patata (9)."
+          },
+          "snack": {
+            "dish": "Sour cherry",
+            "desc": "Sour cherry (10) plain.",
+            "dish_es": "Guinda",
+            "desc_es": "Guinda (10) sola."
+          }
+        },
+        {
+          "day_index": 2,
+          "breakfast": {
+            "dish": "Chia pudding with raspberry",
+            "desc": "Chia seeds (7) soaked in coconut milk (7), topped with raspberry (9).",
+            "dish_es": "Pudin de chía con frambuesa",
+            "desc_es": "Semillas de chía (7) en remojo con leche de coco (7), con frambuesa (9) por encima."
+          },
+          "lunch": {
+            "dish": "Fava bean stew with carrot, garlic and parsley",
+            "desc": "Fava beans (9), carrot (9), garlic (6), and parsley (9).",
+            "dish_es": "Guiso de habas con zanahoria, ajo y perejil",
+            "desc_es": "Habas (9), zanahoria (9), ajo (6) y perejil (9)."
+          },
+          "dinner": {
+            "dish": "Baked hake with asparagus",
+            "desc": "Hake (6) baked with asparagus (7) and olive oil (7).",
+            "dish_es": "Merluza al horno con espárragos",
+            "desc_es": "Merluza (6) al horno con espárragos (7) y aceite de oliva (7)."
+          },
+          "snack": {
+            "dish": "Cacao nibs with yogurt",
+            "desc": "Cacao nibs (7) with a spoonful of fat-free yogurt (8).",
+            "dish_es": "Nibs de cacao con yogur",
+            "desc_es": "Nibs de cacao (7) con una cucharada de yogur desnatado (8)."
+          }
+        },
+        {
+          "day_index": 3,
+          "breakfast": {
+            "dish": "Buckwheat pancakes with mango",
+            "desc": "Buckwheat pancakes (7) topped with mango (8).",
+            "dish_es": "Tortitas de trigo sarraceno con mango",
+            "desc_es": "Tortitas de trigo sarraceno (7) con mango (8) por encima."
+          },
+          "lunch": {
+            "dish": "Chicken with chickpeas and cauliflower",
+            "desc": "Chicken (7), chickpeas (7), and cauliflower (9).",
+            "dish_es": "Pollo con garbanzos y coliflor",
+            "desc_es": "Pollo (7), garbanzos (7) y coliflor (9)."
+          },
+          "dinner": {
+            "dish": "Eggplant stuffed with ground lamb",
+            "desc": "Eggplant (9) stuffed with ground lamb (9) and parsley (9).",
+            "dish_es": "Berenjena rellena de cordero picado",
+            "desc_es": "Berenjena (9) rellena de cordero picado (9) y perejil (9)."
+          },
+          "snack": {
+            "dish": "Strawberry with cacao nibs",
+            "desc": "Strawberry (8) with a spoonful of cacao nibs (7).",
+            "dish_es": "Fresa con nibs de cacao",
+            "desc_es": "Fresa (8) con una cucharada de nibs de cacao (7)."
+          }
+        },
+        {
+          "day_index": 4,
+          "breakfast": {
+            "dish": "Yogurt with date and pumpkin seeds",
+            "desc": "Fat-free yogurt (8) with chopped date (8) and pumpkin seeds (8).",
+            "dish_es": "Yogur con dátil y semillas de calabaza",
+            "desc_es": "Yogur desnatado (8) con dátil troceado (8) y semillas de calabaza (8)."
+          },
+          "lunch": {
+            "dish": "Red lentils with sauerkraut and carrot",
+            "desc": "Red lentils (8) with a spoonful of sauerkraut (8) and carrot (9).",
+            "dish_es": "Lentejas rojas con chucrut y zanahoria",
+            "desc_es": "Lentejas rojas (8) con una cucharada de chucrut (8) y zanahoria (9)."
+          },
+          "dinner": {
+            "dish": "Pan-seared sea bream with Brussels sprouts",
+            "desc": "Sea bream (8) pan-seared with Brussels sprouts (8), garlic (6).",
+            "dish_es": "Dorada a la plancha con coles de Bruselas",
+            "desc_es": "Dorada (8) a la plancha con coles de Bruselas (8), ajo (6)."
+          },
+          "snack": {
+            "dish": "Papaya",
+            "desc": "Papaya (8) plain.",
+            "dish_es": "Papaya",
+            "desc_es": "Papaya (8) sola."
+          },
+          "tip": "We avoid shrimp here because of Deborah's allergy and use sea bream instead, which scores just as well for both of you.",
+          "tip_es": "Evitamos las gambas aquí por la alergia de Deborah y usamos dorada en su lugar, que puntúa igual de bien para los dos."
+        },
+        {
+          "day_index": 5,
+          "breakfast": {
+            "dish": "Green smoothie with spinach and banana",
+            "desc": "Spinach, banana (6), and coconut milk (7) blended.",
+            "dish_es": "Batido verde con espinaca y plátano",
+            "desc_es": "Espinaca, plátano (6) y leche de coco (7) batidos."
+          },
+          "lunch": {
+            "dish": "Mutton with fennel and potato",
+            "desc": "Mutton (9), fennel (7), and roasted potato (9).",
+            "dish_es": "Carnero con hinojo y patata",
+            "desc_es": "Carnero (9), hinojo (7) y patata asada (9)."
+          },
+          "dinner": {
+            "dish": "Sea bream with Swiss chard and sauerkraut",
+            "desc": "Sea bream (8) baked, Swiss chard (6), and a spoonful of sauerkraut (8).",
+            "dish_es": "Dorada con acelga y chucrut",
+            "desc_es": "Dorada (8) al horno, acelga (6) y una cucharada de chucrut (8)."
+          },
+          "snack": {
+            "dish": "Nectarine with chestnuts",
+            "desc": "Nectarine (8) with a handful of chestnuts (8).",
+            "dish_es": "Nectarina con castañas",
+            "desc_es": "Nectarina (8) con un puñado de castañas (8)."
+          }
+        },
+        {
+          "day_index": 6,
+          "breakfast": {
+            "dish": "Whole wheat bread with olive tapenade and pomegranate",
+            "desc": "Whole wheat bread (10) with olive tapenade (9/6) and pomegranate seeds (10).",
+            "dish_es": "Pan integral con tapenade de aceitunas y granada",
+            "desc_es": "Pan integral (10) con tapenade de aceitunas (9/6) y semillas de granada (10)."
+          },
+          "lunch": {
+            "dish": "Peas with lamb and black carrot",
+            "desc": "Peas (6), lamb (9), and black carrot (9).",
+            "dish_es": "Guisantes con cordero y zanahoria negra",
+            "desc_es": "Guisantes (6), cordero (9) y zanahoria negra (9)."
+          },
+          "dinner": {
+            "dish": "Chicken with pumpkin and red cabbage",
+            "desc": "Chicken (7) baked with pumpkin (7) and red cabbage (8).",
+            "dish_es": "Pollo con calabaza y col lombarda",
+            "desc_es": "Pollo (7) al horno con calabaza (7) y col lombarda (8)."
+          },
+          "snack": {
+            "dish": "Sauerkraut with olives",
+            "desc": "Sauerkraut (8) with green olives (10).",
+            "dish_es": "Chucrut con aceitunas",
+            "desc_es": "Chucrut (8) con aceitunas verdes (10)."
+          },
+          "tip": "A gentler week to close out the phase; sauerkraut is already appearing several times a week.",
+          "tip_es": "Una semana más suave para cerrar la fase; el chucrut ya aparece varias veces por semana."
+        }
+      ],
+      "subtitle_es": "Ampliando la Diversidad",
+      "blurb_es": "La diversidad es baja para los dos (0,5), así que esta fase introduce chucrut fermentado y un nuevo alimento vegetal cada pocos días: alcachofa, remolacha, trigo sarraceno, granada, moras. El objetivo: aumentar juntos, cada semana, el número de alimentos vegetales distintos que coméis."
+    },
+    {
+      "phase_index": 2,
+      "phase_key": "optimization",
+      "weeks_en": "Weeks 5-6",
+      "weeks_es": "Semanas 5-6",
+      "subtitle_en": "Optimization",
+      "blurb_en": "We lock in the dishes that have worked best for you, keep sauerkraut daily, and give more weight to polyphenol-rich foods (pomegranate, black grapes, olives, dark chocolate) that help bring down sugar and processed-food scores for both of you, and support El Hachemi's Akkermansia.",
+      "days": [
+        {
+          "day_index": 0,
+          "breakfast": {
+            "dish": "Yogurt with pomegranate and cacao nibs",
+            "desc": "Fat-free yogurt (8) with pomegranate seeds (10) and cacao nibs (7).",
+            "dish_es": "Yogur con granada y nibs de cacao",
+            "desc_es": "Yogur desnatado (8) con semillas de granada (10) y nibs de cacao (7)."
+          },
+          "lunch": {
+            "dish": "Lamb with sauerkraut and potato",
+            "desc": "Lamb (9) with a spoonful of sauerkraut (8) and roasted potato (9).",
+            "dish_es": "Cordero con chucrut y patata",
+            "desc_es": "Cordero (9) con una cucharada de chucrut (8) y patata asada (9)."
+          },
+          "dinner": {
+            "dish": "Baked hake with broccoli",
+            "desc": "Hake (6) baked with broccoli (8) and olive oil (7).",
+            "dish_es": "Merluza al horno con brócoli",
+            "desc_es": "Merluza (6) al horno con brócoli (8) y aceite de oliva (7)."
+          },
+          "snack": {
+            "dish": "Black grapes with dark chocolate",
+            "desc": "Black grapes (9) with a square of dark chocolate (7).",
+            "dish_es": "Uvas negras con chocolate negro",
+            "desc_es": "Uvas negras (9) con una onza de chocolate negro (7)."
+          },
+          "tip": "Sauerkraut is now part of your daily routine.",
+          "tip_es": "El chucrut ya forma parte de vuestra rutina diaria."
+        },
+        {
+          "day_index": 1,
+          "breakfast": {
+            "dish": "Cornmeal porridge with kiwi",
+            "desc": "Cornmeal (9) cooked as porridge, topped with kiwi (9).",
+            "dish_es": "Gachas de maíz con kiwi",
+            "desc_es": "Maíz (9) cocinado como gachas, con kiwi (9) por encima."
+          },
+          "lunch": {
+            "dish": "Chicken with artichoke and carrot",
+            "desc": "Chicken (7) with roasted artichoke (6) and carrot (9).",
+            "dish_es": "Pollo con alcachofa y zanahoria",
+            "desc_es": "Pollo (7) con alcachofa asada (6) y zanahoria (9)."
+          },
+          "dinner": {
+            "dish": "Sea bream with arugula and pomegranate salad",
+            "desc": "Sea bream (8), arugula (9), and pomegranate seeds (10).",
+            "dish_es": "Dorada con ensalada de rúcula y granada",
+            "desc_es": "Dorada (8), rúcula (9) y semillas de granada (10)."
+          },
+          "snack": {
+            "dish": "Sour cherry",
+            "desc": "Sour cherry (10) plain.",
+            "dish_es": "Guinda",
+            "desc_es": "Guinda (10) sola."
+          }
+        },
+        {
+          "day_index": 2,
+          "breakfast": {
+            "dish": "Toast with olive tapenade and pomegranate",
+            "desc": "Whole wheat bread (10) with olive tapenade (9/6) and pomegranate (10).",
+            "dish_es": "Tostada con tapenade de aceitunas y granada",
+            "desc_es": "Pan integral (10) con tapenade de aceitunas (9/6) y granada (10)."
+          },
+          "lunch": {
+            "dish": "Lamb with chickpeas and cauliflower",
+            "desc": "Lamb (9), chickpeas (7), and roasted cauliflower (9).",
+            "dish_es": "Cordero con garbanzos y coliflor",
+            "desc_es": "Cordero (9), garbanzos (7) y coliflor asada (9)."
+          },
+          "dinner": {
+            "dish": "Hake with asparagus and sauerkraut",
+            "desc": "Hake (6) with asparagus (7) and a spoonful of sauerkraut (8).",
+            "dish_es": "Merluza con espárragos y chucrut",
+            "desc_es": "Merluza (6) con espárragos (7) y una cucharada de chucrut (8)."
+          },
+          "snack": {
+            "dish": "Strawberry with yogurt",
+            "desc": "Strawberry (8) with a spoonful of fat-free yogurt (8).",
+            "dish_es": "Fresa con yogur",
+            "desc_es": "Fresa (8) con una cucharada de yogur desnatado (8)."
+          }
+        },
+        {
+          "day_index": 3,
+          "breakfast": {
+            "dish": "Green smoothie with kale and pear",
+            "desc": "Kale (9), pear (10), and coconut milk (7) blended.",
+            "dish_es": "Batido verde con col rizada y pera",
+            "desc_es": "Col rizada (9), pera (10) y leche de coco (7) batidos."
+          },
+          "lunch": {
+            "dish": "Chicken with beetroot and rice",
+            "desc": "Chicken (7) with beetroot (9) and rice (8).",
+            "dish_es": "Pollo con remolacha y arroz",
+            "desc_es": "Pollo (7) con remolacha (9) y arroz (8)."
+          },
+          "dinner": {
+            "dish": "Eggplant stuffed with lamb",
+            "desc": "Eggplant (9) stuffed with lamb (9) and parsley (9).",
+            "dish_es": "Berenjena rellena de cordero",
+            "desc_es": "Berenjena (9) rellena de cordero (9) y perejil (9)."
+          },
+          "snack": {
+            "dish": "Pomegranate with chestnuts",
+            "desc": "Pomegranate (10) with a handful of chestnuts (8).",
+            "dish_es": "Granada con castañas",
+            "desc_es": "Granada (10) con un puñado de castañas (8)."
+          }
+        },
+        {
+          "day_index": 4,
+          "breakfast": {
+            "dish": "Yogurt with kiwi and pumpkin seeds",
+            "desc": "Fat-free yogurt (8) with kiwi (9) and pumpkin seeds (8).",
+            "dish_es": "Yogur con kiwi y semillas de calabaza",
+            "desc_es": "Yogur desnatado (8) con kiwi (9) y semillas de calabaza (8)."
+          },
+          "lunch": {
+            "dish": "Hake with artichoke and potato",
+            "desc": "Hake (6) with roasted artichoke (6) and potato (9).",
+            "dish_es": "Merluza con alcachofa y patata",
+            "desc_es": "Merluza (6) con alcachofa asada (6) y patata (9)."
+          },
+          "dinner": {
+            "dish": "Baked chicken with broccoli and carrot",
+            "desc": "Chicken (7) baked with broccoli (8) and carrot (9).",
+            "dish_es": "Pollo al horno con brócoli y zanahoria",
+            "desc_es": "Pollo (7) al horno con brócoli (8) y zanahoria (9)."
+          },
+          "snack": {
+            "dish": "Apple with dark chocolate",
+            "desc": "Apple (9) with a square of dark chocolate (7).",
+            "dish_es": "Manzana con chocolate negro",
+            "desc_es": "Manzana (9) con una onza de chocolate negro (7)."
+          }
+        },
+        {
+          "day_index": 5,
+          "breakfast": {
+            "dish": "Barley porridge with sour cherry",
+            "desc": "Barley (9) cooked as porridge, topped with sour cherry (10).",
+            "dish_es": "Gachas de cebada con guinda",
+            "desc_es": "Cebada (9) cocinada como gachas, con guinda (10) por encima."
+          },
+          "lunch": {
+            "dish": "Lamb with kale and sauerkraut",
+            "desc": "Lamb (9) with sauteed kale (9) and a spoonful of sauerkraut (8).",
+            "dish_es": "Cordero con col rizada y chucrut",
+            "desc_es": "Cordero (9) con col rizada salteada (9) y una cucharada de chucrut (8)."
+          },
+          "dinner": {
+            "dish": "Sea bream with arugula and pomegranate salad",
+            "desc": "Sea bream (8), arugula (9), and pomegranate seeds (10).",
+            "dish_es": "Dorada con ensalada de rúcula y granada",
+            "desc_es": "Dorada (8), rúcula (9) y semillas de granada (10)."
+          },
+          "snack": {
+            "dish": "Black grapes",
+            "desc": "Black grapes (9) plain.",
+            "dish_es": "Uvas negras",
+            "desc_es": "Uvas negras (9) solas."
+          }
+        },
+        {
+          "day_index": 6,
+          "breakfast": {
+            "dish": "Toast with olive tapenade and pomegranate",
+            "desc": "Whole wheat bread (10) with olive tapenade (9/6) and pomegranate (10).",
+            "dish_es": "Tostada con tapenade de aceitunas y granada",
+            "desc_es": "Pan integral (10) con tapenade de aceitunas (9/6) y granada (10)."
+          },
+          "lunch": {
+            "dish": "Chicken with chickpeas and beetroot",
+            "desc": "Chicken (7) with chickpeas (7) and roasted beetroot (9).",
+            "dish_es": "Pollo con garbanzos y remolacha",
+            "desc_es": "Pollo (7) con garbanzos (7) y remolacha asada (9)."
+          },
+          "dinner": {
+            "dish": "Hake with asparagus and olive oil",
+            "desc": "Hake (6) with asparagus (7), olive oil (7), and lemon (8).",
+            "dish_es": "Merluza con espárragos y aceite de oliva",
+            "desc_es": "Merluza (6) con espárragos (7), aceite de oliva (7) y limón (8)."
+          },
+          "snack": {
+            "dish": "Sauerkraut with olives and dark chocolate",
+            "desc": "Sauerkraut (8), green olives (10), and dark chocolate (7).",
+            "dish_es": "Chucrut con aceitunas y chocolate negro",
+            "desc_es": "Chucrut (8), aceitunas verdes (10) y chocolate negro (7)."
+          },
+          "tip": "This is the rotation you can keep up after week 6: fermented foods and polyphenols daily, exactly what your own scores point to.",
+          "tip_es": "Esta es la rotación que podéis mantener después de la semana 6: alimentos fermentados y polifenoles a diario, justo lo que indican vuestros propios scores."
+        }
+      ],
+      "subtitle_es": "Optimización",
+      "blurb_es": "Consolidamos los platos que mejor os han funcionado, mantenemos el chucrut a diario y damos más peso a los alimentos ricos en polifenoles (granada, uva negra, aceitunas, chocolate negro) que ayudan a bajar los scores de azúcar y de alimentos procesados para los dos, y apoyan la Akkermansia de El Hachemi."
+    }
+  ],
+  "general_notes": [
+    "Shellfish is always excluded because of Deborah's allergy, even though it scores well in her report; a score never overrides a known allergy.",
+    "Pork is always excluded by the family's halal practice, even though it scores well in both reports; mutton is used instead and scores just as well for both of you.",
+    "Prioritize small wild-caught fish (sardine, anchovy, mackerel, herring) over farmed fish, and mineral water over tap water, to help bring down Deborah's antibiotic damage.",
+    "Cook vegetables and legumes thoroughly before eating them; this especially helps your digestion, given your low protein metabolism score.",
+    "Season shared meals with garlic, spring onion, shallot, fresh herbs and salt instead of onion, tomato, ginger and cinnamon, since these score low for at least one of you.",
+    "Aim for at least one serving of sauerkraut a day from week 3 onward to help rebuild diversity for both of you.",
+    "This plan is a framework, not a rule. If either of you notices a food marked 'enrich' doesn't sit well, drop it regardless of its score.",
+    "This plan complements any medication Deborah is taking; any meal-timing schedule set by her doctor or pharmacist stays exactly as advised.",
+    "Check back in on how you're both feeling after week 6: digestion, energy and knee pain. A full microbiome re-test happens once a year to keep the gut healthy and balanced; these 6 weeks are about planting the right seeds, not about seeing measurable changes in the microbiome itself just yet."
+  ],
+  "general_notes_es": [
+    "El marisco siempre se excluye por la alergia de Deborah, aunque puntúe bien en su informe; un score nunca prevalece sobre una alergia conocida.",
+    "El cerdo siempre se excluye por la práctica halal de la familia, aunque puntúe bien en ambos informes; en su lugar se usa carnero, que puntúa igual de bien para los dos.",
+    "Prioriza los pescados pequeños de pesca salvaje (sardina, anchoa, caballa, arenque) frente al pescado de piscifactoría, y el agua mineral frente al agua del grifo, para ayudar a reducir el daño por antibióticos de Deborah.",
+    "Cocina bien las verduras y las legumbres antes de comerlas; esto ayuda especialmente a tu digestión, dado tu score bajo de metabolismo de proteínas.",
+    "Sazona las comidas compartidas con ajo, cebolleta, chalota, hierbas frescas y sal en lugar de cebolla, tomate, jengibre y canela, ya que estos puntúan bajo para al menos uno de los dos.",
+    "Procura tomar al menos una ración de chucrut al día a partir de la semana 3 para ayudar a reconstruir la diversidad de los dos.",
+    "Este plan es un marco de referencia, no una norma fija. Si alguno de los dos nota que un alimento marcado como 'enriquecer' no le sienta bien, elimínalo sea cual sea su score.",
+    "Este plan complementa cualquier medicación que esté tomando Deborah; cualquier horario de comidas pautado por su médico o farmacéutico se mantiene exactamente como se ha indicado.",
+    "Revisad juntos cómo os sentís después de la semana 6: digestión, energía y dolor de rodilla. Un nuevo test completo del microbioma se hace una vez al año para mantener el intestino sano y equilibrado; estas 6 semanas tratan de sembrar las semillas correctas, no de ver todavía cambios medibles en el propio microbioma."
+  ]
+}

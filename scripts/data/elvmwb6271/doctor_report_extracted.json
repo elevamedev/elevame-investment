@@ -1,0 +1,3046 @@
+{
+  "report_meta": {
+    "kit_code": "ELVMWB6271",
+    "report_date": "2026-09-24",
+    "client_name_as_printed_on_cover": "El Hachemi Abdelhak",
+    "client_sex": "male",
+    "age_at_test": 71,
+    "report_title": "Microbiome Analysis Report & Personalized Nutrition Guide",
+    "source_pdf_pages_total": 51,
+    "matches_spec_worked_example": true,
+    "notes": "Kit code, report date (2026-09-24), sex (male) and age (71) all match the spec's worked example for ELVMWB6271 exactly. Client name is printed on the cover page only; per spec it should be stored only in the clients table, not report tables."
+  },
+  "headline_metrics": [
+    {
+      "metric_id": "microbiome_age",
+      "value": 62,
+      "value_text": null,
+      "age_at_test": 71,
+      "printed_badge": "good",
+      "printed_comment": "It appears that your microbiome is younger than you! The personalized nutrition plan we've put together for you, will help you keep your microbiome young longer!",
+      "page": 3
+    },
+    {
+      "metric_id": "wellness_index",
+      "value": null,
+      "value_text": "Good",
+      "printed_badge": "good",
+      "printed_comment": "Your Wellness Index is high, indicating a low risk of chronic disease. The microbiome profile is not associated with chronic disease-linked microbial patterns.",
+      "page": 3
+    },
+    {
+      "metric_id": "diversity",
+      "value": 0.5,
+      "value_text": "Poor, With Need For Improvement",
+      "scale_min": 0,
+      "scale_max": 10,
+      "printed_badge": "act",
+      "printed_comment": "Poor, With Need For Improvement: Although you have a pretty low level of diversity, our personalized nutrition plan will help you improve it and achieve a more diverse microbiome.",
+      "page": 4
+    },
+    {
+      "metric_id": "fb_ratio",
+      "value": 6.3,
+      "value_text": null,
+      "printed_badge": "act",
+      "printed_comment": "Your F/B ratio is high. This means Firmicutes are more dominant, which may be linked to increased calorie extraction and a greater tendency toward weight gain in some people. With your personalized nutrition guide, it's possible to modulate your microbiome!",
+      "page": 4
+    }
+  ],
+  "gut_scores": [
+    {
+      "metric_id": "metabolic_score",
+      "value": 45,
+      "community_value": 35,
+      "printed_badge": "watch",
+      "markers": [
+        {
+          "label": "Lean",
+          "value": 15
+        },
+        {
+          "label": "Overweight",
+          "value": 72
+        }
+      ],
+      "printed_comment": null,
+      "page_dashboard": 2,
+      "page_detail": 14
+    },
+    {
+      "metric_id": "carbohydrate_metabolism",
+      "value": 47,
+      "community_value": 48,
+      "printed_badge": "watch",
+      "markers": [],
+      "printed_comment": null,
+      "page_dashboard": 2,
+      "page_detail": 14
+    },
+    {
+      "metric_id": "protein_metabolism",
+      "value": 19,
+      "community_value": 29,
+      "printed_badge": "watch",
+      "markers": [],
+      "printed_comment": null,
+      "page_dashboard": 2,
+      "page_detail": 14
+    },
+    {
+      "metric_id": "fat_metabolism",
+      "value": 48,
+      "community_value": 29,
+      "printed_badge": "good",
+      "markers": [],
+      "printed_comment": null,
+      "page_dashboard": 2,
+      "page_detail": 14
+    },
+    {
+      "metric_id": "vitamin_synthesis",
+      "value": 72,
+      "community_value": 67,
+      "printed_badge": "watch",
+      "markers": [
+        {
+          "label": "Vitamin deficiency",
+          "value": 56
+        },
+        {
+          "label": "No vitamin deficiency",
+          "value": 73
+        }
+      ],
+      "printed_comment": null,
+      "page_dashboard": 2,
+      "page_detail": 15
+    },
+    {
+      "metric_id": "lactose_sensitivity",
+      "value": 26,
+      "community_value": 27,
+      "printed_badge": "watch",
+      "markers": [
+        {
+          "label": "No sensitivity",
+          "value": 15
+        },
+        {
+          "label": "Lactose sensitivity",
+          "value": 82
+        }
+      ],
+      "printed_comment": null,
+      "page_dashboard": 2,
+      "page_detail": 15
+    },
+    {
+      "metric_id": "gluten_sensitivity",
+      "value": 16,
+      "community_value": 24,
+      "printed_badge": "good",
+      "markers": [
+        {
+          "label": "No sensitivity",
+          "value": 16
+        },
+        {
+          "label": "Gluten sensitivity",
+          "value": 64
+        }
+      ],
+      "printed_comment": null,
+      "page_dashboard": 2,
+      "page_detail": 15
+    },
+    {
+      "metric_id": "sugar_index",
+      "value": 68,
+      "community_value": 59,
+      "printed_badge": "watch",
+      "markers": [
+        {
+          "label": "Avoiding sugar",
+          "value": 7
+        },
+        {
+          "label": "Consuming sugar",
+          "value": 81
+        }
+      ],
+      "printed_comment": null,
+      "page_dashboard": 2,
+      "page_detail": 16
+    },
+    {
+      "metric_id": "processed_food_index",
+      "value": 68,
+      "community_value": 32,
+      "printed_badge": "act",
+      "markers": [
+        {
+          "label": "Avoiding processed foods",
+          "value": 27
+        },
+        {
+          "label": "Consuming processed foods",
+          "value": 58
+        }
+      ],
+      "printed_comment": null,
+      "page_dashboard": 2,
+      "page_detail": 16
+    },
+    {
+      "metric_id": "bowel_mobility",
+      "value": 69,
+      "community_value": 35,
+      "printed_badge": "act",
+      "markers": [
+        {
+          "label": "Decreased intestinal motility",
+          "value": 29
+        },
+        {
+          "label": "Increased intestinal motility",
+          "value": 69
+        }
+      ],
+      "printed_comment": null,
+      "page_dashboard": 2,
+      "page_detail": 17,
+      "notes": "Spec's own metric_markers example row ('bowel_mobility, Increased intestinal motility, 69') matches this bar; used to calibrate which of the two close low-end numbers (29/35) is the community value vs the labeled marker across all gut-score bars with a close pair."
+    },
+    {
+      "metric_id": "antibiotic_damage",
+      "value": 63,
+      "community_value": 34,
+      "printed_badge": "watch",
+      "markers": [
+        {
+          "label": "Avoiding antibiotics",
+          "value": 27
+        },
+        {
+          "label": "Using antibiotics",
+          "value": 74
+        }
+      ],
+      "printed_comment": null,
+      "page_dashboard": 2,
+      "page_detail": 17
+    },
+    {
+      "metric_id": "autoimmune_index",
+      "value": 23,
+      "community_value": 29,
+      "printed_badge": "good",
+      "markers": [
+        {
+          "label": "Healthy individuals",
+          "value": 23
+        },
+        {
+          "label": "Has autoimmune diseases",
+          "value": 62
+        }
+      ],
+      "printed_comment": null,
+      "page_dashboard": 2,
+      "page_detail": 18
+    },
+    {
+      "metric_id": "sleep_quality",
+      "value": 74,
+      "community_value": 74,
+      "printed_badge": "watch",
+      "markers": [
+        {
+          "label": "Low sleep quality",
+          "value": 23
+        },
+        {
+          "label": "High sleep quality",
+          "value": 84
+        }
+      ],
+      "printed_comment": null,
+      "page_dashboard": 2,
+      "page_detail": 18
+    }
+  ],
+  "gut_scores_markers_reading_note": "On several gut-score bars, two close numbers are printed near one end (e.g. '29 35' for bowel mobility). The spec's own metric_results example ('bowel_mobility, 69, community 35') confirms the HIGHER of the close pair is the community value and the LOWER is the printed/labeled reference marker; this convention was applied consistently to processed_food_index, antibiotic_damage, autoimmune_index and sleep_quality. Precision on this specific point could not be double-checked against pixel-level bar positions, only against the one example the spec itself gives, so treat community_value on those five scores as the best available reading rather than certain.",
+  "genus_abundance": [
+    {
+      "genus": "Ruminococcus",
+      "client_pct": 21.9,
+      "world_pct": 2.6,
+      "page": 5
+    },
+    {
+      "genus": "Roseburia",
+      "client_pct": 17.7,
+      "world_pct": 0.7,
+      "page": 5
+    },
+    {
+      "genus": "Lachnospiraceae",
+      "client_pct": 12.4,
+      "world_pct": 9.4,
+      "page": 5,
+      "notes": "Family-level, grouped with genus-level bars in this chart as printed."
+    },
+    {
+      "genus": "Bacteroides",
+      "client_pct": 10.6,
+      "world_pct": 16.7,
+      "page": 5
+    },
+    {
+      "genus": "Faecalibacterium",
+      "client_pct": 8.5,
+      "world_pct": 11.7,
+      "page": 5
+    },
+    {
+      "genus": "Bifidobacterium",
+      "client_pct": 6.9,
+      "world_pct": 1.0,
+      "page": 5
+    },
+    {
+      "genus": "Others",
+      "client_pct": 22.0,
+      "world_pct": 58.0,
+      "page": 5,
+      "notes": "Aggregated remainder, not an individual genus."
+    }
+  ],
+  "key_bacteria": [
+    {
+      "taxon": "Alistipes",
+      "client_score": 98,
+      "community_score": 82,
+      "page": 7
+    },
+    {
+      "taxon": "Prevotella",
+      "client_score": 19,
+      "community_score": 19,
+      "page": 7
+    },
+    {
+      "taxon": "Akkermansia",
+      "client_score": 7,
+      "community_score": 78,
+      "page": 7
+    },
+    {
+      "taxon": "Eubacterium",
+      "client_score": 52,
+      "community_score": 6,
+      "page": 7
+    },
+    {
+      "taxon": "Bifidobacterium",
+      "client_score": 23,
+      "community_score": 1,
+      "page": 7
+    },
+    {
+      "taxon": "Collinsella",
+      "client_score": 13,
+      "community_score": 1,
+      "page": 8
+    },
+    {
+      "taxon": "Haemophilus",
+      "client_score": 11,
+      "community_score": 11,
+      "page": 8
+    },
+    {
+      "taxon": "Roseburia",
+      "client_score": 19,
+      "community_score": 2,
+      "page": 8
+    },
+    {
+      "taxon": "Phascolarctobacterium",
+      "client_score": 26,
+      "community_score": 11,
+      "page": 8
+    }
+  ],
+  "krona_abundance": [
+    {
+      "taxon": "Bacteria",
+      "pct": null,
+      "notes": "Root/center of chart, no percentage printed.",
+      "page": 6
+    },
+    {
+      "taxon": "Firmicutes",
+      "pct": null,
+      "notes": "Inner ring segment label, no percentage printed directly on it.",
+      "page": 6
+    },
+    {
+      "taxon": "Clostridiales",
+      "pct": null,
+      "notes": "Inner ring segment label (printed as 'Olostridiales' due to chart curvature), no percentage printed directly on it.",
+      "page": 6
+    },
+    {
+      "taxon": "Lachnospiraceae_Ruminococcus",
+      "pct": 22,
+      "page": 6
+    },
+    {
+      "taxon": "Lachnospiraceae_Roseburia",
+      "pct": 18,
+      "page": 6
+    },
+    {
+      "taxon": "Bacteroidaceae_Bacteroides",
+      "pct": 11,
+      "page": 6
+    },
+    {
+      "taxon": "Ruminococcaceae_Faecalibacterium",
+      "pct": 9,
+      "page": 6
+    },
+    {
+      "taxon": "Bifidobacteriaceae_Bifidobacterium",
+      "pct": 7,
+      "page": 6
+    },
+    {
+      "taxon": "Lachnospiraceae_Dorea",
+      "pct": 4,
+      "page": 6
+    },
+    {
+      "taxon": "Erysipelotrichaceae_[Eubacterium]",
+      "pct": 3,
+      "page": 6
+    },
+    {
+      "taxon": "Coriobacteriaceae_Collinsella",
+      "pct": 3,
+      "page": 6
+    },
+    {
+      "taxon": "Lachnospiraceae_Anaerostipes",
+      "pct": 2,
+      "page": 6
+    },
+    {
+      "taxon": "Lachnospiraceae_Coprococcus",
+      "pct": 1,
+      "page": 6
+    },
+    {
+      "taxon": "5 more (unlabeled aggregate wedge)",
+      "pct": null,
+      "notes": "Chart shows a wedge captioned '5 more' with no individual percentages readable.",
+      "page": 6
+    }
+  ],
+  "krona_abundance_reading_note": "Krona chart is a small multi-ring radial chart with curved, overlapping label text; percentages for the named outer-ring slices above are read with reasonably high confidence, but root/phylum/order level ring segments (Bacteria, Firmicutes, Clostridiales, Bacteroidetes, Actinobacteria) did not have individually legible percentages in the rendered image. The visible named slices sum to ~80%, consistent with an additional ~20% in the unlabeled '5 more' wedge and the unread inner rings.",
+  "similar_profiles": [
+    {
+      "condition": "Food Allergy",
+      "client_pct": 19,
+      "overall_pct": 10.7,
+      "page": 9
+    },
+    {
+      "condition": "Respiratory Disorders",
+      "client_pct": 14,
+      "overall_pct": 8.8,
+      "page": 9
+    },
+    {
+      "condition": "Autoimmune Disorder(s)",
+      "client_pct": 12,
+      "overall_pct": 9.4,
+      "page": 9
+    },
+    {
+      "condition": "Thyroid Related Disorder(s)",
+      "client_pct": 11,
+      "overall_pct": 7.4,
+      "page": 9
+    },
+    {
+      "condition": "Symptoms Associated with Irritable Bowel Syndrome",
+      "client_pct": 11,
+      "overall_pct": 9.4,
+      "page": 9
+    },
+    {
+      "condition": "Heart Related Disorder(s)",
+      "client_pct": 10,
+      "overall_pct": 2.5,
+      "page": 9
+    },
+    {
+      "condition": "Attention Disorder(s)",
+      "client_pct": 9,
+      "overall_pct": 6.1,
+      "page": 9
+    },
+    {
+      "condition": "Small Intestinal Bacterial Overgrowth (SIBO)",
+      "client_pct": 3,
+      "overall_pct": 1.9,
+      "page": 9
+    }
+  ],
+  "similar_profiles_note": "Per PDF note: only conditions whose client % is above the overall/baseline average are listed on this page, so all 8 listed are 'above average' by construction.",
+  "safety_screen": {
+    "pathogenic_bacteria": {
+      "page": 10,
+      "items": [
+        {
+          "organism": "Campylobacter",
+          "status": "not_detected",
+          "abundance_pct": null
+        },
+        {
+          "organism": "Campylobacter jejuni",
+          "status": "not_detected",
+          "abundance_pct": null
+        },
+        {
+          "organism": "Campylobacter coli",
+          "status": "not_detected",
+          "abundance_pct": null
+        },
+        {
+          "organism": "Campylobacter upsaliensis",
+          "status": "not_detected",
+          "abundance_pct": null
+        },
+        {
+          "organism": "Campylobacter lari",
+          "status": "not_detected",
+          "abundance_pct": null
+        },
+        {
+          "organism": "Clostridium difficile",
+          "status": "not_detected",
+          "abundance_pct": null
+        },
+        {
+          "organism": "Plesiomonas shigelloides",
+          "status": "not_detected",
+          "abundance_pct": null
+        },
+        {
+          "organism": "Salmonella",
+          "status": "not_detected",
+          "abundance_pct": null
+        },
+        {
+          "organism": "Yersinia enterocolitica",
+          "status": "not_detected",
+          "abundance_pct": null
+        },
+        {
+          "organism": "Vibrio parahaemolyticus",
+          "status": "not_detected",
+          "abundance_pct": null
+        },
+        {
+          "organism": "Vibrio vulnificus",
+          "status": "not_detected",
+          "abundance_pct": null
+        },
+        {
+          "organism": "Vibrio cholerae",
+          "status": "not_detected",
+          "abundance_pct": null
+        },
+        {
+          "organism": "Helicobacter pylori",
+          "status": "not_detected",
+          "abundance_pct": null
+        },
+        {
+          "organism": "Campylobacter coli",
+          "status": "not_detected",
+          "abundance_pct": null
+        }
+      ],
+      "notes": "Campylobacter coli appears twice (rows 3 and 14), both Not Detected. Known duplicate row per spec; captured as printed, should be deduplicated on import."
+    },
+    "parasites": {
+      "page": 10,
+      "items": [
+        {
+          "organism": "Cryptosporidium",
+          "status": "not_detected",
+          "abundance_pct": null
+        },
+        {
+          "organism": "Entamoeba histolytica",
+          "status": "not_detected",
+          "abundance_pct": null
+        },
+        {
+          "organism": "Giardia intestinalis",
+          "status": "not_detected",
+          "abundance_pct": null
+        }
+      ]
+    },
+    "fungi_yeast": {
+      "page": 11,
+      "items": [
+        {
+          "organism": "Candida",
+          "status": "not_detected",
+          "abundance_pct": null
+        },
+        {
+          "organism": "Candida albicans",
+          "status": "not_detected",
+          "abundance_pct": null
+        }
+      ]
+    },
+    "dysbiotic_overgrowth_bacteria": {
+      "page": 11,
+      "items": [
+        {
+          "organism": "Bacillus",
+          "status": "not_detected",
+          "abundance_pct": null
+        },
+        {
+          "organism": "Enterococcus faecalis",
+          "status": "not_detected",
+          "abundance_pct": null
+        },
+        {
+          "organism": "Staphylococcus",
+          "status": "not_detected",
+          "abundance_pct": null
+        },
+        {
+          "organism": "Staphylococcus aureus",
+          "status": "not_detected",
+          "abundance_pct": null
+        },
+        {
+          "organism": "Streptococcus",
+          "status": "not_detected",
+          "abundance_pct": null
+        }
+      ],
+      "notes": "Bacillus Not Detected here but High in the TMA Conversion pathway table (page 30) — known conflict, see data_quality_conflicts."
+    },
+    "potential_autoimmune_triggers": {
+      "page": 11,
+      "items": [
+        {
+          "organism": "Citrobacter",
+          "status": "not_detected",
+          "abundance_pct": null
+        },
+        {
+          "organism": "Citrobacter freundii",
+          "status": "not_detected",
+          "abundance_pct": null
+        },
+        {
+          "organism": "Fusobacterium",
+          "status": "not_detected",
+          "abundance_pct": null
+        },
+        {
+          "organism": "Klebsiella",
+          "status": "not_detected",
+          "abundance_pct": null
+        },
+        {
+          "organism": "Klebsiella pneumoniae",
+          "status": "not_detected",
+          "abundance_pct": null
+        },
+        {
+          "organism": "Mycobacterium avium",
+          "status": "not_detected",
+          "abundance_pct": null
+        },
+        {
+          "organism": "Prevotella copri",
+          "status": "not_detected",
+          "abundance_pct": null
+        },
+        {
+          "organism": "Proteus",
+          "status": "not_detected",
+          "abundance_pct": null
+        },
+        {
+          "organism": "Proteus mirabilis",
+          "status": "not_detected",
+          "abundance_pct": null
+        }
+      ],
+      "notes": "Prevotella copri Not Detected here but Low in the Propionate Biosynthesis pathway table (page 29) — known conflict, see data_quality_conflicts."
+    }
+  },
+  "safety_screen_summary_note": "Every organism in all 5 panels is printed as Not Detected with abundance '-' for this client; no pathogens, parasites, fungi, overgrowth bacteria or autoimmune triggers were flagged as detected.",
+  "risk_analysis_conditions": {
+    "page": 12,
+    "symptoms_and_diseases": [
+      {
+        "condition": "Diarrhea",
+        "at_risk": false,
+        "flagged_taxa": [],
+        "printed_text": "The bacteria are not at risk levels"
+      },
+      {
+        "condition": "Gas",
+        "at_risk": true,
+        "flagged_taxa": [
+          "Dorea"
+        ],
+        "printed_text": "Dorea"
+      },
+      {
+        "condition": "Constipation",
+        "at_risk": false,
+        "flagged_taxa": [],
+        "printed_text": "The bacteria are not at risk levels"
+      },
+      {
+        "condition": "Bloating",
+        "at_risk": false,
+        "flagged_taxa": [],
+        "printed_text": "The bacteria are not at risk levels"
+      },
+      {
+        "condition": "Irritable Bowel Syndrome (IBS)",
+        "at_risk": true,
+        "flagged_taxa": [
+          "Ruminococcus"
+        ],
+        "printed_text": "Ruminococcus"
+      },
+      {
+        "condition": "Inflammatory Bowel Disease (IBD)",
+        "at_risk": false,
+        "flagged_taxa": [],
+        "printed_text": "The bacteria are not at risk levels"
+      },
+      {
+        "condition": "Crohn's Disease",
+        "at_risk": true,
+        "flagged_taxa": [
+          "Ruminococcus"
+        ],
+        "printed_text": "Ruminococcus"
+      },
+      {
+        "condition": "Ulcerative Colitis",
+        "at_risk": true,
+        "flagged_taxa": [
+          "Dorea",
+          "Ruminococcus"
+        ],
+        "printed_text": "Dorea, Ruminococcus"
+      },
+      {
+        "condition": "Obesity",
+        "at_risk": false,
+        "flagged_taxa": [],
+        "printed_text": "The bacteria are not at risk levels"
+      },
+      {
+        "condition": "Type 2 Diabetes",
+        "at_risk": false,
+        "flagged_taxa": [],
+        "printed_text": "The bacteria are not at risk levels"
+      },
+      {
+        "condition": "Coronary Heart Disease",
+        "at_risk": false,
+        "flagged_taxa": [],
+        "printed_text": "The bacteria are not at risk levels"
+      },
+      {
+        "condition": "Kidney Stone",
+        "at_risk": false,
+        "flagged_taxa": [],
+        "printed_text": "The bacteria are not at risk levels"
+      }
+    ],
+    "biosynthesis_and_conversion": [
+      {
+        "condition": "Butyric Acid Biosynthesis",
+        "at_risk": false,
+        "flagged_taxa": [],
+        "printed_text": "The bacteria are not at risk levels"
+      },
+      {
+        "condition": "Trimethylamine (TMA) Conversion",
+        "at_risk": false,
+        "flagged_taxa": [],
+        "printed_text": "The bacteria are not at risk levels"
+      },
+      {
+        "condition": "Polyamine Biosynthesis",
+        "at_risk": false,
+        "flagged_taxa": [],
+        "printed_text": "The bacteria are not at risk levels"
+      },
+      {
+        "condition": "Propionate Biosynthesis",
+        "at_risk": false,
+        "flagged_taxa": [],
+        "printed_text": "The bacteria are not at risk levels"
+      },
+      {
+        "condition": "Serotonin Biosynthesis",
+        "at_risk": false,
+        "flagged_taxa": [],
+        "printed_text": "The bacteria are not at risk levels"
+      },
+      {
+        "condition": "Gamma Aminobutyric Acid (GABA) Biosynthesis",
+        "at_risk": false,
+        "flagged_taxa": [],
+        "printed_text": "The bacteria are not at risk levels"
+      }
+    ],
+    "notes": "The Risk Analysis summary table's 'not at risk' calls for TMA Conversion and Propionate Biosynthesis appear to conflict with the detailed pathway tables later in the report, which show several bacteria as High/Low for those same pathways (e.g. Bacillus, Clostridium, Eubacterium High in TMA; Prevotella copri, Dialister, Akkermansia muciniphila Low and Bacteroides uniformis, Coprococcus catus, Roseburia High in Propionate). This is an additional inconsistency beyond the two the spec explicitly flags, observed while extracting this report; see data_quality_issues_observed in the top-level notes."
+  },
+  "pathway_tables": {
+    "diarrhea": {
+      "page": 19,
+      "positively_associated": [
+        {
+          "taxon": "Clostridium difficile",
+          "status": "Not Detected",
+          "association": "positive",
+          "reference_ids": [
+            1,
+            3
+          ]
+        },
+        {
+          "taxon": "Campylobacter",
+          "status": "Not Detected",
+          "association": "positive",
+          "reference_ids": []
+        },
+        {
+          "taxon": "Shigella",
+          "status": "Not Detected",
+          "association": "positive",
+          "reference_ids": [
+            6,
+            8
+          ]
+        },
+        {
+          "taxon": "Salmonella enterica",
+          "status": "Not Detected",
+          "association": "positive",
+          "reference_ids": [
+            9,
+            13
+          ]
+        },
+        {
+          "taxon": "Vibrio cholerae",
+          "status": "Not Detected",
+          "association": "positive",
+          "reference_ids": [
+            14,
+            15
+          ]
+        },
+        {
+          "taxon": "Clostridium",
+          "status": "High",
+          "association": "positive",
+          "reference_ids": [
+            16,
+            17
+          ]
+        }
+      ],
+      "negatively_associated": [
+        {
+          "taxon": "Lactobacillus",
+          "status": "Normal",
+          "association": "negative",
+          "reference_ids": [
+            19
+          ]
+        },
+        {
+          "taxon": "Microbiome Diversity",
+          "status": "Low",
+          "association": "negative",
+          "reference_ids": [
+            20,
+            21
+          ]
+        }
+      ]
+    },
+    "gas": {
+      "page": 19,
+      "positively_associated": [
+        {
+          "taxon": "Bacteroides fragilis",
+          "status": "Low",
+          "association": "positive",
+          "reference_ids": [
+            24
+          ]
+        },
+        {
+          "taxon": "Dorea",
+          "status": "High",
+          "association": "positive",
+          "reference_ids": []
+        }
+      ],
+      "negatively_associated": []
+    },
+    "constipation": {
+      "page": 20,
+      "positively_associated": [
+        {
+          "taxon": "Methanobrevibacter",
+          "status": "Normal",
+          "association": "positive",
+          "reference_ids": [
+            22
+          ]
+        }
+      ],
+      "negatively_associated": [
+        {
+          "taxon": "Bifidobacterium",
+          "status": "High",
+          "association": "negative",
+          "reference_ids": [
+            23
+          ]
+        }
+      ]
+    },
+    "bloating": {
+      "page": 20,
+      "positively_associated": [
+        {
+          "taxon": "Anaerotruncus",
+          "status": "Normal",
+          "association": "positive",
+          "reference_ids": [
+            25
+          ]
+        }
+      ],
+      "negatively_associated": []
+    },
+    "irritable_bowel_syndrome": {
+      "page": 21,
+      "positively_associated": [
+        {
+          "taxon": "Salmonella enterica",
+          "status": "Not Detected",
+          "association": "positive",
+          "reference_ids": [
+            26
+          ]
+        },
+        {
+          "taxon": "Campylobacter",
+          "status": "Not Detected",
+          "association": "positive",
+          "reference_ids": [
+            26
+          ]
+        },
+        {
+          "taxon": "Shigella",
+          "status": "Not Detected",
+          "association": "positive",
+          "reference_ids": [
+            26
+          ]
+        },
+        {
+          "taxon": "Veillonella",
+          "status": "Normal",
+          "association": "positive",
+          "reference_ids": [
+            27
+          ]
+        },
+        {
+          "taxon": "Ruminococcus",
+          "status": "High",
+          "association": "positive",
+          "reference_ids": [
+            28
+          ]
+        }
+      ],
+      "negatively_associated": [
+        {
+          "taxon": "Collinsella aerofaciens",
+          "status": "High",
+          "association": "negative",
+          "reference_ids": [
+            31
+          ]
+        },
+        {
+          "taxon": "Bifidobacterium",
+          "status": "High",
+          "association": "negative",
+          "reference_ids": [
+            30
+          ]
+        },
+        {
+          "taxon": "Lactobacillus",
+          "status": "Normal",
+          "association": "negative",
+          "reference_ids": [
+            27,
+            30
+          ]
+        },
+        {
+          "taxon": "Alistipes",
+          "status": "High",
+          "association": "negative",
+          "reference_ids": [
+            29
+          ]
+        },
+        {
+          "taxon": "Faecalibacterium",
+          "status": "Normal",
+          "association": "negative",
+          "reference_ids": [
+            28
+          ]
+        }
+      ]
+    },
+    "inflammatory_bowel_disease": {
+      "page": 22,
+      "positively_associated": [
+        {
+          "taxon": "Desulfovibrio",
+          "status": "Low",
+          "association": "positive",
+          "reference_ids": [
+            32
+          ]
+        },
+        {
+          "taxon": "Fusobacterium",
+          "status": "Normal",
+          "association": "positive",
+          "reference_ids": [
+            33
+          ]
+        }
+      ],
+      "negatively_associated": [
+        {
+          "taxon": "Roseburia",
+          "status": "High",
+          "association": "negative",
+          "reference_ids": [
+            34
+          ]
+        },
+        {
+          "taxon": "Dialister",
+          "status": "Low",
+          "association": "negative",
+          "reference_ids": []
+        },
+        {
+          "taxon": "Faecalibacterium",
+          "status": "Normal",
+          "association": "negative",
+          "reference_ids": []
+        }
+      ]
+    },
+    "crohns_disease": {
+      "page": 23,
+      "positively_associated": [
+        {
+          "taxon": "Ruminococcus",
+          "status": "High",
+          "association": "positive",
+          "reference_ids": [
+            37,
+            38
+          ]
+        },
+        {
+          "taxon": "Actinomyces",
+          "status": "Low",
+          "association": "positive",
+          "reference_ids": [
+            35
+          ]
+        },
+        {
+          "taxon": "Providencia",
+          "status": "Normal",
+          "association": "positive",
+          "reference_ids": [
+            36
+          ]
+        }
+      ],
+      "negatively_associated": [
+        {
+          "taxon": "Dorea",
+          "status": "High",
+          "association": "negative",
+          "reference_ids": []
+        },
+        {
+          "taxon": "Peptostreptococcus",
+          "status": "Normal",
+          "association": "negative",
+          "reference_ids": []
+        },
+        {
+          "taxon": "Acidaminococcus",
+          "status": "Normal",
+          "association": "negative",
+          "reference_ids": []
+        }
+      ]
+    },
+    "ulcerative_colitis": {
+      "page": 24,
+      "positively_associated": [
+        {
+          "taxon": "Ruminococcus",
+          "status": "High",
+          "association": "positive",
+          "reference_ids": [
+            37
+          ]
+        },
+        {
+          "taxon": "Dorea",
+          "status": "High",
+          "association": "positive",
+          "reference_ids": [
+            46
+          ]
+        },
+        {
+          "taxon": "Peptostreptococcus",
+          "status": "Normal",
+          "association": "positive",
+          "reference_ids": [
+            47
+          ]
+        },
+        {
+          "taxon": "Acidaminococcus",
+          "status": "Normal",
+          "association": "positive",
+          "reference_ids": [
+            45
+          ]
+        }
+      ],
+      "negatively_associated": [
+        {
+          "taxon": "Akkermansia muciniphila",
+          "status": "Low",
+          "association": "negative",
+          "reference_ids": [
+            37
+          ]
+        },
+        {
+          "taxon": "Odoribacter",
+          "status": "Normal",
+          "association": "negative",
+          "reference_ids": [
+            34
+          ]
+        },
+        {
+          "taxon": "Roseburia",
+          "status": "High",
+          "association": "negative",
+          "reference_ids": [
+            50
+          ]
+        },
+        {
+          "taxon": "Ruminococcus albus",
+          "status": "Normal",
+          "association": "negative",
+          "reference_ids": [
+            47
+          ]
+        },
+        {
+          "taxon": "Phascolarctobacterium",
+          "status": "Normal",
+          "association": "negative",
+          "reference_ids": [
+            49
+          ]
+        },
+        {
+          "taxon": "Lachnospira",
+          "status": "Normal",
+          "association": "negative",
+          "reference_ids": [
+            46
+          ]
+        },
+        {
+          "taxon": "Prevotella",
+          "status": "Normal",
+          "association": "negative",
+          "reference_ids": [
+            44
+          ]
+        },
+        {
+          "taxon": "Microbiome Diversity",
+          "status": "Low",
+          "association": "negative",
+          "reference_ids": [
+            48
+          ]
+        }
+      ],
+      "notes": "Known catalogue conflict: Dorea is positively associated with Ulcerative Colitis here but negatively associated with Crohn's Disease above (both status High) — stored as printed per spec."
+    },
+    "obesity": {
+      "page": 25,
+      "positively_associated": [
+        {
+          "taxon": "Acidaminococcus",
+          "status": "Normal",
+          "association": "positive",
+          "reference_ids": [
+            53
+          ]
+        }
+      ],
+      "negatively_associated": [
+        {
+          "taxon": "Akkermansia muciniphila",
+          "status": "Low",
+          "association": "negative",
+          "reference_ids": [
+            55
+          ]
+        },
+        {
+          "taxon": "Christensenella",
+          "status": "Normal",
+          "association": "negative",
+          "reference_ids": [
+            61
+          ]
+        },
+        {
+          "taxon": "Alistipes",
+          "status": "High",
+          "association": "negative",
+          "reference_ids": [
+            56
+          ]
+        },
+        {
+          "taxon": "Anaerotruncus",
+          "status": "Normal",
+          "association": "negative",
+          "reference_ids": [
+            57
+          ]
+        },
+        {
+          "taxon": "Butyrivibrio",
+          "status": "Normal",
+          "association": "negative",
+          "reference_ids": [
+            59,
+            60
+          ]
+        },
+        {
+          "taxon": "Methanobrevibacter",
+          "status": "Normal",
+          "association": "negative",
+          "reference_ids": [
+            52
+          ]
+        },
+        {
+          "taxon": "Bifidobacterium",
+          "status": "High",
+          "association": "negative",
+          "reference_ids": [
+            58
+          ]
+        },
+        {
+          "taxon": "Papillibacter",
+          "status": "Normal",
+          "association": "negative",
+          "reference_ids": [
+            63
+          ]
+        },
+        {
+          "taxon": "Microbiome Diversity",
+          "status": "Low",
+          "association": "negative",
+          "reference_ids": [
+            59,
+            60,
+            62
+          ]
+        }
+      ]
+    },
+    "type_2_diabetes": {
+      "page": 26,
+      "positively_associated": [
+        {
+          "taxon": "Rothia",
+          "status": "Normal",
+          "association": "positive",
+          "reference_ids": [
+            65
+          ]
+        }
+      ],
+      "negatively_associated": [
+        {
+          "taxon": "Lactobacillus",
+          "status": "Normal",
+          "association": "negative",
+          "reference_ids": [
+            67,
+            68
+          ]
+        },
+        {
+          "taxon": "Roseburia",
+          "status": "High",
+          "association": "negative",
+          "reference_ids": [
+            64,
+            69
+          ]
+        },
+        {
+          "taxon": "Victivallis",
+          "status": "Normal",
+          "association": "negative",
+          "reference_ids": [
+            70
+          ]
+        },
+        {
+          "taxon": "Akkermansia muciniphila",
+          "status": "Low",
+          "association": "negative",
+          "reference_ids": [
+            64
+          ]
+        }
+      ]
+    },
+    "coronary_heart_disease": {
+      "page": 27,
+      "positively_associated": [
+        {
+          "taxon": "Collinsella",
+          "status": "High",
+          "association": "positive",
+          "reference_ids": [
+            72
+          ]
+        },
+        {
+          "taxon": "Veillonella",
+          "status": "Normal",
+          "association": "positive",
+          "reference_ids": [
+            72
+          ]
+        },
+        {
+          "taxon": "Actinomyces",
+          "status": "Low",
+          "association": "positive",
+          "reference_ids": [
+            71
+          ]
+        }
+      ],
+      "negatively_associated": [
+        {
+          "taxon": "Papillibacter cinnamivorans",
+          "status": "Normal",
+          "association": "negative",
+          "reference_ids": [
+            73
+          ]
+        },
+        {
+          "taxon": "Anaerostipes",
+          "status": "High",
+          "association": "negative",
+          "reference_ids": [
+            72
+          ]
+        },
+        {
+          "taxon": "Turicibacter",
+          "status": "Low",
+          "association": "negative",
+          "reference_ids": [
+            74
+          ]
+        }
+      ]
+    },
+    "kidney_stone": {
+      "page": 27,
+      "positively_associated": [],
+      "negatively_associated": [
+        {
+          "taxon": "Oxalobacter formigenes",
+          "status": "Normal",
+          "association": "negative",
+          "reference_ids": [
+            75
+          ]
+        }
+      ]
+    },
+    "butyric_acid_biosynthesis": {
+      "page": 29,
+      "theme": "inflammation / anti-inflammatory activity",
+      "taxa": [
+        {
+          "taxon": "Faecalibacterium",
+          "status": "Normal",
+          "association": null,
+          "reference_ids": [
+            81
+          ]
+        },
+        {
+          "taxon": "Roseburia",
+          "status": "High",
+          "association": null,
+          "reference_ids": [
+            83
+          ]
+        },
+        {
+          "taxon": "Eubacterium",
+          "status": "High",
+          "association": null,
+          "reference_ids": [
+            80
+          ]
+        },
+        {
+          "taxon": "Butyricicoccus",
+          "status": "Normal",
+          "association": null,
+          "reference_ids": [
+            77
+          ]
+        },
+        {
+          "taxon": "Anaerostipes",
+          "status": "High",
+          "association": null,
+          "reference_ids": [
+            76
+          ]
+        },
+        {
+          "taxon": "Odoribacter",
+          "status": "Normal",
+          "association": null,
+          "reference_ids": [
+            82
+          ]
+        },
+        {
+          "taxon": "Butyrivibrio",
+          "status": "Normal",
+          "association": null,
+          "reference_ids": [
+            78
+          ]
+        },
+        {
+          "taxon": "Coprococcus",
+          "status": "Low",
+          "association": null,
+          "reference_ids": [
+            79
+          ]
+        }
+      ],
+      "notes": "Table lists butyrate producers without explicit Positively/Negatively Associated split; all are producers of butyric acid (beneficial / anti-inflammatory role)."
+    },
+    "polyamine_biosynthesis": {
+      "page": 29,
+      "theme": "inflammation / anti-inflammatory activity",
+      "taxa": [
+        {
+          "taxon": "Bifidobacterium",
+          "status": "High",
+          "association": null,
+          "reference_ids": [
+            84
+          ]
+        }
+      ]
+    },
+    "propionate_biosynthesis": {
+      "page": 29,
+      "theme": "inflammation / anti-inflammatory activity",
+      "taxa": [
+        {
+          "taxon": "Veillonella",
+          "status": "Normal",
+          "association": null,
+          "reference_ids": []
+        },
+        {
+          "taxon": "Akkermansia muciniphila",
+          "status": "Low",
+          "association": null,
+          "reference_ids": [
+            85
+          ]
+        },
+        {
+          "taxon": "Bacteroides uniformis",
+          "status": "High",
+          "association": null,
+          "reference_ids": [
+            86
+          ]
+        },
+        {
+          "taxon": "Coprococcus catus",
+          "status": "High",
+          "association": null,
+          "reference_ids": [
+            87
+          ]
+        },
+        {
+          "taxon": "Dialister",
+          "status": "Low",
+          "association": null,
+          "reference_ids": [
+            88
+          ]
+        },
+        {
+          "taxon": "Phascolarctobacterium",
+          "status": "Normal",
+          "association": null,
+          "reference_ids": [
+            89
+          ]
+        },
+        {
+          "taxon": "Prevotella copri",
+          "status": "Low",
+          "association": null,
+          "reference_ids": [
+            90
+          ]
+        },
+        {
+          "taxon": "Roseburia",
+          "status": "High",
+          "association": null,
+          "reference_ids": [
+            91
+          ]
+        }
+      ],
+      "notes": "Known status conflict: Prevotella copri is Low here but Not Detected in the Potential Autoimmune Triggers safety panel (page 11). See data_quality_conflicts."
+    },
+    "tma_conversion": {
+      "page": "30-31",
+      "theme": "heart",
+      "positively_associated": [
+        {
+          "taxon": "Acinetobacter",
+          "status": "Normal",
+          "association": "positive",
+          "reference_ids": []
+        },
+        {
+          "taxon": "Aeromonas",
+          "status": "Normal",
+          "association": "positive",
+          "reference_ids": []
+        },
+        {
+          "taxon": "Alcaligenes",
+          "status": "Normal",
+          "association": "positive",
+          "reference_ids": []
+        },
+        {
+          "taxon": "Alteromonas",
+          "status": "Normal",
+          "association": "positive",
+          "reference_ids": []
+        },
+        {
+          "taxon": "Anaerococcus",
+          "status": "Normal",
+          "association": "positive",
+          "reference_ids": []
+        },
+        {
+          "taxon": "Bacillus",
+          "status": "High",
+          "association": "positive",
+          "reference_ids": []
+        },
+        {
+          "taxon": "Burkholderia",
+          "status": "Normal",
+          "association": "positive",
+          "reference_ids": []
+        },
+        {
+          "taxon": "Clostridium",
+          "status": "High",
+          "association": "positive",
+          "reference_ids": []
+        },
+        {
+          "taxon": "Desulfitobacter",
+          "status": "Normal",
+          "association": "positive",
+          "reference_ids": []
+        },
+        {
+          "taxon": "Desulfovibrio",
+          "status": "Low",
+          "association": "positive",
+          "reference_ids": []
+        },
+        {
+          "taxon": "Enterococcus",
+          "status": "Normal",
+          "association": "positive",
+          "reference_ids": []
+        },
+        {
+          "taxon": "Eubacterium",
+          "status": "High",
+          "association": "positive",
+          "reference_ids": []
+        },
+        {
+          "taxon": "Flavobacterium",
+          "status": "Normal",
+          "association": "positive",
+          "reference_ids": []
+        },
+        {
+          "taxon": "Lactobacillus",
+          "status": "Normal",
+          "association": "positive",
+          "reference_ids": []
+        },
+        {
+          "taxon": "Micrococcus",
+          "status": "Normal",
+          "association": "positive",
+          "reference_ids": []
+        },
+        {
+          "taxon": "Mobiluncus",
+          "status": "Normal",
+          "association": "positive",
+          "reference_ids": []
+        },
+        {
+          "taxon": "Photobacterium",
+          "status": "Normal",
+          "association": "positive",
+          "reference_ids": []
+        },
+        {
+          "taxon": "Proteus",
+          "status": "Normal",
+          "association": "positive",
+          "reference_ids": []
+        },
+        {
+          "taxon": "Providencia",
+          "status": "Normal",
+          "association": "positive",
+          "reference_ids": []
+        },
+        {
+          "taxon": "Pseudomonas",
+          "status": "Normal",
+          "association": "positive",
+          "reference_ids": []
+        },
+        {
+          "taxon": "Salmonella",
+          "status": "Normal",
+          "association": "positive",
+          "reference_ids": []
+        },
+        {
+          "taxon": "Sarcina",
+          "status": "Normal",
+          "association": "positive",
+          "reference_ids": []
+        },
+        {
+          "taxon": "Serratia",
+          "status": "Low",
+          "association": "positive",
+          "reference_ids": []
+        },
+        {
+          "taxon": "Shewanella",
+          "status": "Normal",
+          "association": "positive",
+          "reference_ids": []
+        },
+        {
+          "taxon": "Sporomusa",
+          "status": "Normal",
+          "association": "positive",
+          "reference_ids": []
+        },
+        {
+          "taxon": "Staphylococcus",
+          "status": "Normal",
+          "association": "positive",
+          "reference_ids": []
+        },
+        {
+          "taxon": "Streptococcus",
+          "status": "Normal",
+          "association": "positive",
+          "reference_ids": []
+        },
+        {
+          "taxon": "Vibrio",
+          "status": "Normal",
+          "association": "positive",
+          "reference_ids": []
+        }
+      ],
+      "negatively_associated": [],
+      "notes": "Known status conflict: Bacillus is High here but Not Detected in the Dysbiotic/Overgrowth Bacteria safety panel (page 11). See data_quality_conflicts. All 28 rows printed under a single 'Positively Associated' heading, spanning PDF pages 30-31 (footer pages 30-31)."
+    },
+    "anti_inflammatory_activity_intro": {
+      "page": 28,
+      "notes": "Page 28 is explanatory text only (Butyric Acid / Polyamine / Propionate Biosynthesis definitions); the actual per-bacterium table for these three pathways is on page 29 and is captured above as separate entries."
+    },
+    "serotonin_biosynthesis": {
+      "page": 32,
+      "theme": "mind",
+      "taxa": [
+        {
+          "taxon": "Streptococcus",
+          "status": "Normal",
+          "association": null,
+          "reference_ids": []
+        },
+        {
+          "taxon": "Enterococcus",
+          "status": "Normal",
+          "association": null,
+          "reference_ids": []
+        }
+      ]
+    },
+    "gaba_biosynthesis": {
+      "page": 32,
+      "theme": "mind",
+      "taxa": [
+        {
+          "taxon": "Lactobacillus",
+          "status": "Normal",
+          "association": null,
+          "reference_ids": []
+        },
+        {
+          "taxon": "Bifidobacterium",
+          "status": "High",
+          "association": null,
+          "reference_ids": []
+        }
+      ]
+    },
+    "lactose_sensitivity": {
+      "page": 15,
+      "taxa": [],
+      "notes": "No bacteria-name table printed for this pathway in the doctor report; only the numeric gut-score bar (see gut_scores.lactose_sensitivity) is shown."
+    },
+    "gluten_sensitivity": {
+      "page": 15,
+      "taxa": [],
+      "notes": "No bacteria-name table printed for this pathway in the doctor report; only the numeric gut-score bar (see gut_scores.gluten_sensitivity) is shown."
+    }
+  },
+  "data_quality_conflicts_expected": [
+    {
+      "type": "status_conflict",
+      "detail": "Bacillus: Not Detected in Dysbiotic/Overgrowth Bacteria safety panel (page 11) vs High in TMA Conversion pathway table (page 30).",
+      "confirmed_in_extraction": true
+    },
+    {
+      "type": "status_conflict",
+      "detail": "Prevotella copri: Not Detected in Potential Autoimmune Triggers safety panel (page 11) vs Low in Propionate Biosynthesis pathway table (page 29).",
+      "confirmed_in_extraction": true
+    },
+    {
+      "type": "catalogue_conflict",
+      "detail": "Dorea listed as positively associated with Ulcerative Colitis (High, page 24) but negatively associated with Crohn's Disease (High, page 23).",
+      "confirmed_in_extraction": true
+    },
+    {
+      "type": "duplicate_row",
+      "detail": "Campylobacter coli appears twice in the Pathogenic Bacteria panel (page 10), rows 3 and 14, both Not Detected.",
+      "confirmed_in_extraction": true
+    },
+    {
+      "type": "compound_vs_food",
+      "detail": "Curcumin scored 9 (page 35, Phytochemicals); N-3 Fatty Acids scored 1 (page 40, Lipids); Fructooligosaccharide (FOS) scored 2 (page 39, Carbohydrates). The matching food-side scores (turmeric 4, salmon 2/fish oil supplement 8, garlic and onion 6) live in the user report, not this doctor report.",
+      "confirmed_in_extraction": true
+    },
+    {
+      "type": "signal_vs_signal",
+      "detail": "Wellness Index is 'Good' (page 3) while Diversity is 0.5, an 'act' band value (page 4).",
+      "confirmed_in_extraction": true
+    }
+  ],
+  "compound_scores": {
+    "fermented": {
+      "group": "fermented",
+      "pages": "33-34",
+      "compound_scores": [
+        {
+          "compound": "Fermented Milk (L. paracasei CBA L74)",
+          "score": 10
+        },
+        {
+          "compound": "Probiotic Yogurt",
+          "score": 8
+        },
+        {
+          "compound": "Kephir",
+          "score": 5
+        },
+        {
+          "compound": "Yogurt (Lactobacillus delbrueckii ssp. bulgaricus + Streptococcus thermophilus)",
+          "score": 5
+        },
+        {
+          "compound": "Yogurt",
+          "score": 5
+        },
+        {
+          "compound": "Whole Grain Yeast Bread",
+          "score": 5
+        },
+        {
+          "compound": "Sauerkraut (Lactobacillus plantarum + Lactobacillus brevis)",
+          "score": 5
+        },
+        {
+          "compound": "Fermented Milk (Streptococcus thermophilus, Lactobacillus delbrueckii ssp. bulgaricus and Lactobacillus casei)",
+          "score": 5
+        },
+        {
+          "compound": "Fermented Soy Milk",
+          "score": 5
+        },
+        {
+          "compound": "Fermented Milk (L. casei)",
+          "score": 5
+        },
+        {
+          "compound": "Probiotic Yogurt (Lactobacillus gasseri+Lactobacillus coryniformis)",
+          "score": 5
+        },
+        {
+          "compound": "Probiotic Yogurt (Lactobacillus rhamnosus GR-1)",
+          "score": 4
+        },
+        {
+          "compound": "Probiotic Yogurt (Lactobacillus rhamnosus GG + Lactobacillus delbrueckii ssp. bulgaricus + Streptococcus thermophilus)",
+          "score": 4
+        },
+        {
+          "compound": "Yogurt (Lactobacillus delbrueckii ssp. bulgaricus)",
+          "score": 4
+        },
+        {
+          "compound": "Probiotic Yogurt (Bifidobacterium animalis ssp. lactis)",
+          "score": 4
+        },
+        {
+          "compound": "Probiotic Fermented Milk",
+          "score": 4
+        },
+        {
+          "compound": "Fermented Milk Product (Bifidobacterium animalis ssp. lactis + Streptococcus thermophilus + Lactobacillus delbrueckii ssp. bulgaricus + Lactococcus lactis)",
+          "score": 4
+        },
+        {
+          "compound": "Fermented Milk (Lactobacillus rhamnosus GG + Bifidobacterium animalis ssp. lactis Bb-12 + Lactobacillus acidophilus La-5)",
+          "score": 4
+        },
+        {
+          "compound": "Fermented Milk (Lactobacillus casei strain Shirota)",
+          "score": 4
+        },
+        {
+          "compound": "Fermented Milk (Lactobacillus acidophilus La-5 + Bifidobacterium Animalis ssp. lactis BB-12 + Streptococcus thermophilus)",
+          "score": 4
+        },
+        {
+          "compound": "Fermented Milk Products (Bifidobacterium animalis ssp. lactis Bb-12)",
+          "score": 2
+        },
+        {
+          "compound": "Fermented Drink (30% quinoa extract, 70% soy extract, 6% sucrose, 0.8% soybean oil, 1% lactose, 0.14%Recodan TM RS-B stabilizer, 2.5% milk powder, 2% lactic culture (L. casei LC-1))",
+          "score": 2
+        },
+        {
+          "compound": "Fermented Milk (Lactobacillus rhamnosus GG + L. gasseri)",
+          "score": 0
+        }
+      ],
+      "count": 23
+    },
+    "phytochemicals": {
+      "group": "phytochemicals",
+      "pages": "35-36",
+      "compound_scores": [
+        {
+          "compound": "Pomegranate Phenolic Compounds",
+          "score": 10
+        },
+        {
+          "compound": "Curcumin",
+          "score": 9
+        },
+        {
+          "compound": "Pomegranate Extract (Ellagitannins, Ellagic Acid)",
+          "score": 8
+        },
+        {
+          "compound": "Flavonoids",
+          "score": 8
+        },
+        {
+          "compound": "Red Wine Polyphenols",
+          "score": 8
+        },
+        {
+          "compound": "Wild Silverberry Polyphenols",
+          "score": 7
+        },
+        {
+          "compound": "Apricot Polyphenols",
+          "score": 7
+        },
+        {
+          "compound": "Chlorogenic Acid",
+          "score": 7
+        },
+        {
+          "compound": "Grape Paste Extract",
+          "score": 7
+        },
+        {
+          "compound": "Olive Polyphenols (Hydroxytyrosol, Tyrosol)",
+          "score": 6
+        },
+        {
+          "compound": "Hesperetin Glucoside",
+          "score": 6
+        },
+        {
+          "compound": "Hesperetin",
+          "score": 6
+        },
+        {
+          "compound": "Polyphenols",
+          "score": 6
+        },
+        {
+          "compound": "Pomegranate Extract",
+          "score": 6
+        },
+        {
+          "compound": "Tea Extract",
+          "score": 6
+        },
+        {
+          "compound": "Sour Cherry Polyphenols",
+          "score": 6
+        },
+        {
+          "compound": "Naringenin Glucoside",
+          "score": 5
+        },
+        {
+          "compound": "Ellagitannin",
+          "score": 5
+        },
+        {
+          "compound": "Flaxseed Lignans (Secoisolariciresinol Diglucoside)",
+          "score": 5
+        },
+        {
+          "compound": "Rutin Glucosite",
+          "score": 5
+        },
+        {
+          "compound": "Grape Paste Extract (Flavan-3-Ols, Anthocyanins, Flavoles..)",
+          "score": 5
+        },
+        {
+          "compound": "Vine Leaf Extract",
+          "score": 5
+        },
+        {
+          "compound": "Black Tea Polyphenols",
+          "score": 5
+        },
+        {
+          "compound": "Apple Polyphenols",
+          "score": 5
+        },
+        {
+          "compound": "Anthocyanins",
+          "score": 5
+        },
+        {
+          "compound": "Epicatechin",
+          "score": 5
+        },
+        {
+          "compound": "Pomegranate Tannins (Punicalagin, Punicalin, Ellagic Acid And Gallic Acid: 0.05% V/V)",
+          "score": 4
+        },
+        {
+          "compound": "Pomegranate Extract (Punicalagin)",
+          "score": 4
+        },
+        {
+          "compound": "Pine Bark Extract",
+          "score": 4
+        },
+        {
+          "compound": "Murta Leaf Extract",
+          "score": 4
+        },
+        {
+          "compound": "Olive Oil and Thyme Phenolic Compounds",
+          "score": 4
+        },
+        {
+          "compound": "Enocyanin",
+          "score": 4
+        },
+        {
+          "compound": "Naringenin",
+          "score": 4
+        },
+        {
+          "compound": "Malvidin-3-O-Glucoside",
+          "score": 4
+        },
+        {
+          "compound": "Chinese Tea Polyphenols",
+          "score": 4
+        },
+        {
+          "compound": "Cocoa Flavanols (Catechin, Epicatechin)",
+          "score": 4
+        },
+        {
+          "compound": "Epigallocatechin-3-Gallate (EGCG)",
+          "score": 4
+        },
+        {
+          "compound": "Noni Extract",
+          "score": 4
+        },
+        {
+          "compound": "Soy Isoflavone Glucosides",
+          "score": 3
+        },
+        {
+          "compound": "Cranberry Extract",
+          "score": 3
+        },
+        {
+          "compound": "Acai Berry Polyphenols",
+          "score": 3
+        },
+        {
+          "compound": "Quercetin",
+          "score": 3
+        },
+        {
+          "compound": "Puerarin",
+          "score": 2
+        },
+        {
+          "compound": "Gallic Acid",
+          "score": 2
+        },
+        {
+          "compound": "Grape Seed Extract",
+          "score": 2
+        },
+        {
+          "compound": "Soy Isoflavones",
+          "score": 2
+        },
+        {
+          "compound": "Pomegranate Extract (Ellagitannins)",
+          "score": 2
+        },
+        {
+          "compound": "Catechin",
+          "score": 2
+        },
+        {
+          "compound": "Purple Sweet Potato Anthocyanins",
+          "score": 2
+        }
+      ],
+      "count": 49
+    },
+    "carbohydrates": {
+      "group": "carbohydrates",
+      "pages": "37-39",
+      "compound_scores": [
+        {
+          "compound": "Agarooligosaccharide",
+          "score": 8
+        },
+        {
+          "compound": "Dextran Oligosaccharides",
+          "score": 8
+        },
+        {
+          "compound": "Mulberry Oligosaccharides",
+          "score": 8
+        },
+        {
+          "compound": "Mulberry Polysaccharides",
+          "score": 8
+        },
+        {
+          "compound": "Pectin (Derived from Sunflower)",
+          "score": 8
+        },
+        {
+          "compound": "Feruloylated Arabinoxylo-Oligosaccharides",
+          "score": 8
+        },
+        {
+          "compound": "Fuzhuan Brick Tea Polysaccharide",
+          "score": 8
+        },
+        {
+          "compound": "Algae Polysaccharides",
+          "score": 8
+        },
+        {
+          "compound": "Arabinoxylan-Oligosaccharides",
+          "score": 7
+        },
+        {
+          "compound": "Garlic Fructans",
+          "score": 7
+        },
+        {
+          "compound": "Kiwi Oligosaccharides",
+          "score": 7
+        },
+        {
+          "compound": "Isomalto/Maltopolysaccharides",
+          "score": 7
+        },
+        {
+          "compound": "Pectin (Derived from Artichoke)",
+          "score": 7
+        },
+        {
+          "compound": "Beta-Glucan",
+          "score": 7
+        },
+        {
+          "compound": "Levan",
+          "score": 7
+        },
+        {
+          "compound": "Xylo-Oligosaccharide",
+          "score": 7
+        },
+        {
+          "compound": "FOS + GOS",
+          "score": 7
+        },
+        {
+          "compound": "Flax Seed Musilage",
+          "score": 7
+        },
+        {
+          "compound": "Arabinogalactan",
+          "score": 6
+        },
+        {
+          "compound": "Galactooligosaccharide (GOS)",
+          "score": 6
+        },
+        {
+          "compound": "Resistant Starch (RS4)",
+          "score": 6
+        },
+        {
+          "compound": "Maltitol",
+          "score": 6
+        },
+        {
+          "compound": "Polydextrose",
+          "score": 6
+        },
+        {
+          "compound": "Insoluble Pulp",
+          "score": 6
+        },
+        {
+          "compound": "Lactose",
+          "score": 6
+        },
+        {
+          "compound": "Alpha-Gluco-Oligosaccharide",
+          "score": 6
+        },
+        {
+          "compound": "Soluble Corn Pulp",
+          "score": 5
+        },
+        {
+          "compound": "Sugar Cane Pulp",
+          "score": 5
+        },
+        {
+          "compound": "Resistant Maltodextrin",
+          "score": 5
+        },
+        {
+          "compound": "Pectin",
+          "score": 5
+        },
+        {
+          "compound": "Pectin Oligosaccharides (Derived from Apple)",
+          "score": 5
+        },
+        {
+          "compound": "Resistant Dextrin",
+          "score": 5
+        },
+        {
+          "compound": "Red Kidney Bean Polysaccharides",
+          "score": 5
+        },
+        {
+          "compound": "Lactulose",
+          "score": 5
+        },
+        {
+          "compound": "Xyloglucan",
+          "score": 5
+        },
+        {
+          "compound": "Gracilaria Rubra Oligosaccharides",
+          "score": 5
+        },
+        {
+          "compound": "Arabinogalactan+Inulin",
+          "score": 5
+        },
+        {
+          "compound": "Inulin - Partially Hydrolyzed Guar Gum Blend",
+          "score": 5
+        },
+        {
+          "compound": "Trans-Galacto Oligosaccharide",
+          "score": 4
+        },
+        {
+          "compound": "Arabinose",
+          "score": 4
+        },
+        {
+          "compound": "Chitosan Oligosaccharides",
+          "score": 4
+        },
+        {
+          "compound": "Sialyl Oligosaccharides",
+          "score": 4
+        },
+        {
+          "compound": "Short Chain FOS",
+          "score": 4
+        },
+        {
+          "compound": "Resistant Starch (RS3)",
+          "score": 4
+        },
+        {
+          "compound": "Resistant Starch (RS1)",
+          "score": 4
+        },
+        {
+          "compound": "GOS / Polydextrose",
+          "score": 4
+        },
+        {
+          "compound": "Rafinosis + Stachiosis",
+          "score": 4
+        },
+        {
+          "compound": "Lacto-N-Biose",
+          "score": 4
+        },
+        {
+          "compound": "Pectin Oligosaccharides (Derived from Citrus Peel)",
+          "score": 4
+        },
+        {
+          "compound": "Agarose-Agarotriose",
+          "score": 4
+        },
+        {
+          "compound": "Inulin",
+          "score": 4
+        },
+        {
+          "compound": "Oligofructose and Polydextrose",
+          "score": 4
+        },
+        {
+          "compound": "Inulin-Oligofructose Mixture",
+          "score": 4
+        },
+        {
+          "compound": "Inulin Type Fructan",
+          "score": 4
+        },
+        {
+          "compound": "Non-Fucosyl/Non-Sialyl Oligosaccharides",
+          "score": 4
+        },
+        {
+          "compound": "Oligofructose",
+          "score": 4
+        },
+        {
+          "compound": "Inulin and Xylo-Oligosaccharides",
+          "score": 4
+        },
+        {
+          "compound": "GOS + Long Chain FOS",
+          "score": 4
+        },
+        {
+          "compound": "Oligofructose-Inulin",
+          "score": 4
+        },
+        {
+          "compound": "Oligosaccharides (Derived from Lactulose)",
+          "score": 4
+        },
+        {
+          "compound": "Pectic Oligosaccharides",
+          "score": 4
+        },
+        {
+          "compound": "Resistant Starch (RS2)",
+          "score": 3
+        },
+        {
+          "compound": "Very Long Chain Inulin",
+          "score": 3
+        },
+        {
+          "compound": "Lactitol",
+          "score": 3
+        },
+        {
+          "compound": "Fucosyl-Oligosaccharides",
+          "score": 2
+        },
+        {
+          "compound": "Okara (Soy Bean Pulp)",
+          "score": 2
+        },
+        {
+          "compound": "GOS / FOS",
+          "score": 2
+        },
+        {
+          "compound": "Fructooligosaccharide (FOS)",
+          "score": 2
+        }
+      ],
+      "count": 68
+    },
+    "lipids": {
+      "group": "lipids",
+      "pages": "40",
+      "compound_scores": [
+        {
+          "compound": "Saturated Fatty Acids (SFA)",
+          "score": 10
+        },
+        {
+          "compound": "N-6 Fatty Acids",
+          "score": 6
+        },
+        {
+          "compound": "Monounsaturated Fatty Acids (MUFA)",
+          "score": 6
+        },
+        {
+          "compound": "Oleic Acid",
+          "score": 6
+        },
+        {
+          "compound": "Arachidonic Acid",
+          "score": 5
+        },
+        {
+          "compound": "EPA",
+          "score": 5
+        },
+        {
+          "compound": "EPA + DHA",
+          "score": 5
+        },
+        {
+          "compound": "Polyunsaturated Fatty Acids (PUFA)",
+          "score": 5
+        },
+        {
+          "compound": "Sterol-Stanol",
+          "score": 5
+        },
+        {
+          "compound": "Beta-Palmitate",
+          "score": 4
+        },
+        {
+          "compound": "DHA",
+          "score": 4
+        },
+        {
+          "compound": "Myristic Acid",
+          "score": 3
+        },
+        {
+          "compound": "Stearic Acid",
+          "score": 3
+        },
+        {
+          "compound": "N-3 Fatty Acids",
+          "score": 1
+        }
+      ],
+      "count": 14
+    },
+    "proteins": {
+      "group": "proteins",
+      "pages": "41",
+      "compound_scores": [
+        {
+          "compound": "Casein",
+          "score": 6
+        },
+        {
+          "compound": "Soy Milk Protein",
+          "score": 6
+        },
+        {
+          "compound": "Animal Protein",
+          "score": 5
+        },
+        {
+          "compound": "Glycosylated Sodium Caseinate + Beta-lactoglobulin + Galactose",
+          "score": 5
+        },
+        {
+          "compound": "Whey-Casein Mix",
+          "score": 5
+        },
+        {
+          "compound": "Essential Amino Acids",
+          "score": 4
+        },
+        {
+          "compound": "Glycosylated Pea Protein",
+          "score": 4
+        },
+        {
+          "compound": "Glycosylated Protein",
+          "score": 4
+        },
+        {
+          "compound": "Lactoferrin",
+          "score": 4
+        },
+        {
+          "compound": "Glycosylated Fish Protein",
+          "score": 3
+        },
+        {
+          "compound": "Alpha-lactalbumin",
+          "score": 2
+        },
+        {
+          "compound": "Casein Glucomacropeptides (CGMP)",
+          "score": 2
+        },
+        {
+          "compound": "Cow's Milk Proteins",
+          "score": 0
+        },
+        {
+          "compound": "Whey Proteins",
+          "score": 0
+        }
+      ],
+      "count": 14
+    },
+    "total_count": 168,
+    "notes": "Clinician-only per spec; never shown to clients. Known expected mismatches vs food scores (which live in the user report, not here): curcumin 9 here vs turmeric 4 (food); N-3 Fatty Acids 1 here vs salmon 2 / fish oil supplement 8 (food/supplement); Fructooligosaccharide (FOS) 2 here vs garlic and onion 6 (food). Captured as printed, not reconciled."
+  },
+  "supplements": {
+    "prebiotics": {
+      "page": 44,
+      "items": [
+        {
+          "product": "Pre-Biotic with Life Oligo Prebiotic Fiber XOS",
+          "brand": "Bio Nutrition",
+          "score": 7
+        },
+        {
+          "product": "Beta 1,3 Glucans Tablets",
+          "brand": "Solgar",
+          "score": 7
+        },
+        {
+          "product": "Bio-Glucan Plus",
+          "brand": "Pharma Nord",
+          "score": 7
+        },
+        {
+          "product": "Daily Fibre Blend Boost",
+          "brand": "PrebioFibres",
+          "score": 6
+        },
+        {
+          "product": "Bimuno Original",
+          "brand": "Bimuno",
+          "score": 5.7
+        },
+        {
+          "product": "Beta Glucan Complex",
+          "brand": "Lamberts",
+          "score": 5.7
+        },
+        {
+          "product": "Gut Booster",
+          "brand": "Myota",
+          "score": 5.5
+        },
+        {
+          "product": "Fruit & Fiber Plum",
+          "brand": "Oxytarm",
+          "score": 5
+        },
+        {
+          "product": "Fibre Flush",
+          "brand": "Shakra Health",
+          "score": 5
+        },
+        {
+          "product": "Prebio NutriPowder",
+          "brand": "BioCare",
+          "score": 5
+        }
+      ]
+    },
+    "probiotics": {
+      "page": 45,
+      "items": [
+        {
+          "product": "Digestive Support",
+          "brand": "Probio7",
+          "score": 10
+        },
+        {
+          "product": "Omni-biotic 10 AAD",
+          "brand": "Allergosan",
+          "score": 9.6
+        },
+        {
+          "product": "Every Day Extra",
+          "brand": "Optibac",
+          "score": 9.5
+        },
+        {
+          "product": "Essential-Biotic Mood & Mind",
+          "brand": "Allergy Research Group",
+          "score": 9.5
+        },
+        {
+          "product": "BioDoph-7 Plus",
+          "brand": "Biotics Research",
+          "score": 9.4
+        },
+        {
+          "product": "Essential-Biotic Complete",
+          "brand": "Allergy Research Group",
+          "score": 9.3
+        },
+        {
+          "product": "VSL#3",
+          "brand": "VSL#3",
+          "score": 9
+        },
+        {
+          "product": "Biotic Complex",
+          "brand": "Purolabs",
+          "score": 8.9
+        },
+        {
+          "product": "Boosted Extra Strength",
+          "brand": "Bio-Kult",
+          "score": 8.7
+        },
+        {
+          "product": "Advanced Multi-Strain",
+          "brand": "Bio-Kult",
+          "score": 8.7
+        }
+      ]
+    },
+    "total_count": 20,
+    "notes": "20 total (10 prebiotic + 10 probiotic), matching the spec's 'about 20 seen' exactly."
+  },
+  "references_lit": {
+    "pages": "46-48",
+    "items": [
+      {
+        "number": 1,
+        "citation": "Pimentel, Mark, et al. \"Methane production during lactulose breath test is associated with gastrointestinal disease presentation.\" Digestive diseases and sciences 48.1 (2003): 86-92.",
+        "doi_url": null
+      },
+      {
+        "number": 2,
+        "citation": "Chassard, C., Dapoigny, M., Scott, K.P., Crouzet, L., Del'homme, C., Marquet, P., Martin, J.C., Pickering, G., Ardid, D., Eschalier, A., Dubray, C., Flint, H.J., and Bernalier-Donadille, A. (2012). Functional dysbiosis within the gut microbiota of patients with constipated-irritable bowel syndrome. Aliment Pharmacol Ther 35, 828-838.",
+        "doi_url": null
+      },
+      {
+        "number": 3,
+        "citation": "Manichanh, Chaysavanh, et al. \"Anal gas evacuation and colonic microbiota in patients with flatulence: effect of diet.\" Gut 63.3 (2014): 401-408.",
+        "doi_url": null
+      },
+      {
+        "number": 4,
+        "citation": "Jalanka-Tuovinen, Jonna, et al. \"Intestinal microbiota in healthy adults: temporal analysis reveals individual and common core and relation to intestinal symptoms.\" PloS one 6.7 (2011): e23035.",
+        "doi_url": null
+      },
+      {
+        "number": 5,
+        "citation": "Spiller, Robin C. \"Role of infection in irritable bowel syndrome.\" Journal of gastroenterology 42.17 (2007): 41-47.",
+        "doi_url": null
+      },
+      {
+        "number": 6,
+        "citation": "Malinen, Erja, et al. \"Analysis of the fecal microbiota of irritable bowel syndrome patients and healthy controls with real-time PCR.\" American Journal of Gastroenterology 100.2 (2005): 373-382.",
+        "doi_url": null
+      },
+      {
+        "number": 7,
+        "citation": "Enbiosis Biosciences, irritable bowel syndrome clinical study.",
+        "doi_url": null
+      },
+      {
+        "number": 8,
+        "citation": "Rajilić-Stojanović, Mirjana, et al. \"Global and deep molecular analysis of microbiota signatures in fecal samples from patients with irritable bowel syndrome.\" Gastroenterology 141.5 (2011): 1792-1801.",
+        "doi_url": null
+      },
+      {
+        "number": 9,
+        "citation": "Malinen, Erja, et al. \"Association of symptoms with gastrointestinal microbiota in irritable bowel syndrome.\" World journal of gastroenterology: WJG 16.36 (2010): 4532.",
+        "doi_url": null
+      },
+      {
+        "number": 10,
+        "citation": "Malinen E, Krogius-Kurikka L, Lyra A, Nikkilä J, Jääskeläinen J, Rinttilä T, Vilpponen-Salmela T, von Wright AJ, Palva A. Association of symptoms with gastrointestinal microbiota in irritable bowel syndrome. World J Gastroenterol. 2010;16:4532-4540.",
+        "doi_url": null
+      },
+      {
+        "number": 11,
+        "citation": "Loubinoux, Julien, et al. \"Sulfate-reducing bacteria in human feces and their association with inflammatory bowel diseases.\" FEMS microbiology ecology 40.2 (2002): 107-112.",
+        "doi_url": null
+      },
+      {
+        "number": 12,
+        "citation": "Strauss, Jaclyn, et al. \"Invasive potential of gut mucosa-derived Fusobacterium nucleatum positively correlates with IBD status of the host.\" Inflammatory bowel diseases 17.9 (2011): 1971-1978.",
+        "doi_url": null
+      },
+      {
+        "number": 13,
+        "citation": "Morgan, Xochitl C., et al. \"Dysfunction of the intestinal microbiome in inflammatory bowel disease and treatment.\" Genome biology 13.9 (2012): R79.",
+        "doi_url": null
+      },
+      {
+        "number": 14,
+        "citation": "Manley, Paul N., and Rekha Dhru. \"Actinomycosis complicating Crohn's disease.\" Gastroenterology 79.5 (1980): 934-937.",
+        "doi_url": null
+      },
+      {
+        "number": 15,
+        "citation": "Yilmaz, Bahtiyar, et al. \"Microbial network disturbances in relapsing refractory Crohn's disease.\" Nature medicine 25.2 (2019): 323-336.",
+        "doi_url": null
+      },
+      {
+        "number": 16,
+        "citation": "Png, Chin Wen, et al. \"Mucolytic Bacteria With Increased Prevalence in IBD Mucosa Augment In Vitro Utilization of Mucin by Other Bacteria.\" American Journal of Gastroenterology 105.11 (2010): 2420-2428.",
+        "doi_url": null
+      },
+      {
+        "number": 17,
+        "citation": "Joossens, Marie, et al. \"Dysbiosis of the faecal microbiota in patients with Crohn's disease and their unaffected relatives.\" Gut 60.5 (2011): 631-637.",
+        "doi_url": null
+      },
+      {
+        "number": 18,
+        "citation": "Milani, Christian, et al. \"Gut microbiota composition and Clostridium difficile infection in hospitalized elderly individuals: a metagenomic study.\" Scientific reports 6.1 (2016): 1-12.",
+        "doi_url": null
+      },
+      {
+        "number": 19,
+        "citation": "Manichanh, Chaysavanh, et al. \"Reduced diversity of faecal microbiota in Crohn's disease revealed by a metagenomic approach.\" Gut 55.2 (2006): 205-211.",
+        "doi_url": null
+      },
+      {
+        "number": 20,
+        "citation": "Sokol, Harry, et al. \"Faecalibacterium prausnitzii is an anti-inflammatory commensal bacterium identified by gut microbiota analysis of Crohn disease patients.\" Proceedings of the National Academy of Sciences 105.43 (2008): 16731-16736.",
+        "doi_url": null
+      },
+      {
+        "number": 21,
+        "citation": "Nakata, Toru, et al. \"Protective effects of heat-killed Lactococcus lactis subsp. lactis BF3, isolated from the intestine of chum salmon, in a murine model of DSS-induced inflammatory bowel disease.\" Bioscience of microbiota, food and health (2016).",
+        "doi_url": null
+      },
+      {
+        "number": 22,
+        "citation": "Alhagammad, Moftah H., et al. \"An overview of the bacterial contribution to Crohn disease pathogenesis.\" Journal of medical microbiology 65.10 (2016): 1049-1059.",
+        "doi_url": null
+      },
+      {
+        "number": 23,
+        "citation": "Willing, B. P., et al. \"Järnerot, G., Tysk, C., Jansson, JK, and Engstrand, L.(2010). A pyrosequencing study in twins shows that gastrointestinal microbial profiles vary with inflammatory bowel disease phenotypes.\" Gastroenterology 139: 1844-1854.",
+        "doi_url": null
+      },
+      {
+        "number": 24,
+        "citation": "Ohkusa, Toshifumi, and Shigeo Koido. \"Intestinal microbiota and ulcerative colitis.\" Journal of Infection and Chemotherapy 21.11 (2015): 761-768.",
+        "doi_url": null
+      },
+      {
+        "number": 25,
+        "citation": "Nagao-Kitamoto, Hiroko, and Nobuhiko Kamada. \"Host-microbial cross-talk in inflammatory bowel disease.\" Immune network 17.1 (2017): 1-12.",
+        "doi_url": null
+      },
+      {
+        "number": 26,
+        "citation": "Fite, Alemu, et al. \"Longitudinal analyses of gut mucosal microbiotas in ulcerative colitis in relation to patient age and disease severity and duration.\" Journal of clinical microbiology 51.3 (2013): 849-856.",
+        "doi_url": null
+      },
+      {
+        "number": 27,
+        "citation": "Lepage, Patricia, et al. \"Twin study indicates loss of interaction between microbiota and mucosa of patients with ulcerative colitis.\" Gastroenterology 141.1 (2011): 227-236.",
+        "doi_url": null
+      },
+      {
+        "number": 28,
+        "citation": "Zuo, Tao, and Siew C. Ng. \"The gut microbiota in the pathogenesis and therapeutics of inflammatory bowel disease.\" Frontiers in microbiology 9 (2018): 2247.",
+        "doi_url": null
+      },
+      {
+        "number": 29,
+        "citation": "Machiels, Kathleen, et al. \"A decrease of the butyrate-producing species Roseburia hominis and Faecalibacterium prausnitzii defines dysbiosis in patients with ulcerative colitis.\" Gut 63.8 (2014): 1275-1283.",
+        "doi_url": null
+      },
+      {
+        "number": 30,
+        "citation": "Armougom, Fabrice, et al. \"Monitoring bacterial community of human gut microbiota reveals an increase in Lactobacillus in obese patients and Methanogens in anorexic patients.\" PloS one 4.9 (2009): e7125.",
+        "doi_url": null
+      },
+      {
+        "number": 31,
+        "citation": "Million, M., et al. \"Obesity-associated gut microbiota is enriched in Lactobacillus reuteri and depleted in Bifidobacterium animalis and Methanobrevibacter smithii.\" International journal of obesity 36.6 (2012): 817-825.",
+        "doi_url": null
+      },
+      {
+        "number": 32,
+        "citation": "Yun, Yeojun, et al. \"Comparative analysis of gut microbiota associated with body mass index in a large Korean cohort.\" BMC microbiology 17.1 (2017): 151.",
+        "doi_url": null
+      },
+      {
+        "number": 33,
+        "citation": "Gomez-Arango, Luisa F., et al. \"Low dietary fiber intake increases Collinsella abundance in the gut microbiota of overweight and obese pregnant women.\" Gut Microbes 9.3 (2018): 189-201.",
+        "doi_url": null
+      },
+      {
+        "number": 34,
+        "citation": "Santacruz, Arlette, et al. \"Gut microbiota composition is associated with body weight, weight gain and biochemical parameters in pregnant women.\" British Journal of Nutrition 104.1 (2010): 83-92.",
+        "doi_url": null
+      },
+      {
+        "number": 35,
+        "citation": "Zhernakova, Alexandra, et al. \"Population-based metagenomics analysis reveals markers for gut microbiome composition and diversity.\" Science 352.6285 (2016): 565-569.",
+        "doi_url": null
+      },
+      {
+        "number": 36,
+        "citation": "Zupancic, Margaret L., et al. \"Analysis of the gut microbiota in the old order Amish and its relation to the metabolic syndrome.\" PloS one 7.8 (2012): e43052.",
+        "doi_url": null
+      },
+      {
+        "number": 37,
+        "citation": "Million, M., et al. \"Gut bacterial microbiota and obesity.\" Clinical Microbiology and Infection 19.4 (2013): 305-313.",
+        "doi_url": null
+      },
+      {
+        "number": 38,
+        "citation": "Le Chatelier, Emmanuelle, et al. \"Richness of human gut microbiome correlates with metabolic markers.\" Nature 500.7464 (2013): 541-546.",
+        "doi_url": null
+      },
+      {
+        "number": 39,
+        "citation": "Sze, Marc A., and Patrick D. Schloss. \"Looking for a signal in the noise: revisiting obesity and the microbiome.\" MBio 7.4 (2016): e01018-16.",
+        "doi_url": null
+      },
+      {
+        "number": 40,
+        "citation": "Peters, Brandilyn A., et al. \"A taxonomic signature of obesity in a large study of American adults.\" Scientific reports 8.1 (2018): 1-13.",
+        "doi_url": null
+      },
+      {
+        "number": 41,
+        "citation": "Turnbaugh, Peter J., et al. \"A core gut microbiome in obese and lean twins.\" nature 457.7228 (2009): 480-484.",
+        "doi_url": null
+      },
+      {
+        "number": 42,
+        "citation": "Bendtsen, Line Quist, et al. \"High intake of dairy during energy restriction does not affect energy balance or the intestinal microflora compared with low dairy intake in overweight individuals in a randomized controlled trial.\" Applied Physiology, Nutrition, and Metabolism 43.1 (2018): 1-10.",
+        "doi_url": null
+      },
+      {
+        "number": 43,
+        "citation": "Qin, Junjie, et al. \"A metagenome-wide association study of gut microbiota in type 2 diabetes.\" Nature 490.7418 (2012): 55-60.",
+        "doi_url": null
+      },
+      {
+        "number": 44,
+        "citation": "Crusell, Mie Korslund Wiinblad, et al. \"Gestational diabetes is associated with change in the gut microbiota composition in third trimester of pregnancy and postpartum.\" Microbiome 6.1 (2018): 89.",
+        "doi_url": null
+      },
+      {
+        "number": 45,
+        "citation": "Ganesan, Kumar, et al. \"Causal relationship between diet-induced gut microbiota changes and diabetes: a novel strategy to transplant Faecalibacterium prausnitzii in preventing diabetes.\" International journal of molecular sciences 19.12 (2018): 3720.",
+        "doi_url": null
+      },
+      {
+        "number": 46,
+        "citation": "Ejtahed, Hanie S., et al. \"Probiotic yogurt improves antioxidant status in type 2 diabetic patients.\" Nutrition 28.5 (2012): 539-543.",
+        "doi_url": null
+      },
+      {
+        "number": 47,
+        "citation": "Tonucci, Livia Bordalo, et al. \"Clinical application of probiotics in type 2 diabetes mellitus: A randomized, double-blind, placebo-controlled study.\" Clinical nutrition 36.1 (2017): 85-92.",
+        "doi_url": null
+      },
+      {
+        "number": 48,
+        "citation": "Forslund, Kristoffer, et al. \"Disentangling type 2 diabetes and metformin treatment signatures in the human gut microbiota.\" Nature 528.7581 (2015): 262-266.",
+        "doi_url": null
+      },
+      {
+        "number": 49,
+        "citation": "Zhang, Lei, et al. \"Metabolic phenotypes and the gut microbiota in response to dietary resistant starch type 2 in normal-weight subjects: a randomized crossover trial.\" Scientific reports 9.1 (2019): 1-11.",
+        "doi_url": null
+      },
+      {
+        "number": 50,
+        "citation": "Jia, Qiujin, et al. \"Endocrine organs of cardiovascular diseases: gut microbiota.\" Journal of Cellular and Molecular Medicine 23.4 (2019): 2314-2323.",
+        "doi_url": null
+      },
+      {
+        "number": 51,
+        "citation": "Liu, Zuheng, et al. \"The intestinal microbiota associated with cardiac valve calcification differs from that of coronary artery disease.\" Atherosclerosis 284 (2019): 121-128.",
+        "doi_url": null
+      },
+      {
+        "number": 52,
+        "citation": "Claesson, Marcus J., et al. \"Gut microbiota composition correlates with diet and health in the elderly.\" Nature 488.7410 (2012): 178-184.",
+        "doi_url": null
+      },
+      {
+        "number": 53,
+        "citation": "Xu, Hui, et al. \"The gut microbiota and its interactions with cardiovascular disease.\" Microbial Biotechnology 13.3 (2020): 637-656.",
+        "doi_url": null
+      },
+      {
+        "number": 54,
+        "citation": "Kaufman, David W., et al. \"Oxalobacter formigenes may reduce the risk of calcium oxalate kidney stones.\" Journal of the American Society of Nephrology 19.6 (2008): 1197-1203.",
+        "doi_url": null
+      },
+      {
+        "number": 55,
+        "citation": "Kant, Ravi, et al. \"Genome sequence of the butyrate-producing anaerobic bacterium Anaerostipes hadrus PEL 85.\" Genome announcements 3.2 (2015).",
+        "doi_url": null
+      },
+      {
+        "number": 56,
+        "citation": "Geirnaert, Annelies, et al. \"Butyricicoccus pullicaecorum, a butyrate producer with probiotic potential, is intrinsically tolerant to stomach and small intestine conditions.\" Anaerobe 30 (2014): 70-74.",
+        "doi_url": null
+      },
+      {
+        "number": 57,
+        "citation": "Miller, TERRY L., and SUSAN E. Jenesel. \"Enzymology of butyrate formation by Butyrivibrio fibrisolvens.\" Journal of Bacteriology 138.1 (1979): 99-104.",
+        "doi_url": null
+      },
+      {
+        "number": 58,
+        "citation": "Louis, Petra, and Harry J. Flint. \"Diversity, metabolism and microbial ecology of butyrate-producing bacteria from the human large intestine.\" FEMS microbiology letters 294.1 (2009): 1-8.",
+        "doi_url": null
+      },
+      {
+        "number": 59,
+        "citation": "Baxter, Nielson T., et al. \"Dynamics of human gut microbiota and short-chain fatty acids in response to dietary interventions with three fermentable fibers.\" MBio 10.1 (2019).",
+        "doi_url": null
+      },
+      {
+        "number": 60,
+        "citation": "Zhou, Lixing, et al. \"Faecalibacterium prausnitzii produces butyrate to maintain Th17/Treg balance and to ameliorate colorectal colitis by inhibiting histone deacetylase 1.\" Inflammatory bowel diseases 24.9 (2018): 1926-1940.",
+        "doi_url": null
+      },
+      {
+        "number": 61,
+        "citation": "Anand, Swadha, Harrisham Kaur, and Sharmila S. Mande. \"Comparative in silico analysis of butyrate production pathways in gut commensals and pathogens.\" Frontiers in microbiology 7 (2016): 1945.",
+        "doi_url": null
+      },
+      {
+        "number": 62,
+        "citation": "Duncan, Sylvia H., et al. \"Roseburia intestinalis sp. nov., a novel saccharolytic, butyrate-producing bacterium from human faeces.\" International journal of systematic and evolutionary microbiology 52.5 (2002): 1615-1620.",
+        "doi_url": null
+      },
+      {
+        "number": 63,
+        "citation": "Sugiyama, Yuta, et al. \"Analysis of polyamine biosynthetic-and transport ability of human indigenous Bifidobacterium.\" Bioscience, biotechnology, and biochemistry 82.9 (2018): 1606-1614.",
+        "doi_url": null
+      },
+      {
+        "number": 64,
+        "citation": "Xu, Yu, et al. \"Function of Akkermansia muciniphila in Obesity: Interactions With Lipid Metabolism, Immune Response and Gut Systems.\" Frontiers in Microbiology 11 (2020): 219.",
+        "doi_url": null
+      },
+      {
+        "number": 65,
+        "citation": "Louis, Petra, and Harry J. Flint. \"Formation of propionate and butyrate by the human colonic microbiota.\" Environmental microbiology 19.1 (2017): 29-41.",
+        "doi_url": null
+      },
+      {
+        "number": 66,
+        "citation": "El Hage, Racha, et al. \"Propionate-producing consortium restores antibiotic-induced dysbiosis in a dynamic in vitro model of the human intestinal microbial ecosystem.\" Frontiers in microbiology 10 (2019): 1206.",
+        "doi_url": null
+      },
+      {
+        "number": 67,
+        "citation": "Sakamoto, Mitsuo, et al. \"Dialister hominis sp. nov., isolated from human faeces.\" International Journal of Systematic and Evolutionary Microbiology 70.1 (2020): 589-595.",
+        "doi_url": null
+      },
+      {
+        "number": 68,
+        "citation": "Wu, Feifan, et al. \"Phascolarctobacterium faecium abundant colonization in human gastrointestinal tract.\" Experimental and therapeutic medicine 14.4 (2017): 3122-3126.",
+        "doi_url": null
+      },
+      {
+        "number": 69,
+        "citation": "Brooke, Charles G., et al. \"Prevotella copri, a potential indicator for high feed efficiency in western steers.\" Animal Science Journal 90.5 (2019): 696-701.",
+        "doi_url": null
+      },
+      {
+        "number": 70,
+        "citation": "Kasahara, Kazuyuki, et al. \"Interactions between Roseburia intestinalis and diet modulate atherogenesis in a murine model.\" Nature microbiology 3.12 (2018): 1461-1471.",
+        "doi_url": null
+      }
+    ],
+    "count_captured": 70,
+    "notes": "Pages 46-48 showed references numbered 1 through 70; no reference 71-75 were visible on the three pages read even though reference numbers up to [91] are cited in the pathway tables (e.g. Coronary Heart Disease cites [71]-[74], Kidney Stone cites [75], Butyric/Polyamine/Propionate Biosynthesis cite up to [91]). The references list may continue beyond page 48 on a page not captured in the page ranges read, or the PDF's reference list may simply stop at 70 while later citation numbers in the pathway tables were not all given a matching list entry. This is a gap to verify against the source PDF directly (re-check pages 46-49 at higher resolution, or confirm whether references 71-91 exist elsewhere in the document). No DOI URLs were printed anywhere in the references section; all entries are citation text only."
+  }
+}

@@ -4,8 +4,9 @@
  * report (kit ELVMWB6271 / El Hachemi) down into the v1 tables
  * (profiles/gut_scores/screening_findings/similar_profiles/plan_*)
  * so the client is immediately visible in the CURRENT app UI, which
- * still reads v1 exclusively. Run seedReportV2.mjs first (or at
- * least have the extraction JSON in the scratchpad) before this.
+ * still reads v1 exclusively. Reads the same committed extraction
+ * JSON as seedReportV2.mjs (scripts/data/elvmwb6271/) — run that
+ * script first so the v2 tables are populated too.
  *
  * Two modes:
  *   - No --password: self-serve-claimable profile (registerKit.mjs
@@ -24,11 +25,16 @@
  */
 import "dotenv/config";
 import { readFileSync, existsSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { dirname, join } from "node:path";
 import { parseArgs } from "node:util";
 import { createClient } from "@supabase/supabase-js";
 import { upsertFoodsCatalog } from "./lib/provision.mjs";
 
-const SCRATCH = process.env.SCRATCH || "/tmp/claude-0/-home-user-elevame-investment/7635052c-95ed-5c9a-bbcf-3df1d50b2771/scratchpad";
+const __dirname = dirname(fileURLToPath(import.meta.url));
+// Ships in the repo (scripts/data/elvmwb6271/) — same note as in
+// seedReportV2.mjs.
+const SCRATCH = process.env.SCRATCH || join(__dirname, "data/elvmwb6271");
 const KIT_CODE = "ELVMWB6271";
 const CLIENT_NAME = "El Hachemi Abdelhak";
 
