@@ -19,6 +19,15 @@ export function AuthProvider({ children }) {
     return { error };
   }
 
+  async function signUp(email, password) {
+    const { data, error } = await supabase.auth.signUp({ email, password });
+    // If the Supabase project requires email confirmation, signUp
+    // succeeds but returns no session yet — the caller needs to
+    // know that so it can tell the user to check their inbox
+    // instead of expecting to land straight in the app.
+    return { error, needsEmailConfirmation: !error && !data.session };
+  }
+
   async function signOut() {
     await supabase.auth.signOut();
   }
@@ -28,6 +37,7 @@ export function AuthProvider({ children }) {
     user: session?.user ?? null,
     loading: session === undefined,
     signIn,
+    signUp,
     signOut,
   };
 

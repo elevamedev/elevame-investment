@@ -11,7 +11,7 @@ backed by Supabase.
 index.html               Vite entry HTML
 src/
   main.jsx                App bootstrap (wraps App in AuthProvider)
-  App.jsx                 Auth gate + tab shell (Home/Scores/Plan/List/Track/Foods)
+  App.jsx                 Auth gate + claim-kit gate + tab shell (Home/Scores/Plan/List/Track/Foods)
   theme.js                Brand colors
   i18n/strings.js         All EN/ES UI copy
   data/
@@ -19,13 +19,19 @@ src/
     planTemplate.js         Default 6-week plan template, used to seed new clients
     gutScoresTemplate.js    Default gut score / key bacteria values, used to seed new clients
   lib/supabaseClient.js    Supabase JS client (browser-safe anon key)
-  context/AuthContext.jsx  Session state + sign in/out
+  context/AuthContext.jsx  Session state + sign in/up/out
   hooks/useClientData.js   Fetches/saves a signed-in client's profile, plan,
                            gut scores, shopping checks, tracker entries, milestones
   components/              Small reusable UI pieces (ScorePill, CheckinForm, ...)
-  views/                   One file per tab (HomeView, PlanView, ...), plus LoginView
+  views/                   One file per tab (HomeView, PlanView, ...), plus
+                           LoginView, SignUpView, ClaimKitView
 supabase/schema.sql        Full DB schema + Row Level Security policies
-scripts/seed.mjs           Creates a client's login + assigns their starter plan
+scripts/
+  seed.mjs                 Admin-managed: creates a client's login AND their
+                           report in one step, already linked
+  registerKit.mjs           Self-serve: registers a kit's report with no login
+                           attached yet, for a client to claim themselves
+  kits.example.csv          Column layout for bulk kit registration
 ```
 
 Per-client data (profile, plan, gut scores, shopping list, tracker entries,
@@ -60,38 +66,67 @@ screen (Sign in will fail — that's expected until Supabase is wired up).
    - **Project URL** → `VITE_SUPABASE_URL`
    - **anon public** key → `VITE_SUPABASE_ANON_KEY`
    - **service_role secret** key → `SUPABASE_SERVICE_ROLE_KEY` (server-side
-     only — used by `scripts/seed.mjs`, never shipped to the browser)
+     only — used by `scripts/seed.mjs` and `scripts/registerKit.mjs`, never
+     shipped to the browser)
 
    Put all three in your local `.env` (copied from `.env.example`).
 
-## 3. Seed your first client
+## 3. Onboard a client
 
-The prototype's hardcoded data (Pascale Debain, kit `ELVMHB4178`, her gut
-scores, her 6-week plan) is now the *default template* in `src/data/`. Turn
-it into a real record for a real client with:
+There are two ways a client ends up with a working login, depending on
+whether staff create their account directly or the client signs up
+themselves.
+
+### 3a. Admin-managed (you create the login)
 
 ```bash
 npm run seed -- --email pascale@example.com --name "Pascale Debain" --kit ELVMHB4178
 ```
 
-This will:
-- upsert the shared food catalog into Supabase,
-- create (or reuse, if it already exists) a Supabase Auth user for that email,
-- create their `profiles` row,
-- assign them the default gut scores and the default 6-week plan.
-
-If you don't pass `--password`, one is generated and printed once at the end
-— send it to the client (or have them use Supabase's password-reset flow).
-Add `--lang es` for a Spanish-speaking client, `--start-date YYYY-MM-DD` to
+This creates (or reuses) a Supabase Auth user for that email, a `profiles`
+row already linked to it, and the default gut scores + 6-week plan. If you
+don't pass `--password`, one is generated and printed once at the end — send
+it to the client (or have them use Supabase's password-reset flow). Add
+`--lang es` for a Spanish-speaking client, `--start-date YYYY-MM-DD` to
 back/forward-date their plan start.
 
-Run the same command again with a new `--email`/`--name`/`--kit` for each
-additional client. A nutritionist can later customise any client's specific
-plan by editing their rows directly in the Supabase table editor
-(`plan_phases` / `plan_days` / `plan_meals` / `gut_scores`).
+### 3b. Self-serve (client creates their own login, then links their kit)
 
-With `.env` filled in and a client seeded, `npm run dev` gives you a fully
-working local app — sign in with that client's email/password.
+Use this when a client should pick their own password rather than you
+handing one to them — their lab results usually exist *before* they've ever
+signed up, so registering the report and creating their login are two
+separate steps:
+
+1. **Register the kit** (staff side, once results are ready) — either one at
+   a time:
+   ```bash
+   npm run register-kit -- --kit ELVXXXXXXX --email client@example.com --name "Client Name" [--lang en|es]
+   ```
+   or in bulk from a spreadsheet. Build a CSV with the columns in
+   `scripts/kits.example.csv` — `kit_code`, `expected_email`, `full_name`,
+   `language`, `plan_start_date`, `microbiome_age`, `diversity_value`, plus a
+   `<key>_value`/`<key>_avg` pair of columns per gut score (see that file for
+   the full list). Leave a score's columns blank to use the template's
+   default numbers for it. Export from Excel/Sheets as CSV, then:
+   ```bash
+   npm run register-kit -- --csv path/to/kits.csv
+   ```
+   This creates the `profiles` row (and gut scores + default plan) with no
+   `user_id` attached — it's "unclaimed" until the client links it.
+2. **Client signs up** in the app with their own email + password (the
+   "Create one" link on the login screen).
+3. **Client claims their kit** — right after signing up, the app asks for
+   their kit code and the email their results were registered under. If both
+   match an unclaimed kit, their new account is linked to that report and
+   they land in the app with their real data.
+
+Either path works for the rest of the app identically once a client is
+linked — a nutritionist can customise any client's plan afterward by editing
+their rows directly in the Supabase table editor (`plan_phases` /
+`plan_days` / `plan_meals` / `gut_scores`).
+
+With `.env` filled in and at least one client set up (either path),
+`npm run dev` gives you a fully working local app.
 
 ## 4. Push to GitHub
 
@@ -134,14 +169,28 @@ git push -u origin <your-branch>
 
 ## Notes on the auth/data model
 
-- Every table except `foods` has Row Level Security requiring
-  `auth.uid() = profile_id` (directly or via a join), so the anon key that
-  ships in the browser bundle can never read or write another client's data.
-- `profiles.id` **is** the Supabase Auth user id — there's no separate
-  client id to keep in sync.
+- `profiles.id` is an **internal id, separate from the Supabase Auth user
+  id**. A profile can exist before its client has ever signed up (that's the
+  whole point of the self-serve flow) — `profiles.user_id` stays `NULL`
+  until a client links their account by calling the `claim_kit(kit_code,
+  email)` database function from the app with a matching kit code and email.
+  Every other table (`gut_scores`, `plan_phases`, `shopping_checks`, ...)
+  references `profiles.id`, and Row Level Security checks ownership by
+  joining through `profiles.user_id = auth.uid()` (see `owns_profile()` in
+  `supabase/schema.sql`) — the anon key that ships in the browser bundle can
+  never read or write another client's data, claimed or not.
+- `claim_kit` is a `security definer` Postgres function, not a plain table
+  update — that's what lets it look up an unclaimed kit by code (which
+  isn't yet owned by anyone, so normal RLS would block it) while still
+  safely enforcing the email match and preventing two people from claiming
+  the same kit in a race.
 - The app falls back to the bundled default 6-week plan
-  (`src/data/planTemplate.js`) if a signed-in client has no `plan_phases`
-  rows yet, so a newly created auth user (without having run the seed
-  script) still sees something rather than a blank screen — but for a real
-  client you should always run `scripts/seed.mjs` so their plan, and their
-  shopping-list/tracker data, are tied to real database rows.
+  (`src/data/planTemplate.js`) if a linked client has no `plan_phases` rows
+  of their own yet, so an account still sees something sensible rather than
+  a blank screen — but for a real client you should always run the gut-score
+  seed/register step so their plan and scores are tied to real rows, not
+  just the fallback.
+- `supabase/schema.sql` is written to be re-run safely against a database
+  that already has the *older* schema (where `profiles.id` directly was the
+  auth user id) — it migrates existing rows in place rather than requiring
+  a fresh project.
