@@ -7,13 +7,17 @@
  * still reads v1 exclusively. Run seedReportV2.mjs first (or at
  * least have the extraction JSON in the scratchpad) before this.
  *
- * This is a self-serve-claimable profile (registerKit.mjs style) —
- * user_id stays NULL until the client claims it. IMPORTANT: no real
- * email address was found in the source PDFs, so `expected_email`
- * is set to a clearly-fake placeholder
- * (pending-email+elvmwb6271@elevame.es). The client CANNOT claim
- * their kit until you update profiles.expected_email to their real
- * email (Supabase table editor, or re-run this script with --email).
+ * Two modes:
+ *   - No --password: self-serve-claimable profile (registerKit.mjs
+ *     style) — user_id stays NULL, the client signs up themselves
+ *     and claims the kit with --email + their own chosen password.
+ *   - With --password: creates (or reuses) a Supabase Auth account
+ *     for --email directly and links it immediately (seed.mjs
+ *     style, claimed_at set now) — hand the email/password straight
+ *     to the client, no claim step needed. Also syncs the matching
+ *     v2 `clients.auth_user_id` (see supabase/schema_v2_admin.sql)
+ *     so the v2-powered screens (Report tab, Supplements, ...)
+ *     resolve for them too, not just the v1 ones.
  *
  * Requires SUPABASE_SERVICE_ROLE_KEY + VITE_SUPABASE_URL in .env.
  * Safe to re-run — every write is an upsert/delete+insert.
@@ -28,8 +32,31 @@ const SCRATCH = process.env.SCRATCH || "/tmp/claude-0/-home-user-elevame-investm
 const KIT_CODE = "ELVMWB6271";
 const CLIENT_NAME = "El Hachemi Abdelhak";
 
-const { values: args } = parseArgs({ options: { email: { type: "string" } } });
+const { values: args } = parseArgs({ options: { email: { type: "string" }, password: { type: "string" } } });
 const EXPECTED_EMAIL = args.email || `pending-email+${KIT_CODE.toLowerCase()}@elevame.es`;
+
+async function findUserByEmail(supabase, email) {
+  const target = email.toLowerCase();
+  for (let page = 1; page <= 20; page++) {
+    const { data, error } = await supabase.auth.admin.listUsers({ page, perPage: 200 });
+    if (error) throw error;
+    const match = data.users.find(u => u.email?.toLowerCase() === target);
+    if (match) return match;
+    if (data.users.length < 200) break;
+  }
+  return null;
+}
+
+async function getOrCreateAuthUser(supabase, email, password) {
+  const existing = await findUserByEmail(supabase, email);
+  if (existing) {
+    console.log(`Found existing auth user for ${email} (${existing.id}) — leaving their password unchanged.`);
+    return existing;
+  }
+  const { data, error } = await supabase.auth.admin.createUser({ email, password, email_confirm: true });
+  if (error) throw error;
+  return data.user;
+}
 
 function readJSON(name) {
   const path = `${SCRATCH}/${name}`;
@@ -116,6 +143,12 @@ async function main() {
   const foodCount = await upsertFoodsCatalog(supabase);
   console.log(`Upserted ${foodCount} foods into the legacy shopping-list catalog.`);
 
+  let authUser = null;
+  if (args.password) {
+    authUser = await getOrCreateAuthUser(supabase, EXPECTED_EMAIL, args.password);
+    console.log(`Auth user: ${authUser.id} <${EXPECTED_EMAIL}>`);
+  }
+
   const { data: profile, error: profileErr } = await supabase
     .from("profiles").upsert({
       kit_code: KIT_CODE, expected_email: EXPECTED_EMAIL, full_name: CLIENT_NAME, language: "en",
@@ -124,10 +157,18 @@ async function main() {
       diversity_max: doctor.headline_metrics.find(m => m.metric_id === "diversity")?.scale_max || 10,
       wellness_index: (doctor.headline_metrics.find(m => m.metric_id === "wellness_index")?.value_text || "").toLowerCase().startsWith("good") ? "good" : "fair",
       f_b_ratio: doctor.headline_metrics.find(m => m.metric_id === "fb_ratio")?.value,
+      ...(authUser ? { user_id: authUser.id, claimed_at: new Date().toISOString() } : {}),
     }, { onConflict: "kit_code" }).select().single();
   if (profileErr) throw profileErr;
   const profileId = profile.id;
   console.log(`Profile: ${profileId}`);
+
+  if (authUser) {
+    const { error: clientSyncErr } = await supabase
+      .from("clients").update({ auth_user_id: authUser.id }).eq("legacy_profile_id", profileId);
+    if (clientSyncErr) throw clientSyncErr;
+    console.log(`Synced v2 clients.auth_user_id for profile ${profileId} -> ${authUser.id}`);
+  }
 
   // ---- gut_scores (13 panel scores + 9 key bacteria) ----
   await supabase.from("gut_scores").delete().eq("profile_id", profileId);
@@ -228,7 +269,12 @@ async function main() {
   console.log(`  Client:   ${CLIENT_NAME}`);
   console.log(`  Kit:      ${KIT_CODE}`);
   console.log(`  Email:    ${EXPECTED_EMAIL}${args.email ? "" : "  <-- PLACEHOLDER, update before the client tries to claim"}`);
-  console.log(`\nThe client can now sign up in the app and claim this kit with code ${KIT_CODE} + the email above.`);
+  if (authUser) {
+    console.log(`  Password: ${args.password}`);
+    console.log(`\nReady to use — sign in at the login screen with the email and password above. No claim step needed.`);
+  } else {
+    console.log(`\nThe client can now sign up in the app and claim this kit with code ${KIT_CODE} + the email above.`);
+  }
 }
 
 main().catch(err => {
