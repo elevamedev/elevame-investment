@@ -178,6 +178,14 @@ alter table foods add column if not exists image_url text;
 alter table foods add column if not exists family text;
 alter table foods add column if not exists common_in_spain boolean not null default true;
 alter table foods add column if not exists use_in_plans boolean not null default true;
+-- The v1 catalog only ever held produce/grains/dairy/nuts/herbs (the
+-- shopping-list groups the 6-week plan needs). The real report's food
+-- list spans categories that enum never covered (meat, fish, drinks,
+-- ...) — relax both to nullable so new v2-sourced foods can omit them
+-- rather than being force-fit into the wrong legacy bucket. Existing
+-- rows and the check constraint's allowed values are untouched.
+alter table foods alter column category drop not null;
+alter table foods alter column score drop not null;
 
 create table if not exists compound_groups (id text primary key, name_en text not null, name_es text);
 alter table compound_groups enable row level security;
