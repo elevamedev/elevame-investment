@@ -201,7 +201,7 @@ function AuthenticatedApp() {
     );
   }
   if (!data.profile) {
-    return <ClaimKitView t={t} lang={claimLang} setLang={setClaimLang} onClaimed={data.refetch} />;
+    return <ClaimKitView t={t} lang={claimLang} setLang={setClaimLang} onClaimed={data.refetch} debugUserId={user.id} />;
   }
   return <AppShell data={data} user={user} />;
 }
