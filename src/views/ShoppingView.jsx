@@ -10,14 +10,19 @@ export default function ShoppingView({ lang, t, phases, phaseIdx, setPhaseIdx, c
   const phase = phases[phaseIdx];
   const grocery = useMemo(() => groceryFor(phase), [phase]);
   const phaseChecks = checks[phase.id] || {};
+  const allIds = useMemo(() => CATEGORY_ORDER.flatMap(cat => grocery[cat]), [grocery]);
+  const checkedCount = allIds.filter(id => phaseChecks[id]).length;
 
   return (
     <div className="px-4 pt-4 pb-24">
       <PhaseTabs lang={lang} phases={phases} phaseIdx={phaseIdx} onSelect={setPhaseIdx} />
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-1">
         <div className="font-semibold" style={{ color: C.text }}>{t.groceryListFor(phase.weeks[lang])}</div>
-        <button onClick={() => { if (window.confirm(t.confirmResetList)) resetPhase(phase.id); }} className="text-xs font-medium" style={{ color: C.purple }}>{t.reset}</button>
+        <button onClick={() => { if (window.confirm(t.confirmResetList)) resetPhase(phase.id); }} className="text-xs font-medium py-1" style={{ color: C.purple }}>{t.reset}</button>
       </div>
+      {allIds.length > 0 && (
+        <div className="text-xs mb-4" style={{ color: C.textSoft }}>{t.checkedOfTotal(checkedCount, allIds.length)}</div>
+      )}
       {CATEGORY_ORDER.map(cat => {
         const ids = grocery[cat].slice().sort((a, b) => foodName(a, lang).localeCompare(foodName(b, lang)));
         if (ids.length === 0) return null;
