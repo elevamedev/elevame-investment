@@ -439,4 +439,111 @@ errors on any of them.
 
 ---
 
-<!-- Cycle 6 appends below as it runs. -->
+## Cycle 6 — overnight refinement, pass 3 of 3 (FINAL): color-contrast audit
+
+### Review of passes 1-2 (Cycle 3 and Cycle 5)
+
+Re-checked both prior passes' changes for regressions: the rebrand
+(`theme.js`, font) and copy fix from pass 1 are intact; the tap-target,
+keyboard-escape, jump-nav and shopping-progress changes from pass 2 are
+intact and still build/lint clean. No regressions found.
+
+### Audit findings this pass
+
+This was the last pass, so the brief was to prioritize anything that
+would visibly embarrass the app in front of a real client. Did a
+systematic sweep rather than more spot-checks:
+
+1. **Translation completeness** — wrote a script that recursively diffs
+   every key in `STRINGS.en` against `STRINGS.es`: **0 missing in either
+   direction.** Also checked every bilingual data file
+   (`scoreDetails.js`, `scoreReferenceRanges.js`, `screeningTemplate.js`,
+   `similarProfilesTemplate.js`, `gutScoresTemplate.js`) for `{en, es}`
+   pairs where the two strings are identical (a common sign of
+   copy-pasted, forgotten-to-translate text). Found 41 "identical"
+   pairs — all of them Latin binomial organism/genus names
+   (*Clostridium difficile*, *Akkermansia*, etc.), which are correctly
+   identical in English and Spanish by scientific convention. No actual
+   untranslated copy found.
+2. **Color contrast — the real finding this pass.** Computed actual
+   WCAG contrast ratios for the full palette (not eyeballed) and found
+   a systemic, repeated bug: several places use a semantic color
+   (`C.blue`, `C.amber`, `C.sage`, `C.red`) as small/medium **text**
+   color directly, and four of those combinations fail WCAG AA
+   (4.5:1 for normal text):
+   - `C.blue` (#42a2fd) on white: **2.69:1** — the brand blue is a
+     light, vivid blue that reads great as a background tint or icon
+     but is too light for text. (Worth noting: this isn't a rebrand
+     regression — the color it replaced, the old teal #1fb6b6, was
+     *also* failing at 2.49:1. This is the first time contrast was
+     actually measured rather than eyeballed.)
+   - `C.amber` (#e3a95e) on white: **2.08:1** — the worst offender.
+   - `C.sage` (#7fae7a) on white: **2.55:1**.
+   - `C.red` (#e2574c) on white: **3.68:1** — passes the lenient
+     "large text" bar but fails the 4.5:1 normal-text bar most of its
+     uses need.
+   This pattern shows up in the single most-seen component in the
+   app — **`ScorePill`**, rendered next to every food everywhere
+   (today's meals, the full plan, the shopping list, the food
+   search) — plus the score "Strength" tag, the Similar Profile
+   Patterns percentage rings, the screening category icons, and both
+   the login and full-page error messages.
+
+### Implemented this cycle
+
+- **New WCAG-safe text variants** in `theme.js`: `blueText` (#0275e1,
+  4.53:1), `amberText` (#a5691d, 4.53:1), `redText` (#dc3629, 4.56:1),
+  `sageText` (#527f4d, 4.66:1) — darkened versions of each brand/status
+  color that stay recognizably "that color" but pass AA for text. The
+  original colors are untouched and still used for backgrounds,
+  borders, dots and decorative gradients, where contrast rules don't
+  apply the same way.
+- **`scoreTextColor(score)`** added alongside the existing
+  `scoreColor(score)` in `theme.js`; `ScorePill.jsx` now uses it for the
+  visible number while keeping the original color for the tinted
+  background/border.
+- **`TAGS` in `gutScoresTemplate.js`** gained a `textColor` field per
+  tag (`focus`/`onTrack` were already safe; `strength` now uses
+  `sageText`). `ScoreRow.jsx` and `ScoreDetailSheet.jsx` updated to use
+  it for the value number and tag badge text.
+- **`SimilarProfilesReport.jsx`**: the percentage inside each ring now
+  uses the safe text variant; the ring's conic-gradient stroke keeps
+  the original brighter color.
+- **`ScreeningReport.jsx`**: the Detected/Not Detected pill text and the
+  category header shield icons now use the safe variants.
+- **Login and full-page load error messages** (`LoginView.jsx`,
+  `App.jsx`) now use `redText` instead of raw `red`.
+- **Icon-contrast touch-ups** for consistency: the Home screen's
+  milestone/shopping banner icons and the milestone "done" checkmark
+  now use the safe variants too (icons technically need a more lenient
+  3:1, but several were failing even that).
+
+Verified with `npm run build` (clean), `npx eslint .` (clean, same 3
+pre-existing warnings), and a headless screenshot comparing before/after
+on a food list, the gut scores, the Similar Profile Patterns rings, and
+the screening categories — the darker colors read as *more* premium and
+legible, not washed out; nothing regressed visually.
+
+### Explicitly NOT changed — flagged for the user, not touched
+
+Nothing scientific was touched this run (the hard rule held across all
+3 passes): no gut score values, food scores, bacteria data, or reference
+ranges were altered — only how existing values are *rendered* (color
+choice, labels, navigation, tap targets). One thing worth a conscious
+decision from the user, not acted on: the brand spec is just
+purple/blue/white/black, and the blue specifically (#42a2fd) fails text
+contrast — this cycle worked around it with a darker text-only variant
+rather than changing the brand blue itself, since that's a brand
+decision, not a bug fix. If a single consistent blue everywhere (text
+included) matters more than hitting exactly #42a2fd, that's worth a
+quick conversation.
+
+### Status: this is the last of the 3 requested overnight cycles
+
+Per the user's instructions, this autonomous run stops here. No further
+cycles are scheduled. See the chat message sent alongside this commit
+for the full across-all-3-passes summary.
+
+---
+
+<!-- Future cycles, if resumed by the user, append below. -->

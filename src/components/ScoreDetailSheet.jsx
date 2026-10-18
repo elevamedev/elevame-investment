@@ -34,8 +34,8 @@ export default function ScoreDetailSheet({ t, lang, item, onClose }) {
           </button>
         </div>
         <div className="flex items-center gap-2 mb-4">
-          <span className="text-2xl font-extrabold" style={{ color: tagInfo.color }}>{item.value}</span>
-          <span className="text-[11px] font-semibold px-1.5 py-0.5 rounded-full" style={{ background: tagInfo.color + "1c", color: tagInfo.color }}>
+          <span className="text-2xl font-extrabold" style={{ color: tagInfo.textColor }}>{item.value}</span>
+          <span className="text-[11px] font-semibold px-1.5 py-0.5 rounded-full" style={{ background: tagInfo.color + "1c", color: tagInfo.textColor }}>
             {t.tags[item.tag]}
           </span>
         </div>
@@ -70,7 +70,7 @@ export default function ScoreDetailSheet({ t, lang, item, onClose }) {
           <div className="flex items-center gap-6 mb-5">
             <div>
               <div className="text-[10px] font-medium mb-0.5" style={{ color: C.textSoft }}>{t.legendYou}</div>
-              <div className="text-xl font-extrabold" style={{ color: tagInfo.color }}>{item.value}</div>
+              <div className="text-xl font-extrabold" style={{ color: tagInfo.textColor }}>{item.value}</div>
             </div>
             {item.avg != null && (
               <div>

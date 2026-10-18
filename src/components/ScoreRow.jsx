@@ -11,8 +11,8 @@ export default function ScoreRow({ t, lang, item, onOpen }) {
       <div className="flex items-center justify-between mb-0.5">
         <span className="text-sm font-semibold" style={{ color: C.text }}>{item.label[lang]}</span>
         <div className="flex items-center gap-1.5">
-          <span className="text-sm font-bold" style={{ color: tagInfo.color }}>{item.value}</span>
-          <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full" style={{ background: tagInfo.color + "1c", color: tagInfo.color }}>
+          <span className="text-sm font-bold" style={{ color: tagInfo.textColor }}>{item.value}</span>
+          <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full" style={{ background: tagInfo.color + "1c", color: tagInfo.textColor }}>
             {t.tags[item.tag]}
           </span>
           <ChevronRight size={14} color={C.textSoft} />

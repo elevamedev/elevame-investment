@@ -27,7 +27,7 @@ export default function HomeView({ lang, t, startDate, setStartDate, planDay, ph
       {banners.map((b, i) => b.type === "milestone" ? (
         <button key={i} onClick={() => goToMilestone(b.milestone.id)} className="w-full text-left rounded-xl p-4 mb-3 flex items-center gap-3"
           style={{ background: C.blue + "17", border: `1px solid ${C.blue}55` }}>
-          <Activity size={18} color={C.blue} />
+          <Activity size={18} color={C.blueText} />
           <div className="flex-1">
             <div className="text-sm font-semibold" style={{ color: C.navy }}>{t.milestoneReady(b.milestone.label[lang])}</div>
             <div className="text-xs" style={{ color: C.textSoft }}>{t.milestoneSub}</div>
@@ -36,7 +36,7 @@ export default function HomeView({ lang, t, startDate, setStartDate, planDay, ph
       ) : (
         <button key={i} onClick={() => goToShopping(b.phaseId)} className="w-full text-left rounded-xl p-4 mb-3 flex items-center gap-3"
           style={{ background: C.amber + "1c", border: `1px solid ${C.amber}66` }}>
-          <ShoppingCart size={18} color={C.amber} />
+          <ShoppingCart size={18} color={C.amberText} />
           <div className="flex-1">
             <div className="text-sm font-semibold" style={{ color: C.navy }}>{t.newPhaseBanner}</div>
             <div className="text-xs" style={{ color: C.textSoft }}>{t.newPhaseSub}</div>
