@@ -64,7 +64,7 @@ export const FOOD_CATEGORIES = [
   { id: "oils_fats", name_en: "Oil and Fats", name_es: "Aceites y Grasas", sort_order: 8, shopping_list_group: null },
   { id: "nuts_seeds", name_en: "Nut and Seeds", name_es: "Frutos Secos y Semillas", sort_order: 9, shopping_list_group: "nuts" },
   { id: "drinks", name_en: "Drinks", name_es: "Bebidas", sort_order: 10, shopping_list_group: null },
-  { id: "herbs_spices_sauces", name_en: "Herb/Spice and Sauces", name_es: "Hierbas, Especias y Salsas", sort_order: 11, shopping_list_group: "herbs" },
+  { id: "herbs_spices_sauces", name_en: "Herb, Spice and Sauces", name_es: "Hierbas, Especias y Salsas", sort_order: 11, shopping_list_group: "herbs" },
   { id: "supplements", name_en: "Supplements", name_es: "Suplementos", sort_order: 12, shopping_list_group: null },
   { id: "others", name_en: "Others", name_es: "Otros", sort_order: 13, shopping_list_group: null },
 ];
