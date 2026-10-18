@@ -89,6 +89,18 @@ const EMPTY = {
   milestones: {},
 };
 
+/**
+ * Loads everything for the signed-in client, keyed off their auth
+ * user id. A `profiles` row only exists once the client has claimed
+ * a kit (see ClaimKitView) — until then this resolves with
+ * `profile: null` and no error, which App.jsx treats as "show the
+ * claim screen," not a failure.
+ *
+ * Every child table (gut_scores, plan_*, shopping_checks, ...)
+ * stores profiles.id (an internal id), not the auth user id, so
+ * every read/write below goes through `profile.id` once it's known
+ * — never the raw `userId` argument past the initial profile lookup.
+ */
 export function useClientData(userId) {
   const [state, setState] = useState(EMPTY);
   const [loading, setLoading] = useState(true);
@@ -110,8 +122,17 @@ export function useClientData(userId) {
     setLoading(true);
     setError(null);
     try {
+      const { data: profile, error: profileErr } = await supabase
+        .from("profiles").select("*").eq("user_id", userId).maybeSingle();
+      if (profileErr) throw profileErr;
+
+      if (!profile) {
+        setState(EMPTY);
+        return;
+      }
+
+      const profileId = profile.id;
       const [
-        { data: profile, error: profileErr },
         { data: phaseRows, error: phasesErr },
         { data: scoreRows, error: scoresErr },
         { data: screeningRows, error: screeningErr },
@@ -120,16 +141,14 @@ export function useClientData(userId) {
         { data: entryRows, error: entriesErr },
         { data: milestoneRows, error: milestonesErr },
       ] = await Promise.all([
-        supabase.from("profiles").select("*").eq("id", userId).single(),
-        supabase.from("plan_phases").select("*").eq("profile_id", userId),
-        supabase.from("gut_scores").select("*").eq("profile_id", userId),
-        supabase.from("screening_findings").select("*").eq("profile_id", userId),
-        supabase.from("similar_profiles").select("*").eq("profile_id", userId),
-        supabase.from("shopping_checks").select("*").eq("profile_id", userId),
-        supabase.from("tracker_entries").select("*").eq("profile_id", userId).order("date"),
-        supabase.from("milestones").select("*").eq("profile_id", userId),
+        supabase.from("plan_phases").select("*").eq("profile_id", profileId),
+        supabase.from("gut_scores").select("*").eq("profile_id", profileId),
+        supabase.from("screening_findings").select("*").eq("profile_id", profileId),
+        supabase.from("similar_profiles").select("*").eq("profile_id", profileId),
+        supabase.from("shopping_checks").select("*").eq("profile_id", profileId),
+        supabase.from("tracker_entries").select("*").eq("profile_id", profileId).order("date"),
+        supabase.from("milestones").select("*").eq("profile_id", profileId),
       ]);
-      if (profileErr) throw profileErr;
       if (phasesErr) throw phasesErr;
       if (scoresErr) throw scoresErr;
       if (screeningErr) throw screeningErr;
@@ -183,12 +202,16 @@ export function useClientData(userId) {
   useEffect(() => { load(); }, [load]);
 
   async function updateProfile(patch) {
-    const { data, error } = await supabase.from("profiles").update(patch).eq("id", userId).select().single();
+    const profileId = state.profile?.id;
+    if (!profileId) return;
+    const { data, error } = await supabase.from("profiles").update(patch).eq("id", profileId).select().single();
     if (error) { reportSaveError(error); return; }
     setState(s => ({ ...s, profile: data }));
   }
 
   async function toggleShoppingCheck(phaseKey, foodId) {
+    const profileId = state.profile?.id;
+    if (!profileId) return;
     const isChecked = !!state.checks[phaseKey]?.[foodId];
     const next = !isChecked;
     setState(s => {
@@ -197,19 +220,23 @@ export function useClientData(userId) {
       return { ...s, checks: { ...s.checks, [phaseKey]: phaseChecks } };
     });
     const { error } = await supabase.from("shopping_checks").upsert({
-      profile_id: userId, phase_key: phaseKey, food_id: foodId, checked: next, updated_at: new Date().toISOString(),
+      profile_id: profileId, phase_key: phaseKey, food_id: foodId, checked: next, updated_at: new Date().toISOString(),
     });
     if (error) reportSaveError(error);
   }
 
   async function resetShoppingPhase(phaseKey) {
+    const profileId = state.profile?.id;
+    if (!profileId) return;
     setState(s => ({ ...s, checks: { ...s.checks, [phaseKey]: {} } }));
-    const { error } = await supabase.from("shopping_checks").delete().eq("profile_id", userId).eq("phase_key", phaseKey);
+    const { error } = await supabase.from("shopping_checks").delete().eq("profile_id", profileId).eq("phase_key", phaseKey);
     if (error) reportSaveError(error);
   }
 
   async function saveTrackerEntry(date, form) {
-    const row = { profile_id: userId, date, ...form, updated_at: new Date().toISOString() };
+    const profileId = state.profile?.id;
+    if (!profileId) return;
+    const row = { profile_id: profileId, date, ...form, updated_at: new Date().toISOString() };
     const { data, error } = await supabase.from("tracker_entries").upsert(row).select().single();
     if (error) { reportSaveError(error); return; }
     setState(s => ({
@@ -219,8 +246,10 @@ export function useClientData(userId) {
   }
 
   async function saveMilestoneEntry(milestoneId, form) {
+    const profileId = state.profile?.id;
+    if (!profileId) return;
     const row = {
-      profile_id: userId, milestone_id: milestoneId, date: new Date().toISOString().slice(0, 10),
+      profile_id: profileId, milestone_id: milestoneId, date: new Date().toISOString().slice(0, 10),
       ...form, updated_at: new Date().toISOString(),
     };
     const { data, error } = await supabase.from("milestones").upsert(row).select().single();

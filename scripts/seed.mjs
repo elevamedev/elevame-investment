@@ -1,17 +1,22 @@
 #!/usr/bin/env node
 /**
- * Seed a client into Supabase: creates their login (Supabase Auth),
- * their profile row, and assigns them the default 6-week plan +
- * default gut scores from src/data. Safe to re-run for the same
- * email — it upserts the profile/foods/gut-scores and replaces the
- * plan rows rather than duplicating them.
+ * Create a client account staff manage end-to-end: a Supabase Auth
+ * login AND a profile already linked to it (claimed_at set
+ * immediately), with the default gut scores + 6-week plan. Use this
+ * when you're setting a client up directly rather than having them
+ * self-register — for the self-serve flow (client signs up, then
+ * links their own kit code), use scripts/registerKit.mjs instead.
+ *
+ * Safe to re-run for the same email — it upserts the profile (keyed
+ * by kit code) and replaces the plan/gut-score rows rather than
+ * duplicating them.
  *
  * Requires SUPABASE_SERVICE_ROLE_KEY (never expose this to the
  * browser) and VITE_SUPABASE_URL in your .env file.
  *
  * Usage:
  *   node scripts/seed.mjs --email pascale@example.com --name "Pascale Debain" --kit ELVMHB4178
- *   node scripts/seed.mjs --email pascale@example.com --name "Pascale Debain" --password "Sup3rSecret!" --lang es
+ *   node scripts/seed.mjs --email pascale@example.com --name "Pascale Debain" --kit ELVMHB4178 --password "Sup3rSecret!" --lang es
  *
  * If --password is omitted, a random one is generated and printed
  * once at the end — hand it to the client (or have them reset it).
@@ -21,18 +26,13 @@ import { parseArgs } from "node:util";
 import { randomBytes } from "node:crypto";
 import { createClient } from "@supabase/supabase-js";
 
-import { FOODS } from "../src/data/foods.js";
-import { PHASES } from "../src/data/planTemplate.js";
 import {
-  GUT_SCORES_DEFAULT,
-  KEY_BACTERIA_DEFAULT,
   MICROBIOME_AGE_DEFAULT,
   DIVERSITY_DEFAULT,
   WELLNESS_INDEX_DEFAULT,
   FB_RATIO_DEFAULT,
 } from "../src/data/gutScoresTemplate.js";
-import { SCREENING_DEFAULT } from "../src/data/screeningTemplate.js";
-import { SIMILAR_PROFILES_DEFAULT } from "../src/data/similarProfilesTemplate.js";
+import { upsertFoodsCatalog, seedGutScores, seedScreeningFindings, seedSimilarProfiles, seedPlan } from "./lib/provision.mjs";
 
 const { values: args } = parseArgs({
   options: {
@@ -45,8 +45,8 @@ const { values: args } = parseArgs({
   },
 });
 
-if (!args.email || !args.name) {
-  console.error("Usage: node scripts/seed.mjs --email you@example.com --name \"Client Name\" [--kit KITCODE] [--password ...] [--lang en|es] [--start-date YYYY-MM-DD]");
+if (!args.email || !args.name || !args.kit) {
+  console.error("Usage: node scripts/seed.mjs --email you@example.com --name \"Client Name\" --kit KITCODE [--password ...] [--lang en|es] [--start-date YYYY-MM-DD]");
   process.exit(1);
 }
 
@@ -93,159 +93,56 @@ async function getOrCreateUser(email, password) {
   return { user: data.user, generatedPassword: password ? null : generatedPassword };
 }
 
-async function upsertFoodsCatalog() {
-  const rows = Object.entries(FOODS).map(([id, f]) => ({
-    id, category: f.cat, score: f.score, name_en: f.en, name_es: f.es,
-  }));
-  const { error } = await supabase.from("foods").upsert(rows);
+async function upsertProfile(userId, { email, name, kit, lang, startDate }) {
+  const { data, error } = await supabase
+    .from("profiles")
+    .upsert(
+      {
+        user_id: userId,
+        kit_code: kit,
+        expected_email: email,
+        full_name: name,
+        language: lang,
+        plan_start_date: startDate,
+        microbiome_age: MICROBIOME_AGE_DEFAULT,
+        diversity_value: DIVERSITY_DEFAULT.value,
+        diversity_max: DIVERSITY_DEFAULT.max,
+        wellness_index: WELLNESS_INDEX_DEFAULT,
+        f_b_ratio: FB_RATIO_DEFAULT,
+        claimed_at: new Date().toISOString(),
+      },
+      { onConflict: "kit_code" }
+    )
+    .select()
+    .single();
   if (error) throw error;
-  console.log(`Upserted ${rows.length} foods into the shared catalog.`);
-}
-
-async function upsertProfile(userId, { name, kit, lang, startDate }) {
-  const { error } = await supabase.from("profiles").upsert({
-    id: userId,
-    full_name: name,
-    kit_code: kit || null,
-    language: lang,
-    plan_start_date: startDate,
-    microbiome_age: MICROBIOME_AGE_DEFAULT,
-    diversity_value: DIVERSITY_DEFAULT.value,
-    diversity_max: DIVERSITY_DEFAULT.max,
-    wellness_index: WELLNESS_INDEX_DEFAULT,
-    f_b_ratio: FB_RATIO_DEFAULT,
-  });
-  if (error) throw error;
-  console.log(`Profile saved for ${name}.`);
-}
-
-async function seedGutScores(userId) {
-  await supabase.from("gut_scores").delete().eq("profile_id", userId);
-  const rows = [
-    ...GUT_SCORES_DEFAULT.map((s, i) => ({ ...s, category: "gut_score", sortOrder: i })),
-    ...KEY_BACTERIA_DEFAULT.map((s, i) => ({ ...s, category: "key_bacteria", sortOrder: i })),
-  ].map(s => ({
-    profile_id: userId,
-    category: s.category,
-    key: s.key,
-    label_en: s.label.en,
-    label_es: s.label.es,
-    value: s.value,
-    avg: s.avg,
-    tag: s.tag,
-    note_en: s.note.en,
-    note_es: s.note.es,
-    sort_order: s.sortOrder,
-  }));
-  const { error } = await supabase.from("gut_scores").insert(rows);
-  if (error) throw error;
-  console.log(`Seeded ${rows.length} gut score rows.`);
-}
-
-async function seedScreeningFindings(userId) {
-  await supabase.from("screening_findings").delete().eq("profile_id", userId);
-  const rows = SCREENING_DEFAULT.map((f, i) => ({
-    profile_id: userId,
-    category: f.category,
-    key: f.key,
-    name_en: f.name.en,
-    name_es: f.name.es,
-    status: f.status,
-    abundance_pct: f.abundance_pct ?? null,
-    note_en: f.note?.en ?? null,
-    note_es: f.note?.es ?? null,
-    sort_order: i,
-  }));
-  const { error } = await supabase.from("screening_findings").insert(rows);
-  if (error) throw error;
-  console.log(`Seeded ${rows.length} screening finding rows.`);
-}
-
-async function seedSimilarProfiles(userId) {
-  await supabase.from("similar_profiles").delete().eq("profile_id", userId);
-  const rows = SIMILAR_PROFILES_DEFAULT.map((p, i) => ({
-    profile_id: userId,
-    key: p.key,
-    label_en: p.label.en,
-    label_es: p.label.es,
-    client_pct: p.client_pct,
-    baseline_pct: p.baseline_pct,
-    sort_order: i,
-  }));
-  const { error } = await supabase.from("similar_profiles").insert(rows);
-  if (error) throw error;
-  console.log(`Seeded ${rows.length} similar-profile pattern rows.`);
-}
-
-async function seedPlan(userId) {
-  // Deleting plan_phases cascades to plan_days and plan_meals.
-  await supabase.from("plan_phases").delete().eq("profile_id", userId);
-
-  for (let i = 0; i < PHASES.length; i++) {
-    const phase = PHASES[i];
-    const { data: phaseRow, error: phaseErr } = await supabase
-      .from("plan_phases")
-      .insert({
-        profile_id: userId,
-        phase_index: i,
-        phase_key: phase.id,
-        weeks_en: phase.weeks.en,
-        weeks_es: phase.weeks.es,
-        subtitle_en: phase.subtitle.en,
-        subtitle_es: phase.subtitle.es,
-        blurb_en: phase.blurb.en,
-        blurb_es: phase.blurb.es,
-        start_day: i * 14 + 1,
-      })
-      .select()
-      .single();
-    if (phaseErr) throw phaseErr;
-
-    for (let j = 0; j < phase.days.length; j++) {
-      const day = phase.days[j];
-      const { data: dayRow, error: dayErr } = await supabase
-        .from("plan_days")
-        .insert({
-          phase_id: phaseRow.id,
-          day_index: j,
-          tip_en: day.tip?.en ?? null,
-          tip_es: day.tip?.es ?? null,
-        })
-        .select()
-        .single();
-      if (dayErr) throw dayErr;
-
-      const mealRows = day.meals.map((m, k) => ({
-        day_id: dayRow.id,
-        meal_order: k,
-        label_key: m.labelKey,
-        dish_en: m.dish.en,
-        dish_es: m.dish.es,
-        desc_en: m.desc?.en ?? null,
-        desc_es: m.desc?.es ?? null,
-        foods: m.foods,
-      }));
-      const { error: mealErr } = await supabase.from("plan_meals").insert(mealRows);
-      if (mealErr) throw mealErr;
-    }
-  }
-  console.log(`Seeded ${PHASES.length} phases of the default 6-week plan.`);
+  console.log(`Profile saved for ${name} (kit ${kit}).`);
+  return data;
 }
 
 async function main() {
   const startDate = args["start-date"] || new Date().toISOString().slice(0, 10);
 
-  await upsertFoodsCatalog();
+  const foodCount = await upsertFoodsCatalog(supabase);
+  console.log(`Upserted ${foodCount} foods into the shared catalog.`);
 
   const { user, generatedPassword } = await getOrCreateUser(args.email, args.password);
-  await upsertProfile(user.id, { name: args.name, kit: args.kit, lang: args.lang, startDate });
-  await seedGutScores(user.id);
-  await seedScreeningFindings(user.id);
-  await seedSimilarProfiles(user.id);
-  await seedPlan(user.id);
+  const profile = await upsertProfile(user.id, {
+    email: args.email, name: args.name, kit: args.kit, lang: args.lang, startDate,
+  });
+
+  const scoreCount = await seedGutScores(supabase, profile.id);
+  console.log(`Seeded ${scoreCount} gut score rows.`);
+  const screeningCount = await seedScreeningFindings(supabase, profile.id);
+  console.log(`Seeded ${screeningCount} screening finding rows.`);
+  const similarProfilesCount = await seedSimilarProfiles(supabase, profile.id);
+  console.log(`Seeded ${similarProfilesCount} similar-profile pattern rows.`);
+  const phaseCount = await seedPlan(supabase, profile.id);
+  console.log(`Seeded ${phaseCount} phases of the default 6-week plan.`);
 
   console.log("\nDone.");
   console.log(`  Client:   ${args.name} <${args.email}>`);
+  console.log(`  Kit:      ${args.kit}`);
   console.log(`  User id:  ${user.id}`);
   if (generatedPassword) {
     console.log(`  Password: ${generatedPassword}  (share this with the client securely — it will not be shown again)`);

@@ -7,6 +7,8 @@ import { PHASES as PHASES_DEFAULT, homeBanners } from "./data/planTemplate.js";
 import { useAuth } from "./context/AuthContext.jsx";
 import { useClientData } from "./hooks/useClientData.js";
 import LoginView from "./views/LoginView.jsx";
+import SignUpView from "./views/SignUpView.jsx";
+import ClaimKitView from "./views/ClaimKitView.jsx";
 import HomeView from "./views/HomeView.jsx";
 import PlanView from "./views/PlanView.jsx";
 import ShoppingView from "./views/ShoppingView.jsx";
@@ -18,12 +20,12 @@ import ToastStack from "./components/ToastStack.jsx";
 const TAB_ICONS = { home: Home, scores: Gauge, plan: CalendarDays, shopping: ShoppingCart, tracker: Activity, foods: Search };
 const TAB_ORDER = ["home", "scores", "plan", "shopping", "tracker", "foods"];
 
-function AppShell() {
-  const { user, signOut } = useAuth();
+function AppShell({ data }) {
+  const { signOut } = useAuth();
   const {
-    loading, error, profile, phases, gutScores, keyBacteria, screeningFindings, similarProfiles, checks, entries, milestones,
+    profile, phases, gutScores, keyBacteria, screeningFindings, similarProfiles, checks, entries, milestones,
     updateProfile, toggleShoppingCheck, resetShoppingPhase, saveTrackerEntry, saveMilestoneEntry,
-  } = useClientData(user.id);
+  } = data;
 
   const [tab, setTab] = useState("home");
   const [phaseIdx, setPhaseIdx] = useState(0);
@@ -33,7 +35,7 @@ function AppShell() {
   const lang = profile?.language || "en";
   const t = STRINGS[lang];
   // Falls back to the built-in 6-week template if this client has no
-  // personalised plan rows yet (e.g. the seed script hasn't run for them).
+  // personalised plan rows yet (e.g. registered without one).
   const effectivePhases = phases.length ? phases : PHASES_DEFAULT;
 
   const startDate = profile?.plan_start_date || new Date().toISOString().slice(0, 10);
@@ -59,21 +61,6 @@ function AppShell() {
   }
   function setLang(l) { updateProfile({ language: l }); }
   function setStartDate(d) { updateProfile({ plan_start_date: d }); }
-
-  if (loading) {
-    return (
-      <div style={{ background: C.bg, minHeight: "100vh", color: C.textSoft }} className="max-w-md mx-auto flex items-center justify-center text-sm">
-        {t.loading}
-      </div>
-    );
-  }
-  if (error) {
-    return (
-      <div style={{ background: C.bg, minHeight: "100vh", color: C.redText }} className="max-w-md mx-auto flex items-center justify-center text-sm px-6 text-center">
-        {t.loadError}
-      </div>
-    );
-  }
 
   return (
     <div style={{ fontFamily: "'Inter', -apple-system, sans-serif", background: C.bg, minHeight: "100vh" }} className="max-w-md mx-auto relative">
@@ -144,9 +131,36 @@ function AppShell() {
   );
 }
 
+function AuthenticatedApp() {
+  const { user } = useAuth();
+  const data = useClientData(user.id);
+  const [claimLang, setClaimLang] = useState("en");
+  const t = STRINGS[claimLang];
+
+  if (data.loading) {
+    return (
+      <div style={{ background: C.bg, minHeight: "100vh", color: C.textSoft }} className="max-w-md mx-auto flex items-center justify-center text-sm">
+        {t.loading}
+      </div>
+    );
+  }
+  if (data.error) {
+    return (
+      <div style={{ background: C.bg, minHeight: "100vh", color: C.redText }} className="max-w-md mx-auto flex items-center justify-center text-sm px-6 text-center">
+        {t.loadError}
+      </div>
+    );
+  }
+  if (!data.profile) {
+    return <ClaimKitView t={t} lang={claimLang} setLang={setClaimLang} onClaimed={data.refetch} />;
+  }
+  return <AppShell data={data} />;
+}
+
 export default function App() {
   const { user, loading } = useAuth();
-  const [loginLang, setLoginLang] = useState("en");
+  const [authScreen, setAuthScreen] = useState("login");
+  const [authLang, setAuthLang] = useState("en");
 
   return (
     <>
@@ -154,9 +168,13 @@ export default function App() {
       {loading ? (
         <div style={{ background: C.bg, minHeight: "100vh" }} className="max-w-md mx-auto flex items-center justify-center text-sm" />
       ) : !user ? (
-        <LoginView t={STRINGS[loginLang]} lang={loginLang} setLang={setLoginLang} />
+        authScreen === "signup" ? (
+          <SignUpView t={STRINGS[authLang]} lang={authLang} setLang={setAuthLang} onSwitchToSignIn={() => setAuthScreen("login")} />
+        ) : (
+          <LoginView t={STRINGS[authLang]} lang={authLang} setLang={setAuthLang} onSwitchToSignUp={() => setAuthScreen("signup")} />
+        )
       ) : (
-        <AppShell />
+        <AuthenticatedApp />
       )}
     </>
   );
