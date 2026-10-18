@@ -58,7 +58,7 @@ export function useAdminTestList() {
 }
 
 export function useAdminTestReview(testId) {
-  const [state, setState] = useState({ issues: [], insights: [], flags: [], conditionResults: [], themes: [], conditions: [], foods: [] });
+  const [state, setState] = useState({ issues: [], insights: [], flags: [], conditionResults: [], themes: [], conditions: [], foods: [], taxaById: {} });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -75,6 +75,7 @@ export function useAdminTestReview(testId) {
         { data: themes, error: e5 },
         { data: conditions, error: e6 },
         { data: foods, error: e7 },
+        { data: taxa, error: e8 },
       ] = await Promise.all([
         supabase.from("data_quality_issues").select("*").eq("test_id", testId).order("created_at"),
         supabase.from("insights").select("*").eq("test_id", testId).order("created_at"),
@@ -83,10 +84,12 @@ export function useAdminTestReview(testId) {
         supabase.from("themes").select("id,name_en").order("sort_order"),
         supabase.from("conditions").select("id,name_en,theme_id"),
         supabase.from("foods").select("id,name_en").order("name_en"),
+        supabase.from("taxa").select("id,name"),
       ]);
-      const err = e1 || e2 || e3 || e4 || e5 || e6 || e7;
+      const err = e1 || e2 || e3 || e4 || e5 || e6 || e7 || e8;
       if (err) throw err;
-      setState({ issues: issues || [], insights: insights || [], flags: flags || [], conditionResults: conditionResults || [], themes: themes || [], conditions: conditions || [], foods: foods || [] });
+      const taxaById = Object.fromEntries((taxa || []).map(t => [t.id, t.name]));
+      setState({ issues: issues || [], insights: insights || [], flags: flags || [], conditionResults: conditionResults || [], themes: themes || [], conditions: conditions || [], foods: foods || [], taxaById });
     } catch (e) {
       setError(e);
     } finally {

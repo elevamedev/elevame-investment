@@ -59,6 +59,14 @@ const STATUS_MAP = { "Not Detected": "not_detected", Low: "low", Normal: "normal
 // spanning two PDF pages, e.g. "30-31" for tma_conversion) instead of
 // a single integer — every `page` column here is a plain int, so
 // take the first number rather than letting the insert fail.
+function joinNames(names, lang) {
+  if (names.length === 0) return "";
+  if (names.length === 1) return names[0];
+  const last = names[names.length - 1];
+  const rest = names.slice(0, -1).join(", ");
+  return `${rest} ${lang === "es" ? "y" : "and"} ${last}`;
+}
+
 function toPageInt(value) {
   if (value == null) return null;
   if (typeof value === "number") return value;
@@ -543,9 +551,39 @@ async function main() {
       });
     }
   }
+  // ---- 23. Condition-risk insight DRAFTS (unapproved — these DO
+  // contain new interpretation, naming the specific bacteria behind
+  // each at-risk condition flag from the risk-analysis table, so
+  // unlike the block above they are NOT auto-approved. A client
+  // never sees these until a nutritionist reviews and approves them
+  // in the admin panel (insights_select_scoped RLS enforces this —
+  // approved=false is invisible to the client role regardless of
+  // what the app renders). ----
+  const draftRows = conditionResultRows
+    .filter(cr => cr.at_risk && cr.flagged_taxon_ids.length > 0)
+    .map(cr => {
+      const condition = CONDITIONS.find(c => c.id === cr.condition_id);
+      if (!condition) return null;
+      const names = cr.flagged_taxon_ids.map(id => taxaMap.get(id)?.name || id);
+      const namesEn = joinNames(names, "en");
+      const namesEs = joinNames(names, "es");
+      const factorEn = names.length > 1 ? "factors" : "a factor";
+      const factorEs = names.length > 1 ? "factores" : "un factor";
+      return {
+        test_id: testId, theme_id: condition.theme_id, status: "watch",
+        title_en: condition.name_en, title_es: condition.name_es,
+        client_text_en: `Your report flags ${namesEn} as ${factorEn} associated with your ${condition.name_en} risk flag.`,
+        client_text_es: `Tu informe señala ${namesEs} como ${factorEs} asociado${names.length > 1 ? "s" : ""} a tu indicador de riesgo de ${condition.name_es}.`,
+        linked_condition_ids: [cr.condition_id], linked_taxon_ids: cr.flagged_taxon_ids,
+        author: "ai", approved: false,
+      };
+    })
+    .filter(Boolean);
+  insightRows.push(...draftRows);
+
   const { error: insErr } = await supabase.from("insights").insert(insightRows);
   if (insErr) throw insErr;
-  console.log(`Insight drafts seeded (from already-given text only): ${insightRows.length}`);
+  console.log(`Insight drafts seeded: ${insightRows.length} total (${insightRows.length - draftRows.length} auto-approved from already-given text, ${draftRows.length} condition-risk drafts awaiting nutritionist review)`);
 
   console.log(`\nDone. test_id = ${testId}, client_id = ${clientId}, kit_id = ${kitId}`);
   console.log(`\nNOTE: no v1 profiles row was created by this script — run scripts/registerKitFromV2.mjs next to also create the v1 self-serve-claimable profile (gut_scores/screening_findings/similar_profiles/plan) so the client can actually sign in and see their report in the current app UI.`);
