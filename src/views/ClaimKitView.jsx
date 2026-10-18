@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { C } from "../theme.js";
 import { supabase } from "../lib/supabaseClient.js";
 import { useAuth } from "../context/AuthContext.jsx";
@@ -9,7 +9,27 @@ const ERROR_KEYS = {
   already_claimed: "errorAlreadyClaimed",
 };
 
-export default function ClaimKitView({ t, lang, setLang, onClaimed }) {
+// TEMPORARY — diagnosing a report of a user seeing this screen despite
+// their profile already being linked. Shows exactly what the browser's
+// session id is and what the same query App.jsx runs actually returns.
+// Remove once the mismatch is found.
+function DebugPanel({ userId }) {
+  const [result, setResult] = useState(null);
+  useEffect(() => {
+    if (!userId) return;
+    supabase.from("profiles").select("*").eq("user_id", userId).maybeSingle()
+      .then(({ data, error }) => setResult({ data, error }));
+  }, [userId]);
+  return (
+    <div className="rounded-xl p-3 mt-4 text-[11px]" style={{ background: "#fff3cd", border: "1px solid #ffe69c", color: "#000", wordBreak: "break-all" }}>
+      <div style={{ fontWeight: 700 }}>DEBUG (temporary)</div>
+      <div>browser session user.id: {userId || "(none)"}</div>
+      <div>profiles query result: {result ? JSON.stringify(result) : "loading..."}</div>
+    </div>
+  );
+}
+
+export default function ClaimKitView({ t, lang, setLang, onClaimed, debugUserId }) {
   const { signOut } = useAuth();
   const [kitCode, setKitCode] = useState("");
   const [email, setEmail] = useState("");
@@ -68,6 +88,8 @@ export default function ClaimKitView({ t, lang, setLang, onClaimed }) {
       <button type="button" onClick={signOut} className="text-center text-sm mt-5" style={{ color: C.textSoft }}>
         {t.login.signOut}
       </button>
+
+      <DebugPanel userId={debugUserId} />
     </div>
   );
 }
