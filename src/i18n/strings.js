@@ -3,7 +3,7 @@
 ============================================================ */
 export const STRINGS = {
   en: {
-    tabs: { home: "Home", plan: "Plan", shopping: "List", tracker: "Track", foods: "Foods", scores: "Scores" },
+    tabs: { home: "Home", plan: "Plan", shopping: "List", tracker: "Track", foods: "Foods", scores: "Scores", gut: "My gut", settings: "Settings" },
     meal: { breakfast: "Breakfast", lunch: "Lunch", dinner: "Dinner", snack: "Snack" },
     dayOf: n => `Day ${n} of 42`,
     todaysMeals: "Today's meals",
@@ -126,7 +126,7 @@ export const STRINGS = {
     },
   },
   es: {
-    tabs: { home: "Inicio", plan: "Plan", shopping: "Lista", tracker: "Seguimiento", foods: "Alimentos", scores: "Resultados" },
+    tabs: { home: "Inicio", plan: "Plan", shopping: "Lista", tracker: "Seguimiento", foods: "Alimentos", scores: "Resultados", gut: "Mi intestino", settings: "Ajustes" },
     meal: { breakfast: "Desayuno", lunch: "Comida", dinner: "Cena", snack: "Merienda" },
     dayOf: n => `Día ${n} de 42`,
     todaysMeals: "Comidas de hoy",
