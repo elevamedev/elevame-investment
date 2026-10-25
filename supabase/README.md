@@ -58,6 +58,27 @@ APP=/path/to/elevame-investment bash scripts/test_cycle14.sh
 python3 scripts/verify_seed_against_sources.py
 ```
 
+## Cutover: carrying v1 clients into v4 (Phase M)
+
+`migrations/20261024000003_migrate_v1_history.sql` is already in the
+chain above — it's a normal migration, not a separate step. It carries
+each v1 client's `tracker_entries` into `quick_checkins` and their
+`milestones` into milestone `symptom_checkins` with v4 names, linked to
+the test current at the time, and sets an initial `preferred_name` from
+the first word of the profile name. It's safe to re-run (a v4 answer
+for the same day always wins), and it's covered by the "v1 history"
+checks in `scripts/test_cycle14.sh` (already passing).
+
+What's left is operational, not code: at cutover, run the full
+migration chain (including this file) on staging, confirm there, then
+run it on production. Afterwards, staff should check each existing
+client's `preferred_name` (correct it where the first word of their
+full name isn't what they go by — e.g. "El Hachemi Abdelhak" defaults
+to "El") and confirm their current client's baseline phase check-in
+shows up correctly in "Digestion when you started" on their Gut lining
+page. Both of those need a live project/database this session doesn't
+have access to.
+
 ## Steps that need the live hosted Supabase project (dashboard or
 ## Management API access this session doesn't have)
 
