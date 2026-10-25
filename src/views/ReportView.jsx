@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { C } from "../theme.js";
 import { useReportV2 } from "../hooks/useReportV2.js";
 import { REPORT_COPY } from "./reportCopy.js";
@@ -17,10 +17,20 @@ function ThemeCard({ theme, lang, onOpen }) {
 
 // Themes with their own dedicated view navigate straight there
 // instead of through the generic ThemeDetailView.
-export default function ReportView({ lang, user, onGoToFoods, onOpenSupplements }) {
+export default function ReportView({ lang, user, onGoToFoods, onOpenSupplements, initialThemeId, onBackToInitialTheme }) {
   const data = useReportV2(user.id);
   const [openTheme, setOpenTheme] = useState(null);
   const cp = REPORT_COPY[lang] || REPORT_COPY.en;
+
+  // Supports /system/:theme as a real deep-link (brief 1.1's route
+  // table), reusing this view's existing data loading rather than
+  // duplicating it — ThemeDetailView itself gets rebuilt properly in
+  // Phase F; this just makes the URL work today.
+  useEffect(() => {
+    if (!initialThemeId || openTheme) return;
+    const match = data.themes.find(t => t.id === initialThemeId);
+    if (match) setOpenTheme(match);
+  }, [initialThemeId, data.themes, openTheme]);
 
   function openThemeCard(theme) {
     if (theme.id === "food" && onGoToFoods) return onGoToFoods();
@@ -39,7 +49,7 @@ export default function ReportView({ lang, user, onGoToFoods, onOpenSupplements 
   }
 
   if (openTheme) {
-    return <ThemeDetailView theme={openTheme} lang={lang} data={data} onBack={() => setOpenTheme(null)} />;
+    return <ThemeDetailView theme={openTheme} lang={lang} data={data} onBack={() => { setOpenTheme(null); onBackToInitialTheme?.(); }} />;
   }
 
   return (
