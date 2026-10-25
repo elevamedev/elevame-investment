@@ -3,6 +3,7 @@ import { ArrowLeft, Check, X, LogOut } from "lucide-react";
 import { C } from "../theme.js";
 import { useAuth } from "../context/AuthContext.jsx";
 import { useAdminTestList, useAdminTestReview } from "../hooks/useAdminData.js";
+import ReviewV4Panel from "./ReviewV4Panel.jsx";
 
 /**
  * Staff-only review panel. Rendered instead of the normal client
@@ -122,6 +123,8 @@ function AdminTestReview({ test, lang, onBack }) {
           </button>
         </div>
       </Card>
+
+      <ReviewV4Panel testId={test.id} lang={lang} />
 
       <SectionTitle>{c.dataQuality}</SectionTitle>
       <Card>
