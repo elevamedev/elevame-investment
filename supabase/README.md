@@ -46,6 +46,37 @@ Docker stack. It carries no client or project data.
    data layer is ready now so Phase D doesn't need a migration of its
    own for it.
 
+### A standing gap: the v4 screen tables have no seed pipeline here
+
+Steps 3-4 above populate the tables `seedReportV2.mjs` already knew
+about (the v2 data model this session built first: `themes`,
+`metrics`, `conditions`, `taxa`, `insights`, `food_scores`, …). Phase
+S's migrations added a second layer of tables the v4 screens actually
+read — `body_system_status`, `body_system_signals`, `signal_taxa`,
+`body_system_levers`, `body_system_lever_foods`, `report_texts`,
+`plan_meal_items`, `phase_habits`, `meal_logs`, `meal_swaps`, and more
+— and **nothing in this repo populates them**. They exist (schema is
+correct, verified against the brief's own acceptance suite — see
+"Local / CI" above) but hold zero rows for any real client.
+
+That pipeline is `elevame-redesign`'s own (`scripts/build_seed_v4.py`,
+operating on `data/enbiosis_portal/` and `data/knowledge/` — portal
+text this repo doesn't have and must never have). Its output
+(`data/seeds/elvmwb6271_v4_seed.sql`) is real client data and can
+never be copied here either. Getting a real client's v4-screen
+content live means running that pipeline's output against
+staging/production directly from `elevame-redesign` — an operational
+step, not a code change in this repo.
+
+**What this means for phases C through H**: each of those phases
+builds real, schema-correct UI and data-fetching code against these
+tables, verified with synthetic (non-client) data the same way
+[Phase R](https://github.com/elevamedev/elevame-investment/pull/8)
+was — but every such screen will show its empty/not-yet-reviewed
+state against the real database until the above seeding step runs.
+That's expected, not a bug in those PRs; this note is the one place
+it's explained instead of repeating it in each one.
+
 The full 158-check acceptance suite and the 200-value source
 comparison (`scripts/test_cycle14.sh`, `scripts/verify_seed_against_sources.py`
 in `elevamedev/elevame-redesign`) assert against one real client's
