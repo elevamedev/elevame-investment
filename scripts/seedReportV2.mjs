@@ -9,7 +9,10 @@
  * Reads (fixed paths — this script is for this one report only):
  *   doctor_report_extracted.json, user_report_extracted.json,
  *   diet_plan_extracted.json, food_names_es.json
- * from scripts/data/elvmwb6271/ (override with the SCRATCH env var).
+ * from ELEVAME_CLIENT_DATA_DIR/elvmwb6271/ (or override the whole path
+ * with SCRATCH). Real client data must never be committed to this repo
+ * (see .gitignore and DECISIONS.md, 2026-10-19) — point
+ * ELEVAME_CLIENT_DATA_DIR at a local, untracked copy instead.
  *
  * Requires SUPABASE_SERVICE_ROLE_KEY + VITE_SUPABASE_URL in .env.
  * Safe to re-run — every write is an upsert.
@@ -23,10 +26,20 @@ import { slugify } from "./lib/slug.mjs";
 import { seedThemes, seedMetrics, seedScreenPanels, seedFoodCategories, FOOD_CATEGORIES } from "./lib/catalogV2.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-// The extracted report JSON ships in the repo (scripts/data/elvmwb6271/)
-// so this script runs the same for anyone who clones it — SCRATCH only
-// needs overriding if you're re-running extraction for a different kit.
-const SCRATCH = process.env.SCRATCH || join(__dirname, "data/elvmwb6271");
+const SCRATCH =
+  process.env.SCRATCH ||
+  (process.env.ELEVAME_CLIENT_DATA_DIR && join(process.env.ELEVAME_CLIENT_DATA_DIR, "elvmwb6271")) ||
+  join(__dirname, "data/elvmwb6271");
+if (!existsSync(SCRATCH)) {
+  console.error(
+    `Client data directory not found: ${SCRATCH}\n` +
+      "Set ELEVAME_CLIENT_DATA_DIR to a local copy of the extracted report JSON " +
+      "(doctor_report_extracted.json, user_report_extracted.json, diet_plan_extracted.json, " +
+      "food_names_es.json, diet_plan_extracted_es.json under <dir>/elvmwb6271/). " +
+      "This data must never be committed to elevame-investment."
+  );
+  process.exit(1);
+}
 const KIT_CODE = "ELVMWB6271";
 const CLIENT_NAME = "El Hachemi Abdelhak";
 const PLACEHOLDER_EMAIL = `pending-email+${KIT_CODE.toLowerCase()}@elevame.es`;

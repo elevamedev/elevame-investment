@@ -7,6 +7,13 @@ dist-ssr
 .env.local
 .env.*.local
 
+# Real client data (extracted report PDFs, seed sources) must never be
+# committed here — this repo is the public/working app repo. It lives
+# only in the private elevame-redesign repo per DECISIONS.md
+# (2026-10-19). Point extraction/seed scripts at a local copy via
+# ELEVAME_CLIENT_DATA_DIR instead of committing it under scripts/data/.
+scripts/data/
+
 .vscode/*
 !.vscode/extensions.json
 .idea

@@ -4,9 +4,10 @@
  * report (kit ELVMWB6271 / El Hachemi) down into the v1 tables
  * (profiles/gut_scores/screening_findings/similar_profiles/plan_*)
  * so the client is immediately visible in the CURRENT app UI, which
- * still reads v1 exclusively. Reads the same committed extraction
- * JSON as seedReportV2.mjs (scripts/data/elvmwb6271/) — run that
- * script first so the v2 tables are populated too.
+ * still reads v1 exclusively. Reads the same extraction JSON as
+ * seedReportV2.mjs, from ELEVAME_CLIENT_DATA_DIR/elvmwb6271/ (never
+ * committed to this repo — see .gitignore) — run that script first
+ * so the v2 tables are populated too.
  *
  * Two modes:
  *   - No --password: self-serve-claimable profile (registerKit.mjs
@@ -32,9 +33,19 @@ import { createClient } from "@supabase/supabase-js";
 import { upsertFoodsCatalog } from "./lib/provision.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-// Ships in the repo (scripts/data/elvmwb6271/) — same note as in
-// seedReportV2.mjs.
-const SCRATCH = process.env.SCRATCH || join(__dirname, "data/elvmwb6271");
+// Never committed to this repo — same note as in seedReportV2.mjs.
+const SCRATCH =
+  process.env.SCRATCH ||
+  (process.env.ELEVAME_CLIENT_DATA_DIR && join(process.env.ELEVAME_CLIENT_DATA_DIR, "elvmwb6271")) ||
+  join(__dirname, "data/elvmwb6271");
+if (!existsSync(SCRATCH)) {
+  console.error(
+    `Client data directory not found: ${SCRATCH}\n` +
+      "Set ELEVAME_CLIENT_DATA_DIR to a local copy of the extracted report JSON. " +
+      "This data must never be committed to elevame-investment."
+  );
+  process.exit(1);
+}
 const KIT_CODE = "ELVMWB6271";
 const CLIENT_NAME = "El Hachemi Abdelhak";
 
