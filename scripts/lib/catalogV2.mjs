@@ -103,6 +103,34 @@ export const FOOD_CATEGORIES = [
   { id: "others", name_en: "Others", name_es: "Otros", sort_order: 13, shopping_list_group: null },
 ];
 
+// The fixed list of symptoms, diseases and pathways Enbiosis reports
+// against — independent of any one client's report. condition_taxa
+// (which bacterium links to which condition, for which client) is
+// per-report and stays in seedReportV2.mjs; this is only the catalogue
+// of conditions themselves.
+export const CONDITIONS = [
+  { id: "diarrhea", theme_id: "digestion", kind: "symptom", name_en: "Diarrhea", name_es: "Diarrea" },
+  { id: "gas", theme_id: "digestion", kind: "symptom", name_en: "Gas", name_es: "Gases" },
+  { id: "constipation", theme_id: "digestion", kind: "symptom", name_en: "Constipation", name_es: "Estreñimiento" },
+  { id: "bloating", theme_id: "digestion", kind: "symptom", name_en: "Bloating", name_es: "Hinchazón" },
+  { id: "irritable_bowel_syndrome", theme_id: "digestion", kind: "symptom", name_en: "Irritable Bowel Syndrome (IBS)", name_es: "Síndrome del Intestino Irritable (SII)" },
+  { id: "inflammatory_bowel_disease", theme_id: "inflammation", kind: "disease", name_en: "Inflammatory Bowel Disease (IBD)", name_es: "Enfermedad Inflamatoria Intestinal (EII)" },
+  { id: "crohns_disease", theme_id: "inflammation", kind: "disease", name_en: "Crohn's Disease", name_es: "Enfermedad de Crohn" },
+  { id: "ulcerative_colitis", theme_id: "inflammation", kind: "disease", name_en: "Ulcerative Colitis", name_es: "Colitis Ulcerosa" },
+  { id: "obesity", theme_id: "metabolism", kind: "disease", name_en: "Obesity", name_es: "Obesidad" },
+  { id: "type_2_diabetes", theme_id: "metabolism", kind: "disease", name_en: "Type 2 Diabetes", name_es: "Diabetes Tipo 2" },
+  { id: "coronary_heart_disease", theme_id: "heart", kind: "disease", name_en: "Coronary Heart Disease", name_es: "Enfermedad Coronaria" },
+  { id: "kidney_stone", theme_id: "heart", kind: "disease", name_en: "Kidney Stone", name_es: "Cálculos Renales" },
+  { id: "butyric_acid_biosynthesis", theme_id: "inflammation", kind: "pathway", name_en: "Butyric Acid Biosynthesis", name_es: "Biosíntesis de Ácido Butírico" },
+  { id: "tma_conversion", theme_id: "heart", kind: "pathway", name_en: "Trimethylamine (TMA) Conversion", name_es: "Conversión de Trimetilamina (TMA)" },
+  { id: "polyamine_biosynthesis", theme_id: "inflammation", kind: "pathway", name_en: "Polyamine Biosynthesis", name_es: "Biosíntesis de Poliaminas" },
+  { id: "propionate_biosynthesis", theme_id: "inflammation", kind: "pathway", name_en: "Propionate Biosynthesis", name_es: "Biosíntesis de Propionato" },
+  { id: "serotonin_biosynthesis", theme_id: "mind", kind: "pathway", name_en: "Serotonin Biosynthesis", name_es: "Biosíntesis de Serotonina" },
+  { id: "gaba_biosynthesis", theme_id: "mind", kind: "pathway", name_en: "GABA Biosynthesis", name_es: "Biosíntesis de GABA (Ácido Gamma-Aminobutírico)" },
+  { id: "lactose_sensitivity_assoc", theme_id: "digestion", kind: "pathway", name_en: "Lactose Sensitivity (bacterial associations)", name_es: "Sensibilidad a la Lactosa (asociaciones bacterianas)" },
+  { id: "gluten_sensitivity_assoc", theme_id: "digestion", kind: "pathway", name_en: "Gluten Sensitivity (bacterial associations)", name_es: "Sensibilidad al Gluten (asociaciones bacterianas)" },
+];
+
 export async function seedThemes(supabase) {
   const { error } = await supabase.from("themes").upsert(THEMES);
   if (error) throw error;
@@ -125,4 +153,10 @@ export async function seedFoodCategories(supabase) {
   const { error } = await supabase.from("food_categories").upsert(FOOD_CATEGORIES);
   if (error) throw error;
   return FOOD_CATEGORIES.length;
+}
+
+export async function seedConditions(supabase) {
+  const { error } = await supabase.from("conditions").upsert(CONDITIONS);
+  if (error) throw error;
+  return CONDITIONS.length;
 }
