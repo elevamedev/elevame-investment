@@ -23,7 +23,7 @@ import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { createClient } from "@supabase/supabase-js";
 import { slugify } from "./lib/slug.mjs";
-import { seedThemes, seedMetrics, seedScreenPanels, seedFoodCategories, FOOD_CATEGORIES } from "./lib/catalogV2.mjs";
+import { seedThemes, seedMetrics, seedScreenPanels, seedFoodCategories, seedConditions, FOOD_CATEGORIES, CONDITIONS } from "./lib/catalogV2.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const SCRATCH =
@@ -95,28 +95,6 @@ function taxonRank(name) {
   return "genus";
 }
 
-const CONDITIONS = [
-  { id: "diarrhea", theme_id: "digestion", kind: "symptom", name_en: "Diarrhea", name_es: "Diarrea" },
-  { id: "gas", theme_id: "digestion", kind: "symptom", name_en: "Gas", name_es: "Gases" },
-  { id: "constipation", theme_id: "digestion", kind: "symptom", name_en: "Constipation", name_es: "Estreñimiento" },
-  { id: "bloating", theme_id: "digestion", kind: "symptom", name_en: "Bloating", name_es: "Hinchazón" },
-  { id: "irritable_bowel_syndrome", theme_id: "digestion", kind: "symptom", name_en: "Irritable Bowel Syndrome (IBS)", name_es: "Síndrome del Intestino Irritable (SII)" },
-  { id: "inflammatory_bowel_disease", theme_id: "inflammation", kind: "disease", name_en: "Inflammatory Bowel Disease (IBD)", name_es: "Enfermedad Inflamatoria Intestinal (EII)" },
-  { id: "crohns_disease", theme_id: "inflammation", kind: "disease", name_en: "Crohn's Disease", name_es: "Enfermedad de Crohn" },
-  { id: "ulcerative_colitis", theme_id: "inflammation", kind: "disease", name_en: "Ulcerative Colitis", name_es: "Colitis Ulcerosa" },
-  { id: "obesity", theme_id: "metabolism", kind: "disease", name_en: "Obesity", name_es: "Obesidad" },
-  { id: "type_2_diabetes", theme_id: "metabolism", kind: "disease", name_en: "Type 2 Diabetes", name_es: "Diabetes Tipo 2" },
-  { id: "coronary_heart_disease", theme_id: "heart", kind: "disease", name_en: "Coronary Heart Disease", name_es: "Enfermedad Coronaria" },
-  { id: "kidney_stone", theme_id: "heart", kind: "disease", name_en: "Kidney Stone", name_es: "Cálculos Renales" },
-  { id: "butyric_acid_biosynthesis", theme_id: "inflammation", kind: "pathway", name_en: "Butyric Acid Biosynthesis", name_es: "Biosíntesis de Ácido Butírico" },
-  { id: "tma_conversion", theme_id: "heart", kind: "pathway", name_en: "Trimethylamine (TMA) Conversion", name_es: "Conversión de Trimetilamina (TMA)" },
-  { id: "polyamine_biosynthesis", theme_id: "inflammation", kind: "pathway", name_en: "Polyamine Biosynthesis", name_es: "Biosíntesis de Poliaminas" },
-  { id: "propionate_biosynthesis", theme_id: "inflammation", kind: "pathway", name_en: "Propionate Biosynthesis", name_es: "Biosíntesis de Propionato" },
-  { id: "serotonin_biosynthesis", theme_id: "mind", kind: "pathway", name_en: "Serotonin Biosynthesis", name_es: "Biosíntesis de Serotonina" },
-  { id: "gaba_biosynthesis", theme_id: "mind", kind: "pathway", name_en: "GABA Biosynthesis", name_es: "Biosíntesis de GABA (Ácido Gamma-Aminobutírico)" },
-  { id: "lactose_sensitivity_assoc", theme_id: "digestion", kind: "pathway", name_en: "Lactose Sensitivity (bacterial associations)", name_es: "Sensibilidad a la Lactosa (asociaciones bacterianas)" },
-  { id: "gluten_sensitivity_assoc", theme_id: "digestion", kind: "pathway", name_en: "Gluten Sensitivity (bacterial associations)", name_es: "Sensibilidad al Gluten (asociaciones bacterianas)" },
-];
 // pathway_tables JSON key -> conditions.id (two keys collide with the
 // metrics catalog's ids, so these two conditions use a distinct id).
 const PATHWAY_KEY_TO_CONDITION = Object.fromEntries(CONDITIONS.map(c => [c.id.replace(/_assoc$/, ""), c.id]));
@@ -148,11 +126,12 @@ async function main() {
   const esNames = existsSync(`${SCRATCH}/food_names_es.json`) ? readJSON("food_names_es.json") : null;
   if (!esNames) console.warn("⚠ food_names_es.json not found yet — foods will be seeded with name_es = name_en as a placeholder. Re-run this script once translations land.");
 
-  // ---- 1. Static catalogue ----
+  // ---- 1. Static catalogue (also seedable standalone: scripts/seedCatalogV2.mjs) ----
   console.log(`Themes: ${await seedThemes(supabase)}`);
   console.log(`Metrics: ${await seedMetrics(supabase)}`);
   console.log(`Screen panels: ${await seedScreenPanels(supabase)}`);
   console.log(`Food categories: ${await seedFoodCategories(supabase)}`);
+  console.log(`Conditions: ${await seedConditions(supabase)}`);
 
   // ---- 2. Taxa catalogue (derived from every section that names one) ----
   const taxaMap = new Map(); // id -> { id, name, rank, roles: Set, audience }
@@ -197,9 +176,7 @@ async function main() {
   if (taxaErr) throw taxaErr;
   console.log(`Taxa: ${taxaMap.size}`);
 
-  // ---- 3. Conditions + condition_taxa catalogue ----
-  const { error: condErr } = await supabase.from("conditions").upsert(CONDITIONS);
-  if (condErr) throw condErr;
+  // ---- 3. condition_taxa: per-report links from this client's pathway tables ----
   const conditionTaxaRows = [];
   Object.entries(doctor.pathway_tables).forEach(([key, table]) => {
     const conditionId = PATHWAY_KEY_TO_CONDITION[key];
@@ -212,7 +189,7 @@ async function main() {
   });
   const { error: ctErr } = await supabase.from("condition_taxa").upsert(conditionTaxaRows, { onConflict: "condition_id,taxon_id" });
   if (ctErr) throw ctErr;
-  console.log(`Conditions: ${CONDITIONS.length}, condition_taxa: ${conditionTaxaRows.length}`);
+  console.log(`condition_taxa: ${conditionTaxaRows.length}`);
 
   // ---- 4. Similar conditions catalogue ----
   const similarConditions = doctor.similar_profiles.map(p => ({
