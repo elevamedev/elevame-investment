@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Heart } from "lucide-react";
-import { C } from "../../theme.js";
+import { useC } from "../../theme.js";
 import ScoreBadge, { bandFor } from "./ScoreBadge.jsx";
 import { useToast } from "../../context/ToastContext.jsx";
 
@@ -26,6 +26,7 @@ export function swapOptionsFor(food, foods, scoreByFoodId, excludedFoodIds, flag
  * identical in both places.
  */
 export default function MealSheetContent({ meal, items, foodsById, scoreByFoodId, flagsByFoodId, excludedFoodIds, foods, plan, t, lang }) {
+  const C = useC();
   const { show } = useToast();
   const [expanded, setExpanded] = useState(null);
   const eaten = plan.mealLogs[meal.id] === "eaten";
@@ -58,7 +59,7 @@ export default function MealSheetContent({ meal, items, foodsById, scoreByFoodId
               <button onClick={() => setExpanded(isOpen ? null : it.food_id)} className="w-full flex items-center gap-3 px-4 py-3 text-left">
                 <div className="flex-1 min-w-0">
                   <div className="text-sm" style={{ color: C.text }}>{lang === "es" ? (effectiveFood?.name_es || effectiveFood?.name_en) : effectiveFood?.name_en}</div>
-                  {activeSwap && <div className="text-[11px] font-medium" style={{ color: C.purple }}>{t.swapped}</div>}
+                  {activeSwap && <div className="text-[11px] font-medium" style={{ color: C.purpleText }}>{t.swapped}</div>}
                 </div>
                 {score != null && <ScoreBadge score={score} />}
               </button>
@@ -76,9 +77,9 @@ export default function MealSheetContent({ meal, items, foodsById, scoreByFoodId
                         ))}
                       </div>
                       {activeSwap ? (
-                        <button onClick={() => plan.undoSwap(meal.id, it.food_id, activeScope)} className="text-xs font-semibold" style={{ color: C.purple }}>{t.undo}</button>
+                        <button onClick={() => plan.undoSwap(meal.id, it.food_id, activeScope)} className="text-xs font-semibold" style={{ color: C.purpleText }}>{t.undo}</button>
                       ) : (
-                        <button onClick={() => onSwap(it.food_id, alts[0], "phase")} className="text-xs font-semibold" style={{ color: C.purple }}>{t.useAlways}</button>
+                        <button onClick={() => onSwap(it.food_id, alts[0], "phase")} className="text-xs font-semibold" style={{ color: C.purpleText }}>{t.useAlways}</button>
                       )}
                     </>
                   ) : <div className="text-xs">{t.noHigherSwap}</div>}
@@ -90,7 +91,7 @@ export default function MealSheetContent({ meal, items, foodsById, scoreByFoodId
       </div>
       <div className="flex gap-2 mb-3">
         <button onClick={() => plan.logMealEaten(meal.id)} disabled={eaten}
-          className="flex-1 text-sm font-semibold py-2.5 rounded-xl" style={{ background: eaten ? C.purpleSoft : C.purple, color: eaten ? C.purple : "#fff" }}>
+          className="flex-1 text-sm font-semibold py-2.5 rounded-xl" style={{ background: eaten ? C.purpleSoft : C.purple, color: eaten ? C.purpleText : "#fff" }}>
           {eaten ? `✓ ${t.eaten}` : t.ateIt}
         </button>
         <button onClick={() => plan.toggleKeeper(meal.id)} aria-pressed={keeper}

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Search, X } from "lucide-react";
-import { C } from "../theme.js";
+import { useC } from "../theme.js";
 import { V4_LIGHT } from "../theme4.js";
 import { useFoodsData } from "../hooks/useFoodsData.js";
 import ScoreBadge, { bandFor, bandLabel } from "../components/v4/ScoreBadge.jsx";
@@ -44,6 +44,7 @@ const COPY = {
 const BAND_ORDER = ["enrich", "include", "reduce"];
 
 function FoodSheetContent({ food, score, lang, t, inPlan }) {
+  const C = useC();
   const band = bandFor(score);
   const [swaps, setSwaps] = useState([]);
 
@@ -82,6 +83,7 @@ function FoodSheetContent({ food, score, lang, t, inPlan }) {
 
 export default function FoodsView({ lang, user, profileId }) {
   const t = COPY[lang] || COPY.en;
+  const C = useC();
   const data = useFoodsData(user?.id, profileId);
   const [query, setQuery] = useState("");
   const [band, setBand] = useState("enrich");
@@ -153,7 +155,7 @@ export default function FoodsView({ lang, user, profileId }) {
       <div className="flex gap-1.5 mb-3 overflow-x-auto pb-1">
         {[["all", t.all], ["in_plan", t.inPlan], ...data.foodCategories.map(fc => [fc.id, lang === "es" ? fc.name_es : fc.name_en])].map(([id, label]) => (
           <button key={id} onClick={() => setCat(id)} aria-pressed={cat === id} className="px-3 py-2 rounded-full text-xs font-medium whitespace-nowrap"
-            style={{ background: cat === id ? C.navy : "#fff", color: cat === id ? "#fff" : C.textSoft, border: `1px solid ${cat === id ? C.navy : C.line}` }}>
+            style={{ background: cat === id ? C.purple : C.card, color: cat === id ? "#fff" : C.textSoft, border: `1px solid ${cat === id ? C.purple : C.line}` }}>
             {label}
           </button>
         ))}

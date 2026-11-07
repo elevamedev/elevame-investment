@@ -1,4 +1,4 @@
-import { C } from "../../theme.js";
+import { useC } from "../../theme.js";
 import LineChart from "./LineChart.jsx";
 
 const QUESTION_LABEL = {
@@ -35,6 +35,7 @@ const COPY = {
 
 export default function FeelSheet({ dailyQuestions, todayCheckin, weeklyByQuestion, habitRows, lang, onGoToCheckin }) {
   const t = COPY[lang] || COPY.en;
+  const C = useC();
   const answered = dailyQuestions.filter(q => todayCheckin?.[q] != null);
   const todayAvg = answered.length ? Math.round((answered.reduce((s, q) => s + todayCheckin[q], 0) / answered.length) * 10) / 10 : null;
 

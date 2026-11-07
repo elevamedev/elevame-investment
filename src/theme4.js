@@ -16,7 +16,14 @@
 export const V4_LIGHT = {
   page: "#ecebf3", bg: "#f6f6fa", card: "#ffffff", ink: "#15172a", ink2: "#5b5e74", ink3: "#6b6e87", line: "#e8e8f0",
   navy: "#1a1d2e", navy2: "#262a40", purple: "#5131da", purpleL: "#8b78f5", purpleS: "#efedfc", blue: "#42a2fd",
-  en: "#1fb6b6", enS: "#e4f6f6", enText: "#11807f", in: "#e3a95e", inS: "#fbf2e6", inText: "#9a6a26",
+  // `purple` doubles as a solid button background (white text) and as
+  // plain link/accent text on a card — purpleText is the text-safe
+  // variant (brief 7.2/9.7), same split as inText/enText/reText below.
+  // It equals `purple` here since that already passes AA as text on
+  // a light card; it diverges in V4_DARK, where `purple` has to stay
+  // dark enough for white button text but plain text needs to lighten.
+  purpleText: "#5131da",
+  en: "#1fb6b6", enS: "#e4f6f6", enText: "#11807f", in: "#e3a95e", inS: "#fbf2e6", inText: "#8c601e",
   re: "#e2574c", reS: "#fce9e7", reText: "#b23b31", good: "#1f9e8a",
   swGoodText: "#0d6e6d", swWatchText: "#85571a", swActText: "#b23b31",
 };
@@ -24,7 +31,7 @@ export const V4_LIGHT = {
 export const V4_DARK = {
   ...V4_LIGHT,
   bg: "#111321", card: "#1b1e30", ink: "#eceaf6", ink2: "#a9abc2", ink3: "#9a9cb0", line: "#2a2d43",
-  purpleS: "#2a2550", enS: "#173a3d", inS: "#3b3123", reS: "#40221f",
+  purpleS: "#2a2550", purpleText: "#b3a0fa", enS: "#173a3d", inS: "#3b3123", reS: "#40221f",
   en: "#6fd6d3", enText: "#6fd6d3", in: "#e9c08a", inText: "#e9c08a", re: "#f19a92", reText: "#f19a92",
   swGoodText: "#6fd6d3", swWatchText: "#e9c08a", swActText: "#f19a92",
 };

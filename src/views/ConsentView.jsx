@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { C } from "../theme.js";
+import { useC } from "../theme.js";
 import PrivacyNoticeView from "./PrivacyNoticeView.jsx";
 
 const COPY = {
@@ -27,6 +27,7 @@ const COPY = {
  */
 export default function ConsentView({ lang, onAgree }) {
   const t = COPY[lang] || COPY.en;
+  const C = useC();
   const [checked, setChecked] = useState(false);
   const [showNotice, setShowNotice] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -47,7 +48,7 @@ export default function ConsentView({ lang, onAgree }) {
         <span className="text-sm" style={{ color: C.text }}>{t.agreement}</span>
       </label>
 
-      <button onClick={() => setShowNotice(s => !s)} className="text-sm font-semibold mb-4" style={{ color: C.purple }}>
+      <button onClick={() => setShowNotice(s => !s)} className="text-sm font-semibold mb-4" style={{ color: C.purpleText }}>
         {showNotice ? t.hideNotice : t.privacyLink}
       </button>
 
@@ -55,7 +56,7 @@ export default function ConsentView({ lang, onAgree }) {
 
       <button onClick={handleAgree} disabled={!checked || saving}
         className="w-full text-sm font-semibold py-3 rounded-xl"
-        style={{ background: checked ? C.purple : C.purpleSoft, color: checked ? "#fff" : C.purple }}>
+        style={{ background: checked ? C.purple : C.purpleSoft, color: checked ? "#fff" : C.purpleText }}>
         {t.agree}
       </button>
     </div>

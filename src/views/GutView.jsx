@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { C } from "../theme.js";
+import { useC } from "../theme.js";
 import { useV4Theme } from "../context/ThemeContext.jsx";
 import { useFoodsData } from "../hooks/useFoodsData.js";
 import { useV4Gut } from "../hooks/useV4Gut.js";
@@ -60,6 +60,7 @@ const COPY = {
 
 export default function GutView({ lang, user, profile }) {
   const t = COPY[lang] || COPY.en;
+  const C = useC();
   const { V } = useV4Theme();
   const navigate = useNavigate();
   const { isOpen, open, close } = useSheetParam();
@@ -146,7 +147,7 @@ export default function GutView({ lang, user, profile }) {
         ))}
       </div>
       {gut.keyBacteria.length > 6 && (
-        <button onClick={() => setShowAllBacteria(s => !s)} className="text-sm font-semibold mb-5" style={{ color: V.purple }}>
+        <button onClick={() => setShowAllBacteria(s => !s)} className="text-sm font-semibold mb-5" style={{ color: V.purpleText }}>
           {showAllBacteria ? t.showLess : t.showAll(gut.keyBacteria.length)}
         </button>
       )}

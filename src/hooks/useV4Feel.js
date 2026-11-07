@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient.js";
+import { isoDate } from "../lib/localDate.js";
 
 const EMPTY = { loading: true, todayCheckin: null, dailyQuestions: [], weeklyByQuestion: {}, habitRows: [] };
 
@@ -14,7 +15,7 @@ export function useV4Feel(clientId) {
 
   const load = useCallback(async () => {
     if (!clientId) { setState({ ...EMPTY, loading: false }); return; }
-    const todayStr = new Date().toISOString().slice(0, 10);
+    const todayStr = isoDate(new Date());
 
     const [{ data: settings }, { data: todayCheckin }, { data: weekly }, { data: habitInsight }] = await Promise.all([
       supabase.from("client_settings").select("daily_questions").eq("client_id", clientId).maybeSingle(),

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { C } from "../theme.js";
+import { useC } from "../theme.js";
 import { useV4Theme } from "../context/ThemeContext.jsx";
 import { useFoodsData } from "../hooks/useFoodsData.js";
 import { useV4BodySystem } from "../hooks/useV4BodySystem.js";
@@ -70,7 +70,7 @@ function associationLine(bact, lang) {
   const t = CONDITION_RELATION_TEXT[lang] || CONDITION_RELATION_TEXT.en;
   const condition = lang === "es" ? bact.conditionName?.name_es || bact.conditionName?.name_en : bact.conditionName?.name_en;
   if (bact.relation === "makes") return t.makes(lang === "es" ? bact.product_es || bact.product_en : bact.product_en, bact.level);
-  if (bact.relation === "context") return null; // shows plain text instead
+  if (bact.relation === "context" || !condition) return null; // shows plain text instead
   if (bact.level === "normal") return t.normal(condition, bact.relation);
   if (bact.relation === "more_with") return bact.level === "low" ? t.more_low(condition) : t.more_high(condition);
   return bact.level === "high" ? t.less_high(condition) : t.less_low(condition);
@@ -78,6 +78,7 @@ function associationLine(bact, lang) {
 
 export default function BodySystemView({ lang, user, profile, themeId }) {
   const t = COPY[lang] || COPY.en;
+  const C = useC();
   const { V } = useV4Theme();
   const navigate = useNavigate();
   const { isOpen, open, close } = useSheetParam();
@@ -121,7 +122,7 @@ export default function BodySystemView({ lang, user, profile, themeId }) {
         <div className="rounded-xl p-3 mb-4 flex items-center justify-between" style={{ background: C.purpleSoft }}>
           <span className="text-sm font-semibold" style={{ color: C.navy }}>{body.goalFollowed ? t.yourGoal : t.suggestedGoal}</span>
           {body.goalFollowed ? (
-            <span className="text-sm font-semibold" style={{ color: V.purple }}>{t.following}</span>
+            <span className="text-sm font-semibold" style={{ color: V.purpleText }}>{t.following}</span>
           ) : (
             <button onClick={body.followGoal} className="text-sm font-semibold px-3 py-1 rounded-full" style={{ background: C.purple, color: "#fff" }}>{t.add}</button>
           )}
@@ -164,7 +165,7 @@ export default function BodySystemView({ lang, user, profile, themeId }) {
 
               {s.extraCount > 0 && (
                 <div className="mt-2">
-                  <button onClick={() => setShowExtra(e => ({ ...e, [s.id]: !e[s.id] }))} className="text-xs font-semibold" style={{ color: V.purple }}>
+                  <button onClick={() => setShowExtra(e => ({ ...e, [s.id]: !e[s.id] }))} className="text-xs font-semibold" style={{ color: V.purpleText }}>
                     {t.moreCounted(s.extraCount)}
                   </button>
                   {showExtra[s.id] && (
@@ -262,7 +263,7 @@ export default function BodySystemView({ lang, user, profile, themeId }) {
           <div className="rounded-xl p-4" style={{ background: C.card, border: `1px solid ${C.line}` }}>
             <p className="text-sm mb-2" style={{ color: C.text }}>{lang === "es" ? body.education.why_short_es || body.education.why_short_en : body.education.why_short_en}</p>
             {!showMore ? (
-              <button onClick={() => setShowMore(true)} className="text-xs font-semibold" style={{ color: V.purple }}>{t.readMore}</button>
+              <button onClick={() => setShowMore(true)} className="text-xs font-semibold" style={{ color: V.purpleText }}>{t.readMore}</button>
             ) : (
               <>
                 <p className="text-sm mb-2" style={{ color: C.textSoft }}>{lang === "es" ? body.education.why_more_es || body.education.why_more_en : body.education.why_more_en}</p>
@@ -280,7 +281,7 @@ export default function BodySystemView({ lang, user, profile, themeId }) {
       {body.goalInsight?.gap_en && (
         <div className="mb-4">
           {!showGap ? (
-            <button onClick={() => setShowGap(true)} className="text-xs font-semibold" style={{ color: V.purple }}>What your report can't tell us ›</button>
+            <button onClick={() => setShowGap(true)} className="text-xs font-semibold" style={{ color: V.purpleText }}>What your report can't tell us ›</button>
           ) : (
             <p className="text-xs" style={{ color: C.textSoft }}>{lang === "es" ? body.goalInsight.gap_es || body.goalInsight.gap_en : body.goalInsight.gap_en}</p>
           )}

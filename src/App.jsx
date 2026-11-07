@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Routes, Route, Navigate, Outlet, useNavigate, useParams, useOutletContext, useLocation } from "react-router-dom";
 import { Home, CalendarDays, Search, Gauge, Settings as SettingsIcon, LogOut } from "lucide-react";
-import { C } from "./theme.js";
+import { useC } from "./theme.js";
 import { STRINGS } from "./i18n/strings.js";
 import { useAuth } from "./context/AuthContext.jsx";
 import { useClientData } from "./hooks/useClientData.js";
@@ -49,12 +49,14 @@ function PublicOnly({ children }) {
 }
 
 function LoadingScreen() {
+  const C = useC();
   return <div style={{ background: C.bg, minHeight: "100vh" }} className="max-w-md mx-auto flex items-center justify-center text-sm" />;
 }
 
 /* Staff go straight to /admin and never see the client tab shell;
    a signed-in client with no linked kit goes to /link (brief 4.0). */
 function RequireClient({ children }) {
+  const C = useC();
   const { user } = useAuth();
   const staffRole = useStaffRole(user.id);
   const data = useClientData(user.id);
@@ -92,6 +94,7 @@ function RequireStaff({ children }) {
 /* ---------------- client tab shell ---------------- */
 
 function TabShell({ data, user }) {
+  const C = useC();
   const { signOut } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -110,12 +113,12 @@ function TabShell({ data, user }) {
     <div style={{ fontFamily: "'Inter', -apple-system, sans-serif", background: C.bg, minHeight: "100vh" }} className="max-w-md mx-auto relative">
       <div className="sticky top-0 z-10 px-4 pt-4 pb-2" style={{ background: C.bg }}>
         <div className="flex items-center justify-between mb-2">
-          <div className="font-extrabold text-lg" style={{ color: C.navy }}>Eleva<span style={{ color: C.purple }}>me</span></div>
+          <div className="font-extrabold text-lg" style={{ color: C.navy }}>Eleva<span style={{ color: C.purpleText }}>me</span></div>
           <button onClick={handleSignOut} title={t.login.signOut} aria-label={t.login.signOut} className="p-1.5 rounded-full" style={{ border: `1px solid ${C.line}` }}>
             <LogOut size={13} color={C.textSoft} />
           </button>
         </div>
-        <div className="text-[11px] font-medium px-2 py-1 rounded-full inline-block" style={{ background: C.purpleSoft, color: C.purple }}>
+        <div className="text-[11px] font-medium px-2 py-1 rounded-full inline-block" style={{ background: C.purpleSoft, color: C.purpleText }}>
           {profile?.full_name}{profile?.kit_code ? ` · ${profile.kit_code}` : ""}
         </div>
       </div>
@@ -123,7 +126,7 @@ function TabShell({ data, user }) {
       <Outlet context={{ data, user, lang, t }} />
 
       <nav aria-label={t.nav.primary} className="fixed bottom-0 left-0 right-0 max-w-md mx-auto flex"
-        style={{ background: "#fff", borderTop: `1px solid ${C.line}`, paddingBottom: "env(safe-area-inset-bottom)" }}>
+        style={{ background: C.card, borderTop: `1px solid ${C.line}`, paddingBottom: "env(safe-area-inset-bottom)" }}>
         {TAB_ORDER.map(key => {
           const Icon = TAB_ICONS[key];
           const path = key === "home" ? "/" : `/${key}`;
@@ -131,8 +134,8 @@ function TabShell({ data, user }) {
             <button key={key} onClick={() => navigate(path)}
               aria-current={location.pathname === path ? "page" : undefined}
               className="flex-1 flex flex-col items-center gap-1 py-2.5">
-              <Icon size={20} color={location.pathname === path ? C.purple : C.textSoft} strokeWidth={location.pathname === path ? 2.4 : 2} />
-              <span className="text-[10px] font-medium" style={{ color: location.pathname === path ? C.purple : C.textSoft }}>{t.tabs[key]}</span>
+              <Icon size={20} color={location.pathname === path ? C.purpleText : C.textSoft} strokeWidth={location.pathname === path ? 2.4 : 2} />
+              <span className="text-[10px] font-medium" style={{ color: location.pathname === path ? C.purpleText : C.textSoft }}>{t.tabs[key]}</span>
             </button>
           );
         })}

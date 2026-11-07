@@ -17,9 +17,21 @@ jobs:
       - run: npm ci
       - run: npm run lint
       - run: npm run build
-      # Vitest (component tests) and Playwright (route tests, brief
-      # section 9) land with Phase B, alongside the router/data-layer
-      # rebuild they test — no test suite exists yet to run here.
+
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      # Brief section 9's acceptance tests, against the real app built in
+      # --mode e2e with a mocked Supabase client (tests/e2e/) — never real
+      # client data. See playwright.config.js and tests/e2e/helpers.js.
+      - run: npm run test:e2e
 
   database:
     runs-on: ubuntu-latest

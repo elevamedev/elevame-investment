@@ -1,4 +1,4 @@
-import { C } from "../theme.js";
+import { useC } from "../theme.js";
 
 const COPY = {
   en: {
@@ -30,6 +30,7 @@ const COPY = {
  */
 export default function PrivacyNoticeView({ lang }) {
   const t = COPY[lang] || COPY.en;
+  const C = useC();
   return (
     <div>
       {t.sections.map(([heading, body]) => (

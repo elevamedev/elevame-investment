@@ -1,7 +1,14 @@
 node_modules
 dist
+dist-e2e
 dist-ssr
 *.local
+
+# Playwright (tests/e2e/) output
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
 
 .env
 .env.local
