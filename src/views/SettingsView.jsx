@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { ChevronRight, LogOut } from "lucide-react";
-import { C } from "../theme.js";
+import { useC } from "../theme.js";
 import { useToast } from "../context/ToastContext.jsx";
 import { useV4Settings } from "../hooks/useV4Settings.js";
 import { useV4Consent } from "../hooks/useV4Consent.js";
 import Sheet from "../components/v4/Sheet.jsx";
 import PrivacyNoticeView from "./PrivacyNoticeView.jsx";
 import { supabase } from "../lib/supabaseClient.js";
+import { isoDate } from "../lib/localDate.js";
 
 const ES_RELEASED = import.meta.env.VITE_ES_RELEASED === "true";
 const SUPPORT_EMAIL = import.meta.env.VITE_SUPPORT_EMAIL || "support@elevame.es";
@@ -96,6 +97,7 @@ const COPY = {
 };
 
 function Section({ title, children }) {
+  const C = useC();
   return (
     <>
       <div className="text-xs font-semibold uppercase tracking-wide mt-5 mb-2" style={{ color: C.textSoft }}>{title}</div>
@@ -105,10 +107,12 @@ function Section({ title, children }) {
 }
 
 function Row({ children, border = true }) {
+  const C = useC();
   return <div className="px-4 py-3 flex items-center gap-3" style={{ borderTop: border ? `1px solid ${C.line}` : "none", minHeight: 44 }}>{children}</div>;
 }
 
 function NavRow({ label, sub, onClick, danger, border = true }) {
+  const C = useC();
   return (
     <button onClick={onClick} className="w-full px-4 py-3 flex items-center gap-3 text-left" style={{ borderTop: border ? `1px solid ${C.line}` : "none", minHeight: 44 }}>
       <span className="flex-1">
@@ -121,6 +125,7 @@ function NavRow({ label, sub, onClick, danger, border = true }) {
 }
 
 function Switch({ checked, onChange, label }) {
+  const C = useC();
   return (
     <button role="switch" aria-checked={checked} aria-label={label} onClick={() => onChange(!checked)}
       style={{ width: 44, height: 26, borderRadius: 13, background: checked ? C.purple : C.line, position: "relative", flex: "none" }}>
@@ -133,6 +138,7 @@ function Switch({ checked, onChange, label }) {
 }
 
 function ToggleRow({ label, sub, checked, onChange, border = true }) {
+  const C = useC();
   return (
     <Row border={border}>
       <span className="flex-1">
@@ -145,12 +151,13 @@ function ToggleRow({ label, sub, checked, onChange, border = true }) {
 }
 
 function Seg({ options, value, onChange }) {
+  const C = useC();
   return (
     <div className="flex gap-1">
       {options.map(([key, label]) => (
         <button key={key} onClick={() => onChange(key)} aria-pressed={value === key}
           className="text-[11px] font-semibold px-2.5 py-1.5 rounded-full"
-          style={{ background: value === key ? C.navy : "#fff", color: value === key ? "#fff" : C.textSoft, border: `1px solid ${value === key ? C.navy : C.line}` }}>
+          style={{ background: value === key ? C.purple : C.card, color: value === key ? "#fff" : C.textSoft, border: `1px solid ${value === key ? C.purple : C.line}` }}>
           {label}
         </button>
       ))}
@@ -159,6 +166,7 @@ function Seg({ options, value, onChange }) {
 }
 
 function PrivacySheet({ open, onClose, lang, t, consent }) {
+  const C = useC();
   const date = consent.givenAt ? new Date(consent.givenAt).toLocaleDateString(lang === "es" ? "es-ES" : "en-US") : null;
   const [confirming, setConfirming] = useState(false);
   return (
@@ -174,7 +182,7 @@ function PrivacySheet({ open, onClose, lang, t, consent }) {
         <div className="rounded-xl p-3 mt-2" style={{ background: C.bg, border: `1px solid ${C.line}` }}>
           <div className="text-sm mb-3" style={{ color: C.text }}>{t.withdrawConfirm}</div>
           <div className="flex gap-2">
-            <button onClick={() => setConfirming(false)} className="flex-1 text-sm font-semibold py-2 rounded-xl" style={{ background: "#fff", border: `1px solid ${C.line}`, color: C.text }}>
+            <button onClick={() => setConfirming(false)} className="flex-1 text-sm font-semibold py-2 rounded-xl" style={{ background: C.card, border: `1px solid ${C.line}`, color: C.text }}>
               {lang === "es" ? "Cancelar" : "Cancel"}
             </button>
             <button onClick={consent.withdrawConsent} className="flex-1 text-sm font-semibold py-2 rounded-xl" style={{ background: C.red, color: "#fff" }}>
@@ -188,6 +196,7 @@ function PrivacySheet({ open, onClose, lang, t, consent }) {
 }
 
 function DeleteAccountSheet({ open, onClose, t, onSignOut }) {
+  const C = useC();
   const [typed, setTyped] = useState("");
   const [status, setStatus] = useState("idle"); // idle | deleting | error
   const { show } = useToast();
@@ -217,6 +226,7 @@ function DeleteAccountSheet({ open, onClose, t, onSignOut }) {
 
 export default function SettingsView({ lang, user, profile, setLang, onSignOut }) {
   const t = COPY[lang] || COPY.en;
+  const C = useC();
   const { show } = useToast();
   const settingsData = useV4Settings(user?.id);
   const consent = useV4Consent(user?.id);
@@ -249,7 +259,7 @@ export default function SettingsView({ lang, user, profile, setLang, onSignOut }
       const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
-      const date = new Date().toISOString().slice(0, 10);
+      const date = isoDate(new Date());
       a.href = url; a.download = `elevame-data-${date}.json`;
       document.body.appendChild(a); a.click(); a.remove();
       URL.revokeObjectURL(url);
@@ -314,7 +324,7 @@ export default function SettingsView({ lang, user, profile, setLang, onSignOut }
               return (
                 <button key={key} disabled={disabled} onClick={() => toggleQuestion(key)} aria-pressed={selected}
                   className="text-xs font-semibold px-3 py-2 rounded-full" style={{
-                    background: selected ? C.purple : "#fff", color: selected ? "#fff" : C.textSoft,
+                    background: selected ? C.purple : C.card, color: selected ? "#fff" : C.textSoft,
                     border: `1px solid ${selected ? C.purple : C.line}`, opacity: disabled ? 0.6 : 1, minHeight: 36,
                   }}>
                   {selected ? "✓ " : "+ "}{label}

@@ -4,7 +4,7 @@ import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
 
 export default [
-  { ignores: ["dist"] },
+  { ignores: ["dist", "dist-e2e"] },
   {
     files: ["**/*.{js,jsx}"],
     languageOptions: {
@@ -26,5 +26,10 @@ export default [
       "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
       "no-unused-vars": ["warn", { varsIgnorePattern: "^[A-Z_]" }],
     },
+  },
+  {
+    // Build/test config at the repo root runs under Node, not a browser.
+    files: ["*.config.js"],
+    languageOptions: { globals: globals.node },
   },
 ];

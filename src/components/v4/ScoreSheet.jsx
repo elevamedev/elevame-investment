@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { C } from "../../theme.js";
+import { useC } from "../../theme.js";
 import { useV4Theme } from "../../context/ThemeContext.jsx";
 import StatusMark from "./StatusMark.jsx";
 import ScoreBar from "./ScoreBar.jsx";
@@ -21,6 +21,7 @@ export function sitsCompareText(value, markers, lang) {
  * system page's score bars alike, so the two screens can't drift.
  */
 export default function ScoreSheetContent({ item, lang, t, navigate }) {
+  const C = useC();
   const { V } = useV4Theme();
   const [taxa, setTaxa] = useState([]);
   const { metric, result } = item;
@@ -66,10 +67,10 @@ export default function ScoreSheetContent({ item, lang, t, navigate }) {
           ))}
         </div>
       )}
-      <button onClick={() => navigate(`/system/${metric.theme_id}`)} className="text-sm font-semibold mb-2" style={{ color: V.purple }}>{t.partOf(metric.theme_id)} →</button>
+      <button onClick={() => navigate(`/system/${metric.theme_id}`)} className="text-sm font-semibold mb-2" style={{ color: V.purpleText }}>{t.partOf(metric.theme_id)} →</button>
       <br />
       {planLinkKey && item.reportTexts?.[planLinkKey] && (
-        <button onClick={() => navigate("/plan")} className="text-sm font-semibold" style={{ color: V.purple }}>
+        <button onClick={() => navigate("/plan")} className="text-sm font-semibold" style={{ color: V.purpleText }}>
           {t.planWorks}: {lang === "es" ? item.reportTexts[planLinkKey].text_es || item.reportTexts[planLinkKey].text_en : item.reportTexts[planLinkKey].text_en}
         </button>
       )}

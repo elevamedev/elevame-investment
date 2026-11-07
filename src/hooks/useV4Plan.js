@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient.js";
-
-function isoDate(d) { return d.toISOString().slice(0, 10); }
+import { isoDate } from "../lib/localDate.js";
 
 function weekStartFor(date) {
   // Weeks start on Friday (brief 4.3): the most recent Friday on or before `date`.

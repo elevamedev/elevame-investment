@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient.js";
 import { writeOrQueue } from "../lib/offlineQueue.js";
+import { isoDate } from "../lib/localDate.js";
 
 const HOME_THEME_IDS = ["digestion", "inflammation", "metabolism", "heart", "mind"];
 
@@ -14,8 +15,6 @@ const HOME_THEME_IDS = ["digestion", "inflammation", "metabolism", "heart", "min
 const GOAL_KEY_BY_THEME = { digestion: "digestion_comfort", inflammation: "gut_lining", metabolism: "weight_sugar" };
 
 const MILESTONE_ORDER = ["baseline", "end_phase_1", "end_phase_2", "end_phase_3"];
-
-function isoDate(d) { return d.toISOString().slice(0, 10); }
 
 function milestoneDueDay(phases, key) {
   if (key === "baseline") return 1;

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { C } from "../theme.js";
+import { useC } from "../theme.js";
 import { useV4Theme } from "../context/ThemeContext.jsx";
 import { useFoodsData } from "../hooks/useFoodsData.js";
 import { useV4Plan } from "../hooks/useV4Plan.js";
@@ -50,6 +50,7 @@ const AISLE_ORDER = ["fruit_veg", "bread_grains", "legumes", "meat_fish", "dairy
 
 export default function PlanView({ lang, user, profile }) {
   const t = COPY[lang] || COPY.en;
+  const C = useC();
   const { V } = useV4Theme();
   const location = useLocation();
   const [tab, setTab] = useState(location.pathname.endsWith("/shopping") ? "shopping" : "meals");

@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { C } from "../theme.js";
+import { useC } from "../theme.js";
 import { useV4Theme } from "../context/ThemeContext.jsx";
 import { useFoodsData } from "../hooks/useFoodsData.js";
 import { useV4Plan } from "../hooks/useV4Plan.js";
@@ -72,6 +72,7 @@ const COPY = {
 const SLOT_ORDER = ["breakfast", "lunch", "dinner", "snack"];
 
 function Scale1to5({ value, onChange }) {
+  const C = useC();
   return (
     <div className="flex gap-1.5">
       {[1, 2, 3, 4, 5].map(n => (
@@ -87,6 +88,7 @@ function Scale1to5({ value, onChange }) {
 
 export default function HomeView({ lang, user, profile, goToSettings }) {
   const t = COPY[lang] || COPY.en;
+  const C = useC();
   const { V } = useV4Theme();
   const navigate = useNavigate();
   const { show } = useToast();
@@ -164,14 +166,14 @@ export default function HomeView({ lang, user, profile, goToSettings }) {
       <div className="flex items-center justify-between mb-4">
         <div>
           {home.checkinStreakDays > 0 && (
-            <div className="text-[11px] font-semibold mb-1" style={{ color: V.purple }}>🔥 {t.checkinStreak(home.checkinStreakDays)}</div>
+            <div className="text-[11px] font-semibold mb-1" style={{ color: V.purpleText }}>🔥 {t.checkinStreak(home.checkinStreakDays)}</div>
           )}
           <div className="text-lg font-bold" style={{ color: C.navy, fontFamily: "'Manrope', sans-serif" }}>
             {greeting}{firstName ? `, ${firstName}` : ""}
           </div>
         </div>
         <button onClick={goToSettings} aria-label="Settings" className="flex-none rounded-full flex items-center justify-center font-semibold text-sm"
-          style={{ width: 38, height: 38, background: C.purpleSoft, color: C.purple }}>
+          style={{ width: 38, height: 38, background: C.purpleSoft, color: C.purpleText }}>
           {initials}
         </button>
       </div>
@@ -230,7 +232,7 @@ export default function HomeView({ lang, user, profile, goToSettings }) {
         ) : (
           <div className="flex items-center justify-between">
             <span className="text-sm" style={{ color: C.text }}>{t.loggedCheckinLine}</span>
-            <button onClick={() => setEditingCheckin(true)} className="text-sm font-semibold" style={{ color: C.purple }}>{t.edit}</button>
+            <button onClick={() => setEditingCheckin(true)} className="text-sm font-semibold" style={{ color: C.purpleText }}>{t.edit}</button>
           </div>
         )}
       </div>
@@ -238,7 +240,7 @@ export default function HomeView({ lang, user, profile, goToSettings }) {
       {/* Body systems */}
       <div className="flex items-center justify-between mb-1.5">
         <span className="text-xs font-semibold" style={{ color: C.navy }}>{t.yourBodySystems}</span>
-        <button onClick={() => open("home:goals")} className="text-xs font-semibold" style={{ color: C.purple }}>{t.editGoals}</button>
+        <button onClick={() => open("home:goals")} className="text-xs font-semibold" style={{ color: C.purpleText }}>{t.editGoals}</button>
       </div>
       {statusesPresent.length > 0 && (
         <div className="flex items-center gap-3 mb-2">
@@ -343,7 +345,7 @@ export default function HomeView({ lang, user, profile, goToSettings }) {
                 ) : (
                   <div className="flex gap-2">
                     <button onClick={async () => { await supabase.from("client_goals").update({ confirmed_at: new Date().toISOString() }).eq("client_id", foodsData.client?.id).eq("goal_key", key); home.refetch(); }}
-                      className="text-xs font-semibold" style={{ color: C.purple }}>{t.followGoal}</button>
+                      className="text-xs font-semibold" style={{ color: C.purpleText }}>{t.followGoal}</button>
                     <button onClick={async () => { await supabase.from("client_goals").update({ status: "dismissed" }).eq("client_id", foodsData.client?.id).eq("goal_key", key); home.refetch(); }}
                       className="text-xs" style={{ color: C.textSoft }}>{t.dismissGoal}</button>
                   </div>

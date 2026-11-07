@@ -1,9 +1,37 @@
+import path from "path";
+import { fileURLToPath } from "url";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
 
-export default defineConfig({
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+// brief section 9: the e2e suite runs the real app against a mock
+// Supabase client, never the production one — `npm run test:e2e`
+// serves this mode so every import of src/lib/supabaseClient.js
+// resolves to the mock instead, with no change to the real file.
+// A resolveId hook (rather than resolve.alias) so only a real JS
+// import of that exact module is redirected — nothing else Vite
+// resolves along the way (CSS, source maps, …) is ever touched.
+function mockSupabaseClient(enabled) {
+  const target = path.resolve(__dirname, "tests/e2e/mockSupabaseClient.js");
+  return {
+    name: "mock-supabase-client",
+    enforce: "pre",
+    resolveId(source, importer) {
+      // "/supabaseClient.js" (leading slash), not "/lib/supabaseClient.js":
+      // the file's own directory imports it as "./supabaseClient.js" (no
+      // "lib" in that specifier) — e.g. src/lib/offlineQueue.js. The
+      // leading slash still excludes this mock's own filename.
+      if (!enabled || !importer) return null;
+      return source.endsWith("/supabaseClient.js") ? target : null;
+    },
+  };
+}
+
+export default defineConfig(({ mode }) => ({
   plugins: [
+    mockSupabaseClient(mode === "e2e"),
     react(),
     VitePWA({
       registerType: "autoUpdate",
@@ -39,4 +67,4 @@ export default defineConfig({
       },
     }),
   ],
-});
+}));

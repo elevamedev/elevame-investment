@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
-import { C } from "../theme.js";
+import { useC } from "../theme.js";
 import { useFoodsData } from "../hooks/useFoodsData.js";
 import { useV4Checkin, CHECKIN_FIELDS } from "../hooks/useV4Checkin.js";
 
@@ -41,6 +41,7 @@ const COPY = {
 };
 
 function Scale1to5({ value, onChange }) {
+  const C = useC();
   return (
     <div className="flex gap-2">
       {[1, 2, 3, 4, 5].map(n => (
@@ -56,6 +57,7 @@ function Scale1to5({ value, onChange }) {
 
 export default function CheckinFlowView({ lang, user, profile }) {
   const t = COPY[lang] || COPY.en;
+  const C = useC();
   const navigate = useNavigate();
   const { milestone } = useParams();
   const [step, setStep] = useState(0);
@@ -186,7 +188,7 @@ export default function CheckinFlowView({ lang, user, profile }) {
       </div>
 
       <button onClick={handleNext} disabled={!canProceed}
-        className="w-full text-sm font-semibold py-3 rounded-xl mt-6" style={{ background: canProceed ? C.purple : C.purpleSoft, color: canProceed ? "#fff" : C.purple }}>
+        className="w-full text-sm font-semibold py-3 rounded-xl mt-6" style={{ background: canProceed ? C.purple : C.purpleSoft, color: canProceed ? "#fff" : C.purpleText }}>
         {isLast ? t.finish : t.next}
       </button>
     </div>
