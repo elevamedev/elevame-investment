@@ -176,8 +176,8 @@ function ShoppingPage() {
 }
 
 function FoodsPage() {
-  const { lang, t, user } = useOutletContext();
-  return <FoodsView t={t} lang={lang} user={user} />;
+  const { lang, user, data } = useOutletContext();
+  return <FoodsView lang={lang} user={user} profileId={data.profile?.id} />;
 }
 
 function GutPage() {
