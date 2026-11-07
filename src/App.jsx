@@ -1,9 +1,8 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { Routes, Route, Navigate, Outlet, useNavigate, useParams, useOutletContext, useLocation } from "react-router-dom";
 import { Home, CalendarDays, Search, Gauge, Settings as SettingsIcon, LogOut } from "lucide-react";
 import { C } from "./theme.js";
 import { STRINGS } from "./i18n/strings.js";
-import { PHASES as PHASES_DEFAULT, homeBanners } from "./data/planTemplate.js";
 import { useAuth } from "./context/AuthContext.jsx";
 import { useClientData } from "./hooks/useClientData.js";
 import { useStaffRole } from "./hooks/useAdminData.js";
@@ -87,10 +86,9 @@ function TabShell({ data, user }) {
   const { signOut } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const { profile, phases } = data;
+  const { profile } = data;
   const lang = profile?.language || "en";
   const t = STRINGS[lang];
-  const effectivePhases = phases.length ? phases : PHASES_DEFAULT;
 
   async function handleSignOut() {
     await signOut();
@@ -113,7 +111,7 @@ function TabShell({ data, user }) {
         </div>
       </div>
 
-      <Outlet context={{ data, user, lang, t, effectivePhases }} />
+      <Outlet context={{ data, user, lang, t }} />
 
       <nav aria-label={t.nav.primary} className="fixed bottom-0 left-0 right-0 max-w-md mx-auto flex"
         style={{ background: "#fff", borderTop: `1px solid ${C.line}`, paddingBottom: "env(safe-area-inset-bottom)" }}>
@@ -137,25 +135,9 @@ function TabShell({ data, user }) {
 /* ---------------- routed pages (thin wrappers reading the shell's context) ---------------- */
 
 function HomePage() {
-  const { lang, t, effectivePhases, data } = useOutletContext();
+  const { lang, user, data } = useOutletContext();
   const navigate = useNavigate();
-  const { profile, milestones } = data;
-  const startDate = profile?.plan_start_date || new Date().toISOString().slice(0, 10);
-  const planDay = useMemo(() => {
-    const start = new Date(startDate); start.setHours(0, 0, 0, 0);
-    const today = new Date(); today.setHours(0, 0, 0, 0);
-    return Math.min(Math.max(Math.floor((today - start) / 86400000), 0), 41) + 1;
-  }, [startDate]);
-  const phaseIdx = Math.min(Math.floor((planDay - 1) / 14), effectivePhases.length - 1);
-  const dayIdx = (planDay - 1) % 7;
-  const banners = useMemo(() => homeBanners(planDay, milestones), [planDay, milestones]);
-
-  return (
-    <HomeView lang={lang} t={t} startDate={startDate} setStartDate={d => data.updateProfile({ plan_start_date: d })}
-      planDay={planDay} phaseIdx={phaseIdx} dayIdx={dayIdx} phases={effectivePhases}
-      goToPlan={() => navigate("/plan")} goToScores={() => navigate("/gut")}
-      banners={banners} goToMilestone={id => navigate(`/checkin/${id}`)} goToShopping={() => navigate("/plan/shopping")} />
-  );
+  return <HomeView lang={lang} user={user} profile={data.profile} goToSettings={() => navigate("/settings")} />;
 }
 
 function PlanPage() {

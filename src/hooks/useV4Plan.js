@@ -21,8 +21,8 @@ function streakFor(habitId, loggedDays, todayStr) {
 
 const EMPTY = {
   loading: true, hasPlan: false, client: null,
-  phase: null, dayIndex: 0, todayStr: "", weekStart: "",
-  meals: [], itemsByMeal: {}, habits: [], habitStreaks: {}, habitDoneToday: {},
+  phases: [], phase: null, dayIndex: 0, todayStr: "", weekStart: "",
+  meals: [], itemsByMeal: {}, habits: [], habitStreaks: {}, habitDoneToday: {}, habitLogDays: {},
   mealLogs: {}, keeperMealIds: new Set(), swapsByMeal: {}, phaseSwapByFood: {},
   weekFoodIds: [], weekMealCountByFood: {},
 };
@@ -109,8 +109,8 @@ export function useV4Plan(profileId, clientId, planDay) {
 
     setState({
       loading: false, hasPlan: true, client: { id: clientId },
-      phase, dayIndex, todayStr, weekStart,
-      meals: todayMeals, itemsByMeal, habits: habits || [], habitStreaks, habitDoneToday,
+      phases, phase, dayIndex, todayStr, weekStart,
+      meals: todayMeals, itemsByMeal, habits: habits || [], habitStreaks, habitDoneToday, habitLogDays,
       mealLogs: mealLogsByMeal, keeperMealIds, swapsByMeal, phaseSwapByFood,
       weekFoodIds, weekMealCountByFood, shoppingStates,
     });

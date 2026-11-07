@@ -12,18 +12,25 @@ export default function ToastStack() {
       aria-live="polite"
     >
       {toasts.map(t => (
-        <button
+        <div
           key={t.id}
-          onClick={() => dismiss(t.id)}
-          className="max-w-md w-full text-left text-sm rounded-xl px-4 py-3 shadow-lg"
+          className="max-w-md w-full flex items-center gap-3 text-sm rounded-xl px-4 py-3 shadow-lg"
           style={{
             pointerEvents: "auto",
             background: t.type === "error" ? C.red : C.navy,
             color: "#fff",
           }}
         >
-          {t.message}
-        </button>
+          <button onClick={() => dismiss(t.id)} className="flex-1 text-left">{t.message}</button>
+          {t.action && (
+            <button
+              onClick={() => { t.action.onClick(); dismiss(t.id); }}
+              className="flex-none font-semibold underline underline-offset-2"
+            >
+              {t.action.label}
+            </button>
+          )}
+        </div>
       ))}
     </div>
   );
