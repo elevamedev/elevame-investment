@@ -20,7 +20,6 @@ import LinkKitView from "./views/auth/LinkKitView.jsx";
 import StaffMfaGate from "./views/auth/StaffMfaGate.jsx";
 import HomeView from "./views/HomeView.jsx";
 import PlanView from "./views/PlanView.jsx";
-import ShoppingView from "./views/ShoppingView.jsx";
 import TrackerView from "./views/TrackerView.jsx";
 import FoodsView from "./views/FoodsView.jsx";
 import ReportView from "./views/ReportView.jsx";
@@ -160,19 +159,8 @@ function HomePage() {
 }
 
 function PlanPage() {
-  const { lang, t, effectivePhases } = useOutletContext();
-  const [phaseIdx, setPhaseIdx] = useState(0);
-  const [dayIdx, setDayIdx] = useState(0);
-  return <PlanView lang={lang} t={t} phases={effectivePhases} phaseIdx={phaseIdx} setPhaseIdx={setPhaseIdx} dayIdx={dayIdx} setDayIdx={setDayIdx} />;
-}
-
-function ShoppingPage() {
-  const { lang, t, effectivePhases, data } = useOutletContext();
-  const [phaseIdx, setPhaseIdx] = useState(0);
-  return (
-    <ShoppingView lang={lang} t={t} phases={effectivePhases} phaseIdx={phaseIdx} setPhaseIdx={setPhaseIdx}
-      checks={data.checks} toggleCheck={data.toggleShoppingCheck} resetPhase={data.resetShoppingPhase} />
-  );
+  const { lang, user, data } = useOutletContext();
+  return <PlanView lang={lang} user={user} profile={data.profile} />;
 }
 
 function FoodsPage() {
@@ -243,7 +231,7 @@ export default function App() {
         <Route element={<RequireAuth><RequireClient>{(ctx) => <TabShell {...ctx} />}</RequireClient></RequireAuth>}>
           <Route path="/" element={<HomePage />} />
           <Route path="/plan" element={<PlanPage />} />
-          <Route path="/plan/shopping" element={<ShoppingPage />} />
+          <Route path="/plan/shopping" element={<PlanPage />} />
           <Route path="/foods" element={<FoodsPage />} />
           <Route path="/gut" element={<GutPage />} />
           <Route path="/settings" element={<SettingsPage />} />
