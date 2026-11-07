@@ -86,14 +86,3 @@ export function useV4Gut(profileId, testId) {
 
   return { ...state, refetch: load };
 }
-
-/** Rule 9: "sits between A and B" when the two closest reference groups are within 10 of each other, else "sits closest to A". */
-export function sitsCompareText(value, markers, lang) {
-  if (!markers || markers.length < 1) return null;
-  const sorted = [...markers].map(m => ({ ...m, dist: Math.abs(value - m.value) })).sort((a, b) => a.dist - b.dist);
-  const [a, b] = sorted;
-  if (b && Math.abs(a.dist - b.dist) < 10) {
-    return lang === "es" ? `Tu ${value} está entre ${a.label_en} y ${b.label_en}.` : `Your ${value} sits between ${a.label_en} and ${b.label_en}.`;
-  }
-  return lang === "es" ? `Tu ${value} está más cerca de ${a.label_en}.` : `Your ${value} sits closest to ${a.label_en}.`;
-}

@@ -19,8 +19,8 @@ import HomeView from "./views/HomeView.jsx";
 import PlanView from "./views/PlanView.jsx";
 import TrackerView from "./views/TrackerView.jsx";
 import FoodsView from "./views/FoodsView.jsx";
-import ReportView from "./views/ReportView.jsx";
 import GutView from "./views/GutView.jsx";
+import BodySystemView from "./views/BodySystemView.jsx";
 import SettingsView from "./views/SettingsView.jsx";
 import AdminView from "./views/AdminView.jsx";
 import ToastStack from "./components/ToastStack.jsx";
@@ -154,10 +154,9 @@ function GutPage() {
 }
 
 function SystemPage() {
-  const { lang, user } = useOutletContext();
+  const { lang, user, data } = useOutletContext();
   const { theme } = useParams();
-  const navigate = useNavigate();
-  return <ReportView lang={lang} user={user} initialThemeId={theme} onBackToInitialTheme={() => navigate(-1)} />;
+  return <BodySystemView lang={lang} user={user} profile={data.profile} themeId={theme} />;
 }
 
 function CheckinPage() {
