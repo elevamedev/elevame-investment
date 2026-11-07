@@ -1,195 +1,193 @@
-import { useState, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Search, X } from "lucide-react";
 import { C } from "../theme.js";
-import { FOODS, CATEGORY_ORDER } from "../data/foods.js";
-import ScorePill from "../components/ScorePill.jsx";
-import { useReportV2 } from "../hooks/useReportV2.js";
+import { V4_LIGHT } from "../theme4.js";
+import { useFoodsData } from "../hooks/useFoodsData.js";
+import ScoreBadge, { bandFor, bandLabel } from "../components/v4/ScoreBadge.jsx";
+import Sheet from "../components/v4/Sheet.jsx";
+import { useSheetParam } from "../hooks/useSheetParam.js";
+import { supabase } from "../lib/supabaseClient.js";
 
-// Local bilingual copy for the new "Your report" mode only — everything
-// FoodsView already used from the shared `t`/`lang` props is untouched.
 const COPY = {
   en: {
-    modeReport: "Your report", modeCatalog: "General catalog",
-    highlightTop: "Your top picks", highlightFit: "Good fits", highlightAvoid: "Best to avoid",
-    emptyTitle: "Your personal food scores aren't ready yet",
-    emptyBody: "Once your report is processed, every food here will show the score from your own results instead of the general catalog.",
-    allCategories: "All",
+    searchPlaceholder: "Search foods", clearSearch: "Clear search",
+    all: "All", inPlan: "In my plan",
+    bandMeaning: {
+      enrich: "Foods that work in your favour, based on your own gut results.",
+      include: "Everyday foods — fine as part of a varied diet.",
+      reduce: "Best left out during your 6 weeks.",
+    },
+    askNutritionist: "Ask your nutritionist",
+    emptyWithOther: (q, other) => `No ${other} food matches "${q}", but other bands have some. Tap that tab above.`,
+    emptySimple: "Try another name, or check the spelling.",
+    loading: "Loading…", noReport: "Your results appear here once your nutritionist has reviewed your report.",
+    sheetBand: "Band", sheetScore: "Score", sheetInPlan: "In your plan", sheetSwaps: "Swap ideas",
+    sheetNotInPlan: "Not currently in your plan.",
   },
   es: {
-    modeReport: "Tu informe", modeCatalog: "Catálogo general",
-    highlightTop: "Tus mejores opciones", highlightFit: "Buenas opciones", highlightAvoid: "Mejor evitar",
-    emptyTitle: "Tus puntuaciones personales todavía no están listas",
-    emptyBody: "Cuando se procese tu informe, cada alimento aquí mostrará la puntuación de tus propios resultados en lugar del catálogo general.",
-    allCategories: "Todas",
+    searchPlaceholder: "Buscar alimentos", clearSearch: "Borrar búsqueda",
+    all: "Todos", inPlan: "En mi plan",
+    bandMeaning: {
+      enrich: "Alimentos que juegan a tu favor, según tus propios resultados.",
+      include: "Alimentos de cada día: bien como parte de una dieta variada.",
+      reduce: "Mejor dejarlos fuera durante tus 6 semanas.",
+    },
+    askNutritionist: "Pregunta a tu nutricionista",
+    emptyWithOther: (q, other) => `Ningún alimento de ${other} coincide con "${q}", pero otras bandas sí tienen. Toca esa pestaña arriba.`,
+    emptySimple: "Prueba otro nombre o revisa la ortografía.",
+    loading: "Cargando…", noReport: "Tus resultados aparecerán aquí cuando tu nutricionista haya revisado tu informe.",
+    sheetBand: "Banda", sheetScore: "Puntuación", sheetInPlan: "En tu plan", sheetSwaps: "Ideas de sustitución",
+    sheetNotInPlan: "No está actualmente en tu plan.",
   },
 };
 
-function HighlightRow({ title, items, lang }) {
-  if (!items.length) return null;
+const BAND_ORDER = ["enrich", "include", "reduce"];
+
+function FoodSheetContent({ food, score, lang, t, inPlan }) {
+  const band = bandFor(score);
+  const [swaps, setSwaps] = useState([]);
+
+  useEffect(() => {
+    let cancelled = false;
+    supabase.from("swap_pairs").select("to_food_id, foods!swap_pairs_to_food_id_fkey(name_en,name_es)")
+      .eq("from_food_id", food.id).eq("approved", true)
+      .then(({ data }) => { if (!cancelled) setSwaps(data || []); });
+    return () => { cancelled = true; };
+  }, [food.id]);
+
   return (
-    <div className="mb-3">
-      <div className="text-xs font-semibold mb-1.5" style={{ color: C.text }}>{title}</div>
-      <div className="flex gap-2 overflow-x-auto pb-1">
-        {items.map(it => (
-          <div key={it.food_id} className="flex-shrink-0 rounded-lg px-2.5 py-2 flex items-center gap-1.5" style={{ background: C.card, border: `1px solid ${C.line}` }}>
-            <span className="text-xs whitespace-nowrap" style={{ color: C.text }}>{it.name?.[lang] || it.name?.en}</span>
-            <ScorePill score={it.score} />
+    <div>
+      <h2 style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 700, fontSize: 20, margin: "4px 0 10px", color: C.navy }}>
+        {lang === "es" ? (food.name_es || food.name_en) : food.name_en}
+      </h2>
+      <div className="mb-3"><ScoreBadge score={score} /></div>
+      <div className="text-sm mb-4" style={{ color: C.textSoft }}>{t.bandMeaning[band]}</div>
+      <div className="text-xs font-semibold mb-1" style={{ color: C.navy }}>{t.sheetInPlan}</div>
+      <div className="text-sm mb-4" style={{ color: C.textSoft }}>{inPlan ? "✓" : t.sheetNotInPlan}</div>
+      {swaps.length > 0 && (
+        <>
+          <div className="text-xs font-semibold mb-1.5" style={{ color: C.navy }}>{t.sheetSwaps}</div>
+          <div className="flex flex-wrap gap-2">
+            {swaps.map(s => (
+              <span key={s.to_food_id} className="text-xs font-medium px-3 py-1.5 rounded-full" style={{ background: C.bg, color: C.text }}>
+                {lang === "es" ? (s.foods?.name_es || s.foods?.name_en) : s.foods?.name_en}
+              </span>
+            ))}
           </div>
-        ))}
-      </div>
+        </>
+      )}
     </div>
   );
 }
 
-function ReportMode({ t, lang, user }) {
-  const copy = COPY[lang] || COPY.en;
+export default function FoodsView({ lang, user, profileId }) {
+  const t = COPY[lang] || COPY.en;
+  const data = useFoodsData(user?.id, profileId);
   const [query, setQuery] = useState("");
+  const [band, setBand] = useState("enrich");
   const [cat, setCat] = useState("all");
-  const data = useReportV2(user?.id);
+  const { isOpen, open, close } = useSheetParam();
 
-  const hasReport = !data.loading && data.client && data.selectedTestId && data.foodScores.length > 0;
+  const visibleScores = useMemo(
+    () => data.foodScores.filter(fs => !data.excludedFoodIds.has(fs.food_id)),
+    [data.foodScores, data.excludedFoodIds]
+  );
 
-  const categories = useMemo(() => ["all", ...data.foodCategories.map(c => c.id)], [data.foodCategories]);
+  const counts = useMemo(() => {
+    const c = { enrich: 0, include: 0, reduce: 0 };
+    visibleScores.forEach(fs => { c[bandFor(fs.score)]++; });
+    return c;
+  }, [visibleScores]);
+
+  const foodsById = useMemo(() => Object.fromEntries(data.foods.map(f => [f.id, f])), [data.foods]);
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
-    let list = data.foodScores
-      .map(fs => ({ ...fs, food: data.foodsById[fs.food_id] }))
+    let list = visibleScores
+      .filter(fs => bandFor(fs.score) === band)
+      .map(fs => ({ ...fs, food: foodsById[fs.food_id] }))
       .filter(r => r.food);
-    if (cat !== "all") list = list.filter(r => r.food.category_id === cat);
+    if (cat === "in_plan") list = list.filter(r => data.inPlanFoodIds.has(r.food_id));
+    else if (cat !== "all") list = list.filter(r => r.food.category_id === cat);
     if (q) list = list.filter(r => (r.food.name_en || "").toLowerCase().includes(q) || (r.food.name_es || "").toLowerCase().includes(q));
     return list.sort((a, b) => b.score - a.score);
-  }, [data.foodScores, data.foodsById, query, cat]);
+  }, [visibleScores, foodsById, band, cat, query, data.inPlanFoodIds]);
 
-  const highlightGroups = useMemo(() => {
-    const byList = { top: [], fit: [], avoid: [] };
-    data.foodHighlights
-      .slice()
-      .sort((a, b) => a.position - b.position)
-      .forEach(h => {
-        const food = data.foodsById[h.food_id];
-        if (!food || !byList[h.list]) return;
-        byList[h.list].push({ food_id: h.food_id, score: data.foodScores.find(fs => fs.food_id === h.food_id)?.score, name: { en: food.name_en, es: food.name_es } });
-      });
-    return byList;
-  }, [data.foodHighlights, data.foodsById, data.foodScores]);
-
-  if (data.loading) {
-    return <div className="text-sm px-1 py-6 text-center" style={{ color: C.textSoft }}>{t.loading}</div>;
-  }
-  if (!hasReport) {
-    return (
-      <div className="rounded-xl p-6 text-center" style={{ border: `1px solid ${C.line}`, background: C.card }}>
-        <div className="text-sm font-semibold mb-1" style={{ color: C.text }}>{copy.emptyTitle}</div>
-        <div className="text-xs" style={{ color: C.textSoft }}>{copy.emptyBody}</div>
-      </div>
-    );
-  }
-
-  return (
-    <>
-      <HighlightRow title={copy.highlightTop} items={highlightGroups.top.slice(0, 6)} lang={lang} />
-      <HighlightRow title={copy.highlightFit} items={highlightGroups.fit.slice(0, 6)} lang={lang} />
-      <HighlightRow title={copy.highlightAvoid} items={highlightGroups.avoid.slice(0, 6)} lang={lang} />
-
-      <div className="rounded-xl flex items-center gap-2 px-3 mb-3 mt-1" style={{ background: C.card, border: `1px solid ${C.line}` }}>
-        <Search size={16} color={C.textSoft} />
-        <input value={query} onChange={e => setQuery(e.target.value)} placeholder={t.searchPlaceholder}
-          className="w-full py-3 text-sm outline-none" style={{ color: C.text, background: "transparent" }} />
-        {query && <button onClick={() => setQuery("")} aria-label={t.clearSearch} className="p-1.5 -mr-1.5 rounded-full flex-shrink-0"><X size={15} color={C.textSoft} /></button>}
-      </div>
-      <div className="flex gap-1.5 mb-4 overflow-x-auto pb-1">
-        {categories.map(c => {
-          const fc = data.foodCategories.find(x => x.id === c);
-          const label = c === "all" ? copy.allCategories : (fc ? (lang === "es" ? fc.name_es : fc.name_en) : c);
-          return (
-            <button key={c} onClick={() => setCat(c)} aria-current={cat === c ? "true" : undefined} className="px-3 py-2 rounded-full text-xs font-medium whitespace-nowrap"
-              style={{ background: cat === c ? C.navy : "#fff", color: cat === c ? "#fff" : C.textSoft, border: `1px solid ${cat === c ? C.navy : C.line}` }}>
-              {label}
-            </button>
-          );
-        })}
-      </div>
-      <div className="text-xs mb-2" style={{ color: C.textSoft }}>{query ? t.results(results.length) : t.typeToSearch}</div>
-      {query && results.length === 0 ? (
-        <div className="rounded-xl p-6 text-center text-sm" style={{ border: `1px solid ${C.line}`, color: C.textSoft }}>{t.noFoodsFound}</div>
-      ) : (
-        <div className="rounded-xl overflow-hidden" style={{ border: `1px solid ${C.line}` }}>
-          {results.slice(0, 60).map((r, i) => (
-            <div key={r.food_id} className="flex items-center justify-between px-4 py-3" style={{ background: C.card, borderTop: i === 0 ? "none" : `1px solid ${C.line}` }}>
-              <span className="text-sm" style={{ color: C.text }}>{lang === "es" ? r.food.name_es : r.food.name_en}</span>
-              <ScorePill score={r.score} />
-            </div>
-          ))}
-        </div>
-      )}
-    </>
-  );
-}
-
-function CatalogMode({ t, lang }) {
-  const [query, setQuery] = useState("");
-  const [cat, setCat] = useState("all");
-  const categories = ["all", ...CATEGORY_ORDER];
-
-  const results = useMemo(() => {
+  // For the empty-search message: does the same query match something in another band?
+  const otherBandWithMatch = useMemo(() => {
+    if (!query.trim() || results.length) return null;
     const q = query.trim().toLowerCase();
-    let list = Object.entries(FOODS).filter(([, f]) => cat === "all" || f.cat === cat);
-    if (q) list = list.filter(([, f]) => f[lang].toLowerCase().includes(q));
-    return list.sort((a, b) => b[1].score - a[1].score);
-  }, [query, cat, lang]);
+    for (const b of BAND_ORDER) {
+      if (b === band) continue;
+      const hit = visibleScores.some(fs => bandFor(fs.score) === b && foodsById[fs.food_id] &&
+        ((foodsById[fs.food_id].name_en || "").toLowerCase().includes(q) || (foodsById[fs.food_id].name_es || "").toLowerCase().includes(q)));
+      if (hit) return b;
+    }
+    return null;
+  }, [query, results.length, band, visibleScores, foodsById]);
+
+  const openFood = results.find(r => isOpen(`food:${r.food_id}`));
+
+  if (data.loading) return <div className="px-4 pt-8 text-sm text-center" style={{ color: C.textSoft }}>{t.loading}</div>;
+  if (!data.testId) return <div className="px-4 pt-8 text-sm text-center" style={{ color: C.textSoft }}>{t.noReport}</div>;
 
   return (
-    <>
+    <div className="px-4 pt-4 pb-24">
       <div className="rounded-xl flex items-center gap-2 px-3 mb-3" style={{ background: C.card, border: `1px solid ${C.line}` }}>
         <Search size={16} color={C.textSoft} />
         <input value={query} onChange={e => setQuery(e.target.value)} placeholder={t.searchPlaceholder}
           className="w-full py-3 text-sm outline-none" style={{ color: C.text, background: "transparent" }} />
         {query && <button onClick={() => setQuery("")} aria-label={t.clearSearch} className="p-1.5 -mr-1.5 rounded-full flex-shrink-0"><X size={15} color={C.textSoft} /></button>}
       </div>
-      <div className="flex gap-1.5 mb-4 overflow-x-auto pb-1">
-        {categories.map(c => (
-          <button key={c} onClick={() => setCat(c)} aria-current={cat === c ? "true" : undefined} className="px-3 py-2 rounded-full text-xs font-medium whitespace-nowrap"
-            style={{ background: cat === c ? C.navy : "#fff", color: cat === c ? "#fff" : C.textSoft, border: `1px solid ${cat === c ? C.navy : C.line}` }}>
-            {c === "all" ? t.all : t.categories[c]}
+
+      <div className="grid grid-cols-3 gap-1 mb-3 rounded-xl p-1" style={{ background: C.bg }}>
+        {BAND_ORDER.map(b => (
+          <button key={b} onClick={() => setBand(b)} aria-pressed={band === b}
+            className="text-xs font-semibold py-2 rounded-lg text-center"
+            style={{ background: band === b ? C.card : "transparent", color: band === b ? C.text : C.textSoft, boxShadow: band === b ? "0 1px 2px rgba(21,23,42,.04)" : "none" }}>
+            {bandLabel(b, lang)} <span style={{ color: C.textSoft, fontWeight: 500 }}>{counts[b]}</span>
           </button>
         ))}
       </div>
-      <div className="text-xs mb-2" style={{ color: C.textSoft }}>{query ? t.results(results.length) : t.typeToSearch}</div>
-      {query && results.length === 0 ? (
-        <div className="rounded-xl p-6 text-center text-sm" style={{ border: `1px solid ${C.line}`, color: C.textSoft }}>{t.noFoodsFound}</div>
+
+      <div className="flex gap-1.5 mb-3 overflow-x-auto pb-1">
+        {[["all", t.all], ["in_plan", t.inPlan], ...data.foodCategories.map(fc => [fc.id, lang === "es" ? fc.name_es : fc.name_en])].map(([id, label]) => (
+          <button key={id} onClick={() => setCat(id)} aria-pressed={cat === id} className="px-3 py-2 rounded-full text-xs font-medium whitespace-nowrap"
+            style={{ background: cat === id ? C.navy : "#fff", color: cat === id ? "#fff" : C.textSoft, border: `1px solid ${cat === id ? C.navy : C.line}` }}>
+            {label}
+          </button>
+        ))}
+      </div>
+
+      <div className="text-xs mb-2" style={{ color: C.textSoft }}>{t.bandMeaning[band]}</div>
+
+      {results.length === 0 ? (
+        <div className="rounded-xl p-6 text-center text-sm" style={{ border: `1px solid ${C.line}`, color: C.textSoft }}>
+          {otherBandWithMatch ? t.emptyWithOther(query, bandLabel(otherBandWithMatch, lang)) : t.emptySimple}
+        </div>
       ) : (
         <div className="rounded-xl overflow-hidden" style={{ border: `1px solid ${C.line}` }}>
-          {results.slice(0, 60).map(([id, f], i) => (
-            <div key={id} className="flex items-center justify-between px-4 py-3" style={{ background: C.card, borderTop: i === 0 ? "none" : `1px solid ${C.line}` }}>
-              <span className="text-sm" style={{ color: C.text }}>{f[lang]}</span>
-              <ScorePill score={f.score} />
-            </div>
-          ))}
+          {results.map((r, i) => {
+            const flag = data.flagsByFoodId[r.food_id];
+            return (
+              <button key={r.food_id} onClick={() => open(`food:${r.food_id}`)}
+                className="w-full flex items-center gap-3 px-4 py-3 text-left" style={{ background: C.card, borderTop: i === 0 ? "none" : `1px solid ${C.line}` }}>
+                <div className="flex-1 min-w-0">
+                  <div className="text-sm" style={{ color: C.text }}>{lang === "es" ? (r.food.name_es || r.food.name_en) : r.food.name_en}</div>
+                  {flag && <div className="text-[11px] font-medium" style={{ color: V4_LIGHT.inText }}>{t.askNutritionist}</div>}
+                </div>
+                <ScoreBadge score={r.score} />
+              </button>
+            );
+          })}
         </div>
       )}
-    </>
-  );
-}
 
-export default function FoodsView({ t, lang, user }) {
-  const copy = COPY[lang] || COPY.en;
-  const [mode, setMode] = useState(user ? "report" : "catalog");
-
-  return (
-    <div className="px-4 pt-4 pb-24">
-      {user && (
-        <div className="flex gap-1.5 mb-3">
-          {[["report", copy.modeReport], ["catalog", copy.modeCatalog]].map(([key, label]) => (
-            <button key={key} onClick={() => setMode(key)} aria-pressed={mode === key} className="flex-1 text-xs font-semibold px-3 py-2 rounded-full"
-              style={{ background: mode === key ? C.purple : "#fff", color: mode === key ? "#fff" : C.textSoft, border: `1px solid ${mode === key ? C.purple : C.line}` }}>
-              {label}
-            </button>
-          ))}
-        </div>
+      {openFood && (
+        <Sheet open={!!openFood} onClose={close} title={lang === "es" ? openFood.food.name_es : openFood.food.name_en}>
+          <FoodSheetContent food={openFood.food} score={openFood.score} lang={lang} t={t} inPlan={data.inPlanFoodIds.has(openFood.food_id)} />
+        </Sheet>
       )}
-      {mode === "report" && user ? <ReportMode t={t} lang={lang} user={user} /> : <CatalogMode t={t} lang={lang} />}
-      <div className="mt-4 rounded-xl p-3 text-xs" style={{ background: C.purpleSoft, color: C.navy }}>{t.detectorNote}</div>
     </div>
   );
 }
