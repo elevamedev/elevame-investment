@@ -10,10 +10,10 @@ export function ToastProvider({ children }) {
     setToasts(ts => ts.filter(t => t.id !== id));
   }, []);
 
-  const show = useCallback((message, type = "error") => {
+  const show = useCallback((message, type = "error", options = {}) => {
     const id = ++idRef.current;
-    setToasts(ts => [...ts, { id, message, type }]);
-    setTimeout(() => dismiss(id), 4000);
+    setToasts(ts => [...ts, { id, message, type, action: options.action }]);
+    setTimeout(() => dismiss(id), options.durationMs || 4000);
   }, [dismiss]);
 
   return (
