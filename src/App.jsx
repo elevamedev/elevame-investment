@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Routes, Route, Navigate, Outlet, useNavigate, useParams, useOutletContext, useLocation } from "react-router-dom";
 import { Home, CalendarDays, Search, Gauge, Settings as SettingsIcon, LogOut } from "lucide-react";
 import { C } from "./theme.js";
@@ -8,6 +8,7 @@ import { useClientData } from "./hooks/useClientData.js";
 import { useStaffRole } from "./hooks/useAdminData.js";
 import { resetQueryClientOnSignOut } from "./lib/OfflineQueryProvider.jsx";
 import { clearPersistedCache } from "./lib/queryClient.js";
+import { installOfflineFlush } from "./lib/offlineQueue.js";
 import SignInView from "./views/auth/SignInView.jsx";
 import SignUpView from "./views/auth/SignUpView.jsx";
 import ForgotPasswordView from "./views/auth/ForgotPasswordView.jsx";
@@ -17,7 +18,7 @@ import LinkKitView from "./views/auth/LinkKitView.jsx";
 import StaffMfaGate from "./views/auth/StaffMfaGate.jsx";
 import HomeView from "./views/HomeView.jsx";
 import PlanView from "./views/PlanView.jsx";
-import TrackerView from "./views/TrackerView.jsx";
+import CheckinFlowView from "./views/CheckinFlowView.jsx";
 import FoodsView from "./views/FoodsView.jsx";
 import GutView from "./views/GutView.jsx";
 import BodySystemView from "./views/BodySystemView.jsx";
@@ -159,18 +160,9 @@ function SystemPage() {
   return <BodySystemView lang={lang} user={user} profile={data.profile} themeId={theme} />;
 }
 
-function CheckinPage() {
-  const { lang, t, data } = useOutletContext();
-  const { milestone } = useParams();
-  const navigate = useNavigate();
-  const todayStr = new Date().toISOString().slice(0, 10);
-  const todayEntry = data.entries.find(e => e.date === todayStr);
-  return (
-    <TrackerView t={t} lang={lang} entries={data.entries} todayEntry={todayEntry}
-      saveEntry={form => data.saveTrackerEntry(todayStr, form)} milestones={data.milestones}
-      saveMilestone={data.saveMilestoneEntry} planDay={null}
-      openMilestone={milestone} setOpenMilestone={() => navigate("/")} />
-  );
+function CheckinFlowPage({ data, user }) {
+  const lang = data.profile?.language || "en";
+  return <CheckinFlowView lang={lang} user={user} profile={data.profile} />;
 }
 
 function SettingsPage() {
@@ -189,6 +181,7 @@ function SettingsPage() {
 /* ---------------- root ---------------- */
 
 export default function App() {
+  useEffect(() => { installOfflineFlush(); }, []); // brief 4.10: check ins must save offline, so retry queued writes once back online
   return (
     <>
       <ToastStack />
@@ -199,6 +192,8 @@ export default function App() {
         <Route path="/auth/confirm" element={<ConfirmView />} />
         <Route path="/reset" element={<ResetPasswordView />} />
         <Route path="/admin/*" element={<RequireAuth><RequireStaff><AdminViewRoute /></RequireStaff></RequireAuth>} />
+        {/* Full screen, not a sheet, not the tab shell (brief 4.10) */}
+        <Route path="/checkin/:milestone" element={<RequireAuth><RequireClient>{(ctx) => <CheckinFlowPage {...ctx} />}</RequireClient></RequireAuth>} />
         <Route element={<RequireAuth><RequireClient>{(ctx) => <TabShell {...ctx} />}</RequireClient></RequireAuth>}>
           <Route path="/" element={<HomePage />} />
           <Route path="/plan" element={<PlanPage />} />
@@ -207,7 +202,6 @@ export default function App() {
           <Route path="/gut" element={<GutPage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/system/:theme" element={<SystemPage />} />
-          <Route path="/checkin/:milestone" element={<CheckinPage />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
