@@ -6,8 +6,6 @@ import { STRINGS } from "./i18n/strings.js";
 import { useAuth } from "./context/AuthContext.jsx";
 import { useClientData } from "./hooks/useClientData.js";
 import { useStaffRole } from "./hooks/useAdminData.js";
-import { useSheetParam } from "./hooks/useSheetParam.js";
-import Sheet from "./components/v4/Sheet.jsx";
 import { resetQueryClientOnSignOut } from "./lib/OfflineQueryProvider.jsx";
 import { clearPersistedCache } from "./lib/queryClient.js";
 import SignInView from "./views/auth/SignInView.jsx";
@@ -22,7 +20,7 @@ import PlanView from "./views/PlanView.jsx";
 import TrackerView from "./views/TrackerView.jsx";
 import FoodsView from "./views/FoodsView.jsx";
 import ReportView from "./views/ReportView.jsx";
-import SupplementsView from "./views/SupplementsView.jsx";
+import GutView from "./views/GutView.jsx";
 import SettingsView from "./views/SettingsView.jsx";
 import AdminView from "./views/AdminView.jsx";
 import ToastStack from "./components/ToastStack.jsx";
@@ -151,16 +149,8 @@ function FoodsPage() {
 }
 
 function GutPage() {
-  const { lang, user } = useOutletContext();
-  const { isOpen, open, close } = useSheetParam();
-  return (
-    <>
-      <ReportView lang={lang} user={user} onGoToFoods={() => {}} onOpenSupplements={() => open("supplements")} />
-      <Sheet open={isOpen("supplements")} onClose={close} title="Supplements">
-        <SupplementsView lang={lang} user={user} />
-      </Sheet>
-    </>
-  );
+  const { lang, user, data } = useOutletContext();
+  return <GutView lang={lang} user={user} profile={data.profile} />;
 }
 
 function SystemPage() {
