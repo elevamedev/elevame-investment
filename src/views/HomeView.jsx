@@ -5,9 +5,11 @@ import { useV4Theme } from "../context/ThemeContext.jsx";
 import { useFoodsData } from "../hooks/useFoodsData.js";
 import { useV4Plan } from "../hooks/useV4Plan.js";
 import { useV4Home } from "../hooks/useV4Home.js";
+import { useV4Feel } from "../hooks/useV4Feel.js";
 import StatusMark from "../components/v4/StatusMark.jsx";
 import Sheet from "../components/v4/Sheet.jsx";
 import MealSheetContent from "../components/v4/MealSheet.jsx";
+import FeelSheet from "../components/v4/FeelSheet.jsx";
 import { useSheetParam } from "../hooks/useSheetParam.js";
 import { useToast } from "../context/ToastContext.jsx";
 import { supabase } from "../lib/supabaseClient.js";
@@ -20,17 +22,6 @@ const MILESTONE_LABEL = {
   en: { baseline: "Starting check-in", end_phase_1: "End of phase 1 check-in", end_phase_2: "End of phase 2 check-in", end_phase_3: "Final check-in" },
   es: { baseline: "Seguimiento inicial", end_phase_1: "Seguimiento de fin de fase 1", end_phase_2: "Seguimiento de fin de fase 2", end_phase_3: "Seguimiento final" },
 };
-const SNACK_OPTIONS = ["none", "one_two", "three_five", "six_plus"];
-const SNACK_LABEL = {
-  en: { none: "None", one_two: "1-2", three_five: "3-5", six_plus: "6+" },
-  es: { none: "Ninguno", one_two: "1-2", three_five: "3-5", six_plus: "6+" },
-};
-const MILESTONE_FIELDS = ["digestion", "gas", "heaviness", "bowel_comfort", "energy", "sleep", "mood"];
-const MILESTONE_FIELD_LABEL = {
-  en: { digestion: "Digestion", gas: "Gas", heaviness: "How do you feel after meals?", bowel_comfort: "Bowel comfort", energy: "Energy", sleep: "Sleep", mood: "Mood" },
-  es: { digestion: "Digestión", gas: "Gases", heaviness: "¿Cómo te sientes después de comer?", bowel_comfort: "Comodidad intestinal", energy: "Energía", sleep: "Sueño", mood: "Ánimo" },
-};
-
 const COPY = {
   en: {
     greetingMorning: "Good morning", greetingAfternoon: "Good afternoon", greetingEvening: "Good evening",
@@ -102,7 +93,6 @@ export default function HomeView({ lang, user, profile, goToSettings }) {
   const { isOpen, open, close } = useSheetParam();
   const [editingCheckin, setEditingCheckin] = useState(false);
   const [checkinDraft, setCheckinDraft] = useState({});
-  const [milestoneDraft, setMilestoneDraft] = useState({});
 
   const planDay = useMemo(() => {
     const start = new Date(profile?.plan_start_date || new Date().toISOString().slice(0, 10)); start.setHours(0, 0, 0, 0);
@@ -113,6 +103,7 @@ export default function HomeView({ lang, user, profile, goToSettings }) {
   const foodsData = useFoodsData(user?.id, profile?.id);
   const plan = useV4Plan(profile?.id, foodsData.client?.id, planDay);
   const home = useV4Home(foodsData.client?.id, foodsData.testId, planDay, plan.phases);
+  const feel = useV4Feel(foodsData.client?.id);
 
   const foodsById = useMemo(() => Object.fromEntries(foodsData.foods.map(f => [f.id, f])), [foodsData.foods]);
   const scoreByFoodId = useMemo(() => Object.fromEntries(foodsData.foodScores.map(s => [s.food_id, s.score])), [foodsData.foodScores]);
@@ -162,13 +153,6 @@ export default function HomeView({ lang, user, profile, goToSettings }) {
   }
 
   const statusesPresent = [...new Set(home.bodySystems.map(s => s.status))];
-
-  const openMilestone = isOpen("checkin:milestone") && home.comingUpMilestone;
-  function submitMilestone() {
-    home.saveMilestoneCheckin(home.comingUpMilestone.key, milestoneDraft);
-    setMilestoneDraft({});
-    close();
-  }
 
   const openMealSheet = plan.meals.find(m => isOpen(`meal:${m.id}`));
 
@@ -290,7 +274,7 @@ export default function HomeView({ lang, user, profile, goToSettings }) {
       {home.comingUpMilestone && (
         <>
           <div className="text-xs font-semibold mb-1.5" style={{ color: C.navy }}>{t.comingUp}</div>
-          <button onClick={() => open("checkin:milestone")} className="w-full text-left rounded-xl p-4 mb-2" style={{ background: C.card, border: `1px solid ${C.line}` }}>
+          <button onClick={() => navigate(`/checkin/${home.comingUpMilestone.key}`)} className="w-full text-left rounded-xl p-4 mb-2" style={{ background: C.card, border: `1px solid ${C.line}` }}>
             <div className="flex items-center justify-between mb-1">
               <span className="text-sm font-semibold" style={{ color: C.text }}>{MILESTONE_LABEL[lang]?.[home.comingUpMilestone.key]}</span>
               {home.comingUpMilestone.state === "missed" && <span className="text-[11px] font-semibold" style={{ color: V.re }}>{t.missed}</span>}
@@ -342,16 +326,8 @@ export default function HomeView({ lang, user, profile, goToSettings }) {
       </Sheet>
 
       <Sheet open={isOpen("home:feel")} onClose={close} title={t.howYouFeelLabel}>
-        {home.todayCheckin ? (
-          <div className="rounded-xl overflow-hidden" style={{ border: `1px solid ${C.line}` }}>
-            {home.dailyQuestions.filter(q => home.todayCheckin[q] != null).map((q, i) => (
-              <div key={q} className="flex items-center justify-between px-4 py-2.5" style={{ borderTop: i === 0 ? "none" : `1px solid ${C.line}` }}>
-                <span className="text-sm" style={{ color: C.text }}>{QUESTION_LABEL[lang]?.[q] || q}</span>
-                <span className="text-sm font-semibold" style={{ color: C.text }}>{home.todayCheckin[q]} / 5</span>
-              </div>
-            ))}
-          </div>
-        ) : <p className="text-sm" style={{ color: C.textSoft }}>{t.notYet}</p>}
+        <FeelSheet dailyQuestions={feel.dailyQuestions} todayCheckin={feel.todayCheckin} weeklyByQuestion={feel.weeklyByQuestion}
+          habitRows={feel.habitRows} lang={lang} onGoToCheckin={() => { close(); setEditingCheckin(true); }} />
       </Sheet>
 
       <Sheet open={isOpen("home:goals")} onClose={close} title={t.editGoals}>
@@ -377,32 +353,6 @@ export default function HomeView({ lang, user, profile, goToSettings }) {
           </div>
         )}
       </Sheet>
-
-      {openMilestone && (
-        <Sheet open={!!openMilestone} onClose={close} title={MILESTONE_LABEL[lang]?.[home.comingUpMilestone.key]}>
-          {MILESTONE_FIELDS.map(f => (
-            <div key={f} className="mb-3">
-              <div className="text-xs mb-1.5" style={{ color: C.textSoft }}>{MILESTONE_FIELD_LABEL[lang]?.[f] || f}</div>
-              <Scale1to5 value={milestoneDraft[f]} onChange={v => setMilestoneDraft(d => ({ ...d, [f]: v }))} />
-            </div>
-          ))}
-          <div className="mb-3">
-            <div className="text-xs mb-1.5" style={{ color: C.textSoft }}>Processed snacks</div>
-            <div className="flex gap-1.5">
-              {SNACK_OPTIONS.map(opt => (
-                <button key={opt} onClick={() => setMilestoneDraft(d => ({ ...d, processed_snacks: opt }))} aria-pressed={milestoneDraft.processed_snacks === opt}
-                  className="flex-1 py-2 rounded-lg text-xs font-semibold" style={{ background: milestoneDraft.processed_snacks === opt ? C.purple : C.bg, color: milestoneDraft.processed_snacks === opt ? "#fff" : C.textSoft }}>
-                  {SNACK_LABEL[lang]?.[opt]}
-                </button>
-              ))}
-            </div>
-          </div>
-          <textarea value={milestoneDraft.notes || ""} onChange={e => setMilestoneDraft(d => ({ ...d, notes: e.target.value }))}
-            placeholder={lang === "es" ? "Algo más que hayas notado…" : "Anything else you've noticed…"}
-            className="w-full text-sm rounded-lg px-3 py-2 mb-3" style={{ border: `1px solid ${C.line}`, minHeight: 70 }} />
-          <button onClick={submitMilestone} className="w-full text-sm font-semibold py-2.5 rounded-xl" style={{ background: C.purple, color: "#fff" }}>{t.start}</button>
-        </Sheet>
-      )}
 
       {openMealSheet && (
         <Sheet open={!!openMealSheet} onClose={close} title={lang === "es" ? openMealSheet.dish_es : openMealSheet.dish_en}>

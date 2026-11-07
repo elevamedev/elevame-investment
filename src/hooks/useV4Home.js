@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient.js";
+import { writeOrQueue } from "../lib/offlineQueue.js";
 
 const HOME_THEME_IDS = ["digestion", "inflammation", "metabolism", "heart", "mind"];
 
@@ -106,14 +107,10 @@ export function useV4Home(clientId, testId, planDay, phases) {
 
   async function saveDailyCheckin(answers) {
     const todayStr = isoDate(new Date());
-    await supabase.from("quick_checkins").upsert({ client_id: clientId, day: todayStr, ...answers });
-    await load();
+    const { queued } = await writeOrQueue("quick_checkins", "upsert", { client_id: clientId, day: todayStr, ...answers });
+    if (!queued) await load();
+    else setState(s => ({ ...s, todayCheckin: { ...s.todayCheckin, client_id: clientId, day: todayStr, ...answers } }));
   }
 
-  async function saveMilestoneCheckin(milestoneKey, answers) {
-    await supabase.from("symptom_checkins").insert({ client_id: clientId, test_id: testId, kind: "milestone", milestone: milestoneKey, ...answers });
-    await load();
-  }
-
-  return { ...state, saveDailyCheckin, saveMilestoneCheckin, refetch: load };
+  return { ...state, saveDailyCheckin, refetch: load };
 }
