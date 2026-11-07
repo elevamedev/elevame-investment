@@ -6,6 +6,8 @@ import { STRINGS } from "./i18n/strings.js";
 import { useAuth } from "./context/AuthContext.jsx";
 import { useClientData } from "./hooks/useClientData.js";
 import { useStaffRole } from "./hooks/useAdminData.js";
+import { useV4Consent } from "./hooks/useV4Consent.js";
+import { useV4ThemeSync } from "./hooks/useV4ThemeSync.js";
 import { resetQueryClientOnSignOut } from "./lib/OfflineQueryProvider.jsx";
 import { clearPersistedCache } from "./lib/queryClient.js";
 import { installOfflineFlush } from "./lib/offlineQueue.js";
@@ -23,6 +25,7 @@ import FoodsView from "./views/FoodsView.jsx";
 import GutView from "./views/GutView.jsx";
 import BodySystemView from "./views/BodySystemView.jsx";
 import SettingsView from "./views/SettingsView.jsx";
+import ConsentView from "./views/ConsentView.jsx";
 import AdminView from "./views/AdminView.jsx";
 import ToastStack from "./components/ToastStack.jsx";
 
@@ -55,6 +58,8 @@ function RequireClient({ children }) {
   const { user } = useAuth();
   const staffRole = useStaffRole(user.id);
   const data = useClientData(user.id);
+  const consent = useV4Consent(user.id);
+  useV4ThemeSync(user.id);
   const t = STRINGS.en; // no profile yet at this point, so no stored language preference to read
 
   if (staffRole === undefined) return <LoadingScreen />;
@@ -67,6 +72,11 @@ function RequireClient({ children }) {
   }
   if (!data.profile) {
     return <LinkKitView onClaimed={data.refetch} />;
+  }
+  // Brief 6.5: no result shows until health-data consent is given.
+  if (consent.loading) return <LoadingScreen />;
+  if (!consent.hasConsent) {
+    return <ConsentView lang={data.profile?.language || "en"} onAgree={consent.giveConsent} />;
   }
   return children({ data, user });
 }
@@ -175,7 +185,7 @@ function SettingsPage() {
     resetQueryClientOnSignOut();
     navigate("/signin", { replace: true });
   }
-  return <SettingsView lang={lang} profile={data.profile} setLang={l => data.updateProfile({ language: l })} onSignOut={handleSignOut} />;
+  return <SettingsView lang={lang} user={user} profile={data.profile} setLang={l => data.updateProfile({ language: l })} onSignOut={handleSignOut} />;
 }
 
 /* ---------------- root ---------------- */

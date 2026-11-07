@@ -5,3 +5,10 @@
 html, body, #root {
   height: 100%;
 }
+
+/* brief 4.11: text size setting. Tailwind's text-* utilities are
+   rem-based, so scaling the root font-size scales every screen built
+   with them without touching each one. */
+html[data-text-size="large"] {
+  font-size: 118%;
+}

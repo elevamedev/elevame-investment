@@ -140,3 +140,8 @@ them once:
   keys, 0011 unpinned `search_path`, 0028 privileged functions callable
   by anon) — this is a final confirmation, not expected to find
   anything new.
+- **Deploy the `delete-account` Edge Function** (brief 6.2, 6.5):
+  `supabase functions deploy delete-account --project-ref <ref>`. It
+  runs with the project's own service role key (set automatically by
+  Supabase, not something to configure) and needs no secrets of its
+  own.
